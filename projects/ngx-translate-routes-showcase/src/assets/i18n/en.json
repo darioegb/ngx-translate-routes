@@ -1,0 +1,19 @@
+{
+    "validations": {
+        "required": "The field is required.",
+        "maxlength": "The maximum length allowed is {{param}}.",
+        "minlength": "The minimum allowed length is {{param}}.",
+        "email": "It is not a valid email.",
+        "min": "The minimum allowed is {{param}}.",
+        "max": "The maximum allowed is {{param}}.",
+        "pattern": {
+            "numeric": "The valid format is numeric.",
+            "alphabet": "The valid format is alphabetical.",
+            "smallLetters": "The valid format is lowercase letters.",
+            "capitalLetters": "The valid format is capital letters.",
+            "alphaNumeric": "The valid format is alphanumeric.",
+            "custom": "The valid format is alphanumeric and the '.' is allowed"
+        },
+        "avoidMultipleZero": "Can't start with multiple zeros"
+    }
+}

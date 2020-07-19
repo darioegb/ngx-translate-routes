@@ -1,0 +1,18 @@
+form {
+    margin-block-start: 10px;
+    width: 50%;
+    margin-left: 10%;
+    div {
+        display: flex;
+        flex-direction: column;
+    }
+    button {
+        margin-block-end: 10px;
+    }
+}
+
+// Add border style when error exist
+.error-container {
+    border: 1px solid red;
+    color: red;
+}
