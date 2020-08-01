@@ -1,0 +1,22 @@
+{
+    "titles": {
+        "home": "Inicio",
+        "profile": "Perfil",
+        "about": "Sobre Nosotros",
+        "myaccount": "Mi cuenta",
+        "dashboard": "Tablero",
+        "users": {
+            "root": "Usuarios",
+            "profile": "Perfil de Usuario",
+            "myaccount": "List Users"
+        }
+    },
+    "routes": {
+        "home": "inicio",
+        "profile": "perfil",
+        "about": "sobreNosotros",
+        "myaccount": "miCuenta",
+        "dashboard": "tablero",
+        "users": "usuarios"
+    }
+}

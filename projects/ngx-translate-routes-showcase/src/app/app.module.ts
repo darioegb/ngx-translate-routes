@@ -1,24 +1,33 @@
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, Title } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { FormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
-import { ReactiveFormsModule } from '@angular/forms';
-import { NgxTranslateRoutesModule } from '../../../ngx-translate-routes/src/lib/ngx-translate-routes.module';
+import { AboutComponent } from './about/about.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { MyprofileComponent } from './myprofile/myprofile.component';
+import { MyaccountComponent } from './myaccount/myaccount.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
 }
-
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    AboutComponent,
+    DashboardComponent,
+    MyprofileComponent,
+    MyaccountComponent
   ],
   imports: [
     BrowserModule,
+    AppRoutingModule,
     HttpClientModule,
+    FormsModule,
     TranslateModule.forRoot({
       defaultLanguage: 'en',
       useDefaultLang: true,
@@ -28,8 +37,6 @@ export function HttpLoaderFactory(http: HttpClient) {
         deps: [HttpClient]
       }
     }),
-    ReactiveFormsModule,
-    NgxTranslateRoutesModule
   ],
   providers: [],
   bootstrap: [AppComponent]

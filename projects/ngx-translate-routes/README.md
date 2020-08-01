@@ -12,7 +12,7 @@ Latest version available for each version of Angular
 
 ## Live Example
 You can check how these library work in the next link, on live example:
-https://stackblitz.com/edit/ngx-translate-example
+https://stackblitz.com/edit/ngx-translate-routes-example
 
 ## Install
 
