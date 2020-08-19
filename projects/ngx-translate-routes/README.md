@@ -63,7 +63,10 @@ https://github.com/ngx-translate/core
           deps: [HttpClient]
         }
       }),
-      NgxTranslateRoutesModule //NgxTranslateRoutesModule added
+      NgxTranslateRoutesModule.forRoot({
+      enableRouteTranslate: true,// this key is optional
+      enableTitleTranslate: true// this key is optional
+    }),//NgxTranslateRoutesModule added
     ],
     providers: [],
     bootstrap: [AppComponent]
@@ -73,21 +76,25 @@ https://github.com/ngx-translate/core
 
 **step  2**
 **Add error message configuration in JSON file**
- Ngx-translate and others internationalizations packages manage json files for each idiom thant manage. For example is your application manage english langague you must create in assets/i18n/en.json, in the file you will have all the titles you need to translate in your application. Every property in the json will be named as we want to discribe route, by example:
+ Ngx-translate and others internationalizations packages manage json files for each idiom thant manage. For example is your application manage english langague you must create in assets/i18n/en.json, in the file you will have all the titles and routes you need to translate in your application. Every property in the json will be named as we want to discribe route, by example:
 ```javascript
   // assets/i18n/en.json
   {
     "titles": {
-        "home": "Home",
-        "auth": {
-          "login": "Login",
-          "register": "Register"
+        "about": "About Us",
+        "dashboard": "Dashboard",
+        "users": {
+            "root": "Users",
+            "profile": "User Profile",
+            "myaccount": "List Users"
         }
+    },
+    "routes": {
+        "about": "aboutUs",
+        "myaccount": "myAccount"
     }
   }
 ```
-You must respect titles key name and the structure.
-If you change some of these keys, the library does not work for you to change.
 
 ## Use
 

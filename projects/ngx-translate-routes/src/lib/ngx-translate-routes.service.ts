@@ -1,28 +1,63 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Optional } from '@angular/core';
 
 import { TranslateService } from '@ngx-translate/core';
 import { Title } from '@angular/platform-browser';
-import { Location } from '@angular/common';
-import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
-import { filter, map, tap } from 'rxjs/operators';
+import { Location, TitleCasePipe } from '@angular/common';
+import {
+  Router,
+  NavigationEnd,
+  ActivatedRoute,
+  NavigationError,
+} from '@angular/router';
+import { filter, map, debounceTime } from 'rxjs/operators';
+import { NgxTranslateRoutesConfig } from './ngx-translate-routes-config';
+import {
+  translatePrefixes,
+  lastRouteKey,
+} from './ngx-translate-routes-constant';
 
 @Injectable({
   providedIn: 'root',
 })
 export class NgxTranslateRoutesService {
+  private config: NgxTranslateRoutesConfig;
+
   constructor(
     private translate: TranslateService,
     private location: Location,
     private title: Title,
     private router: Router,
-    private activatedRoute: ActivatedRoute
-  ) {}
+    private activatedRoute: ActivatedRoute,
+    private titleCasePipe: TitleCasePipe,
+    @Optional() config?: NgxTranslateRoutesConfig
+  ) {
+    this.config = new NgxTranslateRoutesConfig(config);
+  }
 
-  translateTitles() {
+  init() {
+    if (this.config) {
+      this.initWithConfig();
+    } else {
+      this.translateRoutes();
+      this.translateTitles();
+    }
+  }
+
+  private initWithConfig() {
+    if (this.config.enableRouteTranslate) {
+      this.translateRoutes();
+    }
+    if (this.config.enableTitleTranslate) {
+      this.translateTitles();
+    }
+  }
+
+  private translateTitles() {
     const appTitle = this.title.getTitle();
     this.router.events
       .pipe(
         filter((event) => event instanceof NavigationEnd),
+        debounceTime(10),
         map(() => {
           let child = this.activatedRoute.firstChild;
           if (child) {
@@ -31,9 +66,12 @@ export class NgxTranslateRoutesService {
             }
             let routeTitle: string = child.snapshot.data.title;
             if (routeTitle) {
-              routeTitle = routeTitle.includes('titles.')
-                ? this.translate.instant(routeTitle)
-                : routeTitle;
+              const translateTitle: string = this.translate.instant(routeTitle);
+              routeTitle = !translateTitle.startsWith(translatePrefixes.title)
+                ? translateTitle
+                : this.titleCasePipe.transform(
+                    routeTitle.replace(`${translatePrefixes.title}.`, '')
+                  );
               return routeTitle;
             }
           }
@@ -45,10 +83,13 @@ export class NgxTranslateRoutesService {
       });
   }
 
-  translateRoutes() {
+  private translateRoutes() {
     let routeUrl: string;
     this.router.events
-      .pipe(filter((event) => event instanceof NavigationEnd))
+      .pipe(
+        filter((event) => event instanceof NavigationEnd),
+        debounceTime(10),
+      )
       .subscribe(() => {
         routeUrl = '';
         const subPaths = this.router.url.split('/');
@@ -60,14 +101,20 @@ export class NgxTranslateRoutesService {
             subPath.length > 0
               ? routeUrl.concat(
                   `/${
-                    !translatePath.startsWith('routes.')
+                    !translatePath.startsWith(translatePrefixes.route)
                       ? translatePath
                       : subPath
                   }`
                 )
               : subPath;
         });
+        sessionStorage.setItem(lastRouteKey, this.location.path());
         this.location.replaceState(routeUrl);
       });
+    this.router.errorHandler = () => {
+      const lastLocationPath = sessionStorage.getItem(lastRouteKey);
+      sessionStorage.removeItem(lastRouteKey);
+      this.router.navigateByUrl(lastLocationPath);
+    };
   }
 }

@@ -1,10 +1,8 @@
 {
     "titles": {
-        "home": "Home",
         "profile": "Profile",
         "about": "About Us",
         "myaccount": "My account",
-        "dashboard": "Dashboard",
         "users": {
             "root": "Users",
             "profile": "User Profile",
@@ -12,7 +10,6 @@
         }
     },
     "routes": {
-        "home": "home",
         "about": "aboutUs",
         "myaccount": "myAccount"
     }

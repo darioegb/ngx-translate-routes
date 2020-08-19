@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { NgxTranslateRoutesService } from 'projects/ngx-translate-routes/src/public-api';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -13,23 +12,20 @@ export class AppComponent implements OnInit {
   languajes = [
     {
       key: 'English',
-      value: 'en'
+      value: 'en',
     },
     {
       key: 'Spanish',
-      value: 'es'
-    }
+      value: 'es',
+    },
   ];
   languaje: string;
 
-  constructor(
-    private translate: TranslateService,
-    private translateRoutesService: NgxTranslateRoutesService
-  ) {}
+  constructor(private translate: TranslateService) {}
 
   ngOnInit() {
-    this.translateRoutesService.translateTitles();
-    this.translateRoutesService.translateRoutes();
+    this.languaje = this.languajes[1].value;
+    this.translate.setDefaultLang(this.languaje);
   }
 
   changeLanguaje() {

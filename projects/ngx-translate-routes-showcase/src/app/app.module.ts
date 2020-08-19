@@ -11,6 +11,7 @@ import { AboutComponent } from './about/about.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { MyprofileComponent } from './myprofile/myprofile.component';
 import { MyaccountComponent } from './myaccount/myaccount.component';
+import { NgxTranslateRoutesModule } from 'projects/ngx-translate-routes/src/public-api';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -21,7 +22,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     AboutComponent,
     DashboardComponent,
     MyprofileComponent,
-    MyaccountComponent
+    MyaccountComponent,
   ],
   imports: [
     BrowserModule,
@@ -33,12 +34,16 @@ export function HttpLoaderFactory(http: HttpClient) {
       useDefaultLang: true,
       loader: {
         provide: TranslateLoader,
-        useFactory: (HttpLoaderFactory),
-        deps: [HttpClient]
-      }
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient],
+      },
+    }),
+    NgxTranslateRoutesModule.forRoot({
+      enableRouteTranslate: true,
+      enableTitleTranslate: true
     }),
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
