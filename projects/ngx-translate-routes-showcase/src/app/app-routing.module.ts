@@ -9,7 +9,7 @@ const routes: Routes = [
   { path: 'about', component: AboutComponent, data: {title: 'titles.about'} },
   { path: 'profile', component: MyprofileComponent, data: {title: 'titles.profile'} },
   { path: 'myaccount', component: MyaccountComponent, data: {title: 'titles.myaccount'} },
-  { path: 'dashboard', component: DashboardComponent, data: {title: 'titles.dashboard'} },
+  { path: 'dashboard', component: DashboardComponent, data: {title: 'Dashboard'} },
   { path: 'users',  loadChildren: () => import('./users/users.module').then(m => m.UsersModule) }
 ];
 

@@ -2,12 +2,11 @@ import { Injectable, Optional } from '@angular/core';
 
 import { TranslateService } from '@ngx-translate/core';
 import { Title } from '@angular/platform-browser';
-import { Location, TitleCasePipe } from '@angular/common';
+import { Location } from '@angular/common';
 import {
   Router,
   NavigationEnd,
   ActivatedRoute,
-  NavigationError,
 } from '@angular/router';
 import { filter, map, debounceTime } from 'rxjs/operators';
 import { NgxTranslateRoutesConfig } from './ngx-translate-routes-config';
@@ -28,7 +27,6 @@ export class NgxTranslateRoutesService {
     private title: Title,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private titleCasePipe: TitleCasePipe,
     @Optional() config?: NgxTranslateRoutesConfig
   ) {
     this.config = new NgxTranslateRoutesConfig(config);
@@ -69,9 +67,7 @@ export class NgxTranslateRoutesService {
               const translateTitle: string = this.translate.instant(routeTitle);
               routeTitle = !translateTitle.startsWith(translatePrefixes.title)
                 ? translateTitle
-                : this.titleCasePipe.transform(
-                    routeTitle.replace(`${translatePrefixes.title}.`, '')
-                  );
+                : routeTitle;
               return routeTitle;
             }
           }
@@ -88,7 +84,7 @@ export class NgxTranslateRoutesService {
     this.router.events
       .pipe(
         filter((event) => event instanceof NavigationEnd),
-        debounceTime(10),
+        debounceTime(10)
       )
       .subscribe(() => {
         routeUrl = '';
