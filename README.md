@@ -10,14 +10,10 @@ Latest version available for each version of Angular
 |-------------------|-------------|
 | 0.1.0             | 9.x 8.x 7.x |
 
-## Live Example
-You can check how these library work in the next link, on live example:
-https://stackblitz.com/edit/ngx-translate-example
-
 ## Install
 
 ```bash
-  npm install ngx-translate --save
+  npm install ngx-translate-routes --save
 ```
 
 `@ngx-translate` package is a required dependency
@@ -63,7 +59,7 @@ https://github.com/ngx-translate/core
           deps: [HttpClient]
         }
       }),
-      NgxTranslateRoutesModule //NgxTranslateRoutesModule added
+      NgxTranslateRoutesModule.forRoot(),//NgxTranslateRoutesModule added
     ],
     providers: [],
     bootstrap: [AppComponent]
@@ -71,26 +67,61 @@ https://github.com/ngx-translate/core
   class MainModule {}
 ```
 
+In app module when import the module can configure if we don want to to translate routes or title for default the service will translate both features. 
+We can pass to forRoot the following object if dont want to translate titles.
+```typescript
+ NgxTranslateRoutesModule.forRoot({
+      enableTitleTranslate: false
+    })
+```
+
+### Configuration Object
+```typescript
+  NgxTranslateRoutesConfig {
+    enableRouteTranslate?: boolean,
+    enableTitleTranslate?: boolean
+  }
+```
+
 **step  2**
 **Add error message configuration in JSON file**
- Ngx-translate and others internationalizations packages manage json files for each idiom thant manage. For example is your application manage english langague you must create in assets/i18n/en.json, in the file you will have all the titles you need to translate in your application. Every property in the json will be named as we want to discribe route, by example:
+ Ngx-translate and others internationalizations packages manage json files for each idiom thant manage. For example is your application manage english langague you must create in assets/i18n/en.jsone all the titles and routes you need to translate in your application. Every property in the json will be named as we want to discribe route, by example:
 ```javascript
   // assets/i18n/en.json
   {
     "titles": {
-        "home": "Home",
-        "auth": {
-          "login": "Login",
-          "register": "Register"
+        "about": "About Us",
+        "users": {
+            "root": "Users",
+            "profile": "User Profile",
+            "myaccount": "List Users"
         }
+    },
+    "routes": {
+        "about": "aboutUs",
+        "myaccount": "myAccount"
     }
   }
 ```
-You must respect titles key name and the structure.
+You must respect titles and routes key.
 If you change some of these keys, the library does not work for you to change.
 
 ## Use
 
+After configuration you can use the service customizing your routes object as follow example 
+
+```typescript
+  // app.routing.modules.ts 
+  const routes: Routes = [
+    { path: 'about', component: AboutComponent, data: {title: 'titles.about'} },
+    { path: 'profile', component: MyprofileComponent, data: {title: 'titles.profile'} },
+    { path: 'myaccount', component: MyaccountComponent, data: {title: 'titles.myaccount'} },
+    { path: 'dashboard', component: DashboardComponent, data: {title: 'Dashboard'} }
+  ];
+```
+For translate titles we need to add in data object title value respecting the tree we create for translate titles for example title: **'titles.about'**, will be replace with about value inside json translation file, follow the json in step 2 of cofiguration it title will replace with **About Us**. If we dont add translate for some title we will follow Dashboard example only add for title the final value.  
+
+For translate routes is litle easy we only need to create the route object inside translation follow the json in step 2 of configuration. The route key in translate file must be the same as path string.
 
 ## Test
 

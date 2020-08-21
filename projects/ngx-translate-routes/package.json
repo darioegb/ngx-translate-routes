@@ -1,6 +1,6 @@
 {
     "name": "ngx-translate-routes",
-    "version": "1.2.0",
+    "version": "1.0.0",
     "peerDependencies": {
         "@angular/common": "^9.0.7",
         "@angular/core": "^9.0.7",
@@ -12,12 +12,11 @@
         "name": "Dario E Gonzalez B",
         "email": "darioegb@gmail.com"
     },
-    "description": "A package to display error messages in reative forms",
+    "description": "A package to translate title and route path",
     "keywords": [
         "ngx-translate-routes",
-        "ng-error",
-        "error message",
-        "angular handler error"
+        "angular translate title",
+        "angular translate route"
     ],
     "repository": {
         "type": "git",
