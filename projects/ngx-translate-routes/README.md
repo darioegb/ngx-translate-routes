@@ -10,13 +10,10 @@ Latest version available for each version of Angular
 |-------------------|-------------|
 | 0.1.0             | 9.x 8.x 7.x |
 
-<<<<<<< HEAD
 ## Live Example
 You can check how these library work in the next link, on live example:
 https://stackblitz.com/edit/ngx-translate-routes-example
 
-=======
->>>>>>> 53e5306cbf5e6c3456f6127a52cc675866e97a51
 ## Install
 
 ```bash
