@@ -7,8 +7,11 @@
 Latest version available for each version of Angular
 
 | ngx-translate | Angular     |
-|-------------------|-------------|
-| 0.1.0             | 9.x 8.x 7.x |
+|---------------|-------------|
+| 1.1.0         | 9.x 8.x 7.x |
+| 1.0.2         | 9.x 8.x 7.x |
+| 1.0.0         | 9.x 8.x 7.x |
+| 0.1.0         | 9.x 8.x 7.x |
 
 ## Live Example
 You can check how these library work in the next link, on live example:
