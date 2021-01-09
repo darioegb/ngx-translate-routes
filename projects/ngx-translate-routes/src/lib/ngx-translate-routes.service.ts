@@ -27,12 +27,10 @@ export class NgxTranslateRoutesService {
     @Optional() config?: NgxTranslateRoutesConfig
   ) {
     this.config = new NgxTranslateRoutesConfig(config);
-    this.translate.onDefaultLangChange.pipe(skip(1)).subscribe((lang) => {
+    this.translate.onDefaultLangChange.pipe(skip(1)).subscribe(() => {
       if (this.isInitTranslate) {
         this.translateTitle();
         this.translateRoute();
-        console.log(lang);
-        console.log(this.translate.defaultLang);
       }
     });
   }
