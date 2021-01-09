@@ -8,7 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.1.0] - 2021-01-09
 ### Added
-- Update readme with live example
+- Fix problem with translate route when switching language
+- Fix problem translate route on browser reload
 
 ## [1.0.2] - 2020-08-21
 ### Added
