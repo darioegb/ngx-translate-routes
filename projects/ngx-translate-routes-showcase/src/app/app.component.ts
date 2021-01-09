@@ -24,11 +24,13 @@ export class AppComponent implements OnInit {
   constructor(private translate: TranslateService) {}
 
   ngOnInit() {
-    this.languaje = this.languajes[1].value;
+    const lang = localStorage.getItem('lang');
+    this.languaje = lang ? lang : this.translate.defaultLang;
     this.translate.setDefaultLang(this.languaje);
   }
 
   changeLanguaje() {
     this.translate.setDefaultLang(this.languaje);
+    localStorage.setItem('lang', this.languaje);
   }
 }
