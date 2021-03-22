@@ -29,31 +29,22 @@ export class NgxTranslateRoutesService {
     this.config = new NgxTranslateRoutesConfig(config);
     this.translate.onDefaultLangChange.pipe(skip(1)).subscribe(() => {
       if (this.isInitTranslate) {
-        this.translateTitle();
-        this.translateRoute();
+        this.checkConfigValueAndMakeTranslations();
       }
     });
   }
 
-  init() {
-    if (this.config) {
-      this.initWithConfig();
-    } else {
-      this.initTranslateRoutes();
-      this.initTranslateRouteTitles();
+  initConfig() {
+    if (!this.config) {
+      this.config = {
+        enableRouteTranslate: true,
+        enableTitleTranslate: true,
+      };
     }
+    this.init();
   }
 
-  private initWithConfig() {
-    if (this.config.enableRouteTranslate) {
-      this.initTranslateRoutes();
-    }
-    if (this.config.enableTitleTranslate) {
-      this.initTranslateRouteTitles();
-    }
-  }
-
-  private initTranslateRouteTitles() {
+  private init() {
     this.router.events
       .pipe(
         filter((event) => event instanceof NavigationEnd),
@@ -61,20 +52,23 @@ export class NgxTranslateRoutesService {
       )
       .subscribe(() => {
         this.isInitTranslate = true;
-        this.translateTitle();
+        this.checkConfigValueAndMakeTranslations();
       });
+    if (this.config?.enableRouteTranslate) {
+      this.initTranslateRoutes();
+    }
+  }
+
+  private checkConfigValueAndMakeTranslations() {
+    if (this.config?.enableTitleTranslate) {
+      this.translateTitle();
+    }
+    if (this.config?.enableRouteTranslate) {
+      this.translateRoute();
+    }
   }
 
   private initTranslateRoutes() {
-    this.router.events
-      .pipe(
-        filter((event) => event instanceof NavigationEnd),
-        debounceTime(100)
-      )
-      .subscribe(() => {
-        this.isInitTranslate = true;
-        this.translateRoute();
-      });
     this.router.errorHandler = () => {
       const lastLocationPath = sessionStorage.getItem(lastRouteKey);
       sessionStorage.removeItem(lastRouteKey);
