@@ -6,8 +6,11 @@
         "start": "ng serve",
         "build": "ng build",
         "test": "ng test",
+        "test-prod": "ng test --code-coverage --watch=false --browsers=ChromeHeadlessNoSandbox",
         "lint": "ng lint",
-        "e2e": "ng e2e"
+        "e2e": "ng e2e",
+        "pre-push": "ng lint && npm run test-prod",
+        "postinstall": "ngcc"
     },
     "private": true,
     "dependencies": {
@@ -45,8 +48,14 @@
         "karma-jasmine-html-reporter": "^1.4.2",
         "ng-packagr": "^9.0.0",
         "protractor": "^7.0.0",
+        "husky": "^4.3.0",
         "ts-node": "~8.3.0",
         "tslint": "~5.18.0",
         "typescript": "~3.7.5"
+    },
+    "husky": {
+        "hooks": {
+            "pre-push": "npm run pre-push"
+        }
     }
 }
