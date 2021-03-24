@@ -26,7 +26,7 @@
         "@ngx-translate/http-loader": "^4.0.0",
         "bootstrap": "^4.4.1",
         "rxjs": "~6.5.4",
-        "tslib": "^1.10.0",
+        "tslib": "^2.1.0",
         "zone.js": "~0.10.2"
     },
     "devDependencies": {
