@@ -1,15 +1,27 @@
-import { TestBed, async } from '@angular/core/testing';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { TestBed, async, waitForAsync } from '@angular/core/testing';
+import { ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { AppComponent } from './app.component';
+import { HttpLoaderFactory } from './app.module';
 
 describe('AppComponent', () => {
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
+      declarations: [AppComponent],
       imports: [
-        RouterTestingModule
-      ],
-      declarations: [
-        AppComponent
+        HttpClientModule,
+        TranslateModule.forRoot({
+          defaultLanguage: 'en',
+          useDefaultLang: true,
+          loader: {
+            provide: TranslateLoader,
+            useFactory: HttpLoaderFactory,
+            deps: [HttpClient],
+          },
+        }),
+        ReactiveFormsModule,
       ],
     }).compileComponents();
   }));
