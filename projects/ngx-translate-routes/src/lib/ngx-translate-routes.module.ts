@@ -10,7 +10,7 @@ import { NgxTranslateRoutesService } from './ngx-translate-routes.service';
 })
 export class NgxTranslateRoutesModule {
   constructor(private translateRoutesService: NgxTranslateRoutesService) {
-    this.translateRoutesService.init();
+    this.translateRoutesService.initConfig();
   }
   static forRoot(
     config?: NgxTranslateRoutesConfig
