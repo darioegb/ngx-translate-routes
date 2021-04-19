@@ -18,8 +18,8 @@ module.exports = function (config) {
       clearContext: false // leave Jasmine Spec Runner output visible in browser
     },
     coverageIstanbulReporter: {
-      dir: require('path').join(__dirname, '../../coverage/ngx-error-message'),
-      reports: ['html', 'lcovonly', 'text-summary'],
+      dir: require('path').join(__dirname, '../../coverage/ngx-translate-routes'),
+      reports: ['html', 'text-summary'],
       fixWebpackSourcePaths: true,
       thresholds: {
         statements: 80,

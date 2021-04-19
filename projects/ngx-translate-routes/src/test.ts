@@ -30,7 +30,7 @@ const context = require.context('./', true, /\.spec\.ts$/);
 context.keys().forEach(context);
 
 // translation const
-export const ENGLISH_TRANSLATIONS = {
+const ENGLISH_TRANSLATIONS = {
   titles: {
     profile: 'Profile',
     about: 'About Us',
@@ -45,4 +45,28 @@ export const ENGLISH_TRANSLATIONS = {
     about: 'aboutUs',
     myaccount: 'myAccount',
   },
+};
+
+const SPANISH_TRANSLATIONS = {
+  titles: {
+    profile: 'Perfil',
+    about: 'Sobre Nosotros',
+    myaccount: 'Mi cuenta',
+    users: {
+      root: 'Usuarios',
+      profile: 'Perfil de Usuario',
+      myaccount: 'List Users',
+    },
+  },
+  routes: {
+    profile: 'perfil',
+    about: 'sobreNosotros',
+    myaccount: 'miCuenta',
+    users: 'usuarios',
+  },
+};
+
+export const TRANSLATIONS = {
+  'es': SPANISH_TRANSLATIONS,
+  'en': ENGLISH_TRANSLATIONS
 };

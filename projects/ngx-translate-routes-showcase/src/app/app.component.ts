@@ -21,7 +21,9 @@ export class AppComponent implements OnInit {
   ];
   languaje: string;
 
-  constructor(private translate: TranslateService) {}
+  constructor(
+    private translate: TranslateService
+  ) {}
 
   ngOnInit() {
     const lang = localStorage.getItem('lang');
