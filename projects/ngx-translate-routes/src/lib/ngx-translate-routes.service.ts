@@ -37,7 +37,7 @@ export class NgxTranslateRoutesService {
     );
     this.translate.onDefaultLangChange
       .pipe(skip(1))
-      .subscribe(() => this.checkConfigValueAndMakeTranslations());
+      .subscribe({ next: () => this.checkConfigValueAndMakeTranslations() });
   }
 
   init() {
@@ -52,16 +52,18 @@ export class NgxTranslateRoutesService {
                 event.url)
         )
       )
-      .subscribe((event) => {
-        if (event instanceof NavigationStart) {
-          const lastLocationPath: RoutePath = JSON.parse(
-            localStorage.getItem(lastRouteKey)
-          );
-          localStorage.removeItem(lastRouteKey);
-          this.router.navigateByUrl(lastLocationPath.path);
-        } else {
-          this.checkConfigValueAndMakeTranslations();
-        }
+      .subscribe({
+        next: (event) => {
+          if (event instanceof NavigationStart) {
+            const lastLocationPath: RoutePath = JSON.parse(
+              localStorage.getItem(lastRouteKey)
+            );
+            localStorage.removeItem(lastRouteKey);
+            this.router.navigateByUrl(lastLocationPath.path);
+          } else {
+            this.checkConfigValueAndMakeTranslations();
+          }
+        },
       });
   }
 
@@ -93,13 +95,7 @@ export class NgxTranslateRoutesService {
       const translatePath: string = this.translate.instant(`routes.${subPath}`);
       routeUrl =
         subPath.length > 0
-          ? routeUrl.concat(
-              `/${
-                !translatePath.startsWith(translatePrefixes.route)
-                  ? translatePath
-                  : subPath
-              }`
-            )
+          ? this.routeUrlConcat(routeUrl, translatePath, subPath)
           : subPath;
     });
     const lastLocationPath: RoutePath = {
@@ -108,5 +104,19 @@ export class NgxTranslateRoutesService {
     };
     localStorage.setItem(lastRouteKey, JSON.stringify(lastLocationPath));
     this.location.replaceState(routeUrl);
+  }
+
+  private routeUrlConcat(
+    routeUrl: string,
+    translatePath: string,
+    subPath: string
+  ): string {
+    return routeUrl.concat(
+      `/${
+        !translatePath.startsWith(translatePrefixes.route)
+          ? translatePath
+          : subPath
+      }`
+    );
   }
 }
