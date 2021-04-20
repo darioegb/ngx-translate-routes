@@ -1,35 +1,60 @@
-import { TestBed, async } from '@angular/core/testing';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { FormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { AppComponent } from './app.component';
+import { HttpLoaderFactory } from './app.module';
 
 describe('AppComponent', () => {
-  beforeEach(async(() => {
+  let component: AppComponent;
+  let fixture: ComponentFixture<AppComponent>;
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
+      declarations: [AppComponent],
       imports: [
-        RouterTestingModule
-      ],
-      declarations: [
-        AppComponent
+        RouterTestingModule,
+        HttpClientModule,
+        TranslateModule.forRoot({
+          defaultLanguage: 'en',
+          useDefaultLang: true,
+          loader: {
+            provide: TranslateLoader,
+            useFactory: HttpLoaderFactory,
+            deps: [HttpClient],
+          },
+        }),
+        FormsModule,
       ],
     }).compileComponents();
   }));
 
-  it('should create the app', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
-    expect(app).toBeTruthy();
-  });
-
-  it(`should have as title 'angulartitle'`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual('angulartitle');
-  });
-
-  it('should render title in a h1 tag', () => {
-    const fixture = TestBed.createComponent(AppComponent);
+  beforeEach(() => {
+    fixture = TestBed.createComponent(AppComponent);
+    component = fixture.componentInstance;
+    localStorage.clear();
     fixture.detectChanges();
-    const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('h1').textContent).toContain('Welcome to angulartitle!');
   });
+
+  it('should create the app', () => {
+    expect(component).toBeTruthy();
+  });
+
+  it('#ngOnInit should set default lang', () => {
+    component.ngOnInit();
+    expect(component.languaje).toBeDefined();
+  });
+
+  it('#changeLanguaje should to change the current lang', () => {
+    const lang = localStorage.getItem('lang');
+    component.languaje = 'es';
+    component.changeLanguaje();
+    expect(lang).not.toEqual(localStorage.getItem('lang'));
+    component.ngOnInit();
+    expect(component.languaje).toBeDefined();
+  });
+
+
 });

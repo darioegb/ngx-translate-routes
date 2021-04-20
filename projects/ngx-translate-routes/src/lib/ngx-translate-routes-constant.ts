@@ -1,6 +1,11 @@
 export const translatePrefixes = {
   title: 'titles',
-  route: 'routes'
+  route: 'routes',
 };
 
-export const lastRouteKey = 'lastLocationPath'
+export const lastRouteKey = 'lastLocationPath';
+
+export interface RoutePath {
+  path: string;
+  translatedPath: string;
+}
