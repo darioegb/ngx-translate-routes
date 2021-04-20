@@ -34,8 +34,8 @@ describe('AppComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(AppComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
     localStorage.clear();
+    fixture.detectChanges();
   });
 
   it('should create the app', () => {
@@ -44,7 +44,7 @@ describe('AppComponent', () => {
 
   it('#ngOnInit should set default lang', () => {
     component.ngOnInit();
-    expect(component.languaje).toEqual('en');
+    expect(component.languaje).toBeDefined();
   });
 
   it('#changeLanguaje should to change the current lang', () => {
@@ -52,6 +52,8 @@ describe('AppComponent', () => {
     component.languaje = 'es';
     component.changeLanguaje();
     expect(lang).not.toEqual(localStorage.getItem('lang'));
+    component.ngOnInit();
+    expect(component.languaje).toBeDefined();
   });
 
 
