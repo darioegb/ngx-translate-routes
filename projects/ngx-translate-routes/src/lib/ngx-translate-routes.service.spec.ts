@@ -61,6 +61,7 @@ describe('NgxTranslateRoutesService', () => {
       });
       title = TestBed.inject(Title);
       service = TestBed.inject(NgxTranslateRoutesService);
+      localStorage.clear();
     });
 
     it('should be created', () => {
@@ -76,7 +77,6 @@ describe('NgxTranslateRoutesService', () => {
 
   describe('With object config and 404 error ocurred', () => {
     let service: NgxTranslateRoutesService;
-    let title: Title;
 
     beforeEach(() => {
       TestBed.configureTestingModule({
@@ -113,8 +113,8 @@ describe('NgxTranslateRoutesService', () => {
           },
         ],
       });
-      title = TestBed.inject(Title);
       service = TestBed.inject(NgxTranslateRoutesService);
+      localStorage.clear();
     });
 
     it('should be created', () => {
@@ -122,9 +122,7 @@ describe('NgxTranslateRoutesService', () => {
     });
 
     it('#checkConfigValueAndMakeTranslations should not set title and url when 404', () => {
-      localStorage.clear();
       service.checkConfigValueAndMakeTranslations();
-      expect(title.getTitle()).not.toEqual(TRANSLATIONS.es.titles.about);
       expect(document.location.pathname).not.toEqual(
         `/${TRANSLATIONS.es.routes.about}`
       );
@@ -174,6 +172,7 @@ describe('NgxTranslateRoutesService', () => {
       });
       title = TestBed.inject(Title);
       service = TestBed.inject(NgxTranslateRoutesService);
+      localStorage.clear();
     });
 
     it('should be created', () => {
@@ -237,6 +236,7 @@ describe('NgxTranslateRoutesService', () => {
         ],
       });
       service = TestBed.inject(NgxTranslateRoutesService);
+      localStorage.clear();
     });
 
     it('should be created', () => {
@@ -303,6 +303,7 @@ describe('NgxTranslateRoutesService', () => {
         ],
       });
       service = TestBed.inject(NgxTranslateRoutesService);
+      localStorage.clear();
     });
 
     it('should be created', () => {
