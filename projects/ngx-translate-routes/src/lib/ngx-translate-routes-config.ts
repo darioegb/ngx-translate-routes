@@ -1,20 +1,11 @@
 export class NgxTranslateRoutesConfig {
-  enableTitleTranslate?: boolean;
-  enableRouteTranslate?: boolean;
-
   constructor(
-    options: {
-      enableTitleTranslate?: boolean;
-      enableRouteTranslate?: boolean;
-    } = {}
+    public enableTitleTranslate?: boolean,
+    public enableRouteTranslate?: boolean
   ) {
-    this.enableTitleTranslate =
-      options.enableTitleTranslate !== undefined
-        ? options.enableTitleTranslate
-        : true;
     this.enableRouteTranslate =
-      options.enableRouteTranslate !== undefined
-        ? options.enableRouteTranslate
-        : true;
+      enableRouteTranslate !== undefined ? enableRouteTranslate : true;
+    this.enableTitleTranslate =
+      enableTitleTranslate !== undefined ? enableTitleTranslate : true;
   }
 }

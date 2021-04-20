@@ -12,6 +12,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { MyprofileComponent } from './myprofile/myprofile.component';
 import { MyaccountComponent } from './myaccount/myaccount.component';
 import { NgxTranslateRoutesModule } from 'projects/ngx-translate-routes/src/public-api';
+import { NotFoundComponent } from './not-found/not-found.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -23,6 +24,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     DashboardComponent,
     MyprofileComponent,
     MyaccountComponent,
+    NotFoundComponent,
   ],
   imports: [
     BrowserModule,
