@@ -14,9 +14,8 @@ import { MyaccountComponent } from './myaccount/myaccount.component';
 import { NgxTranslateRoutesModule } from 'projects/ngx-translate-routes/src/public-api';
 import { NotFoundComponent } from './not-found/not-found.component';
 
-export function HttpLoaderFactory(http: HttpClient) {
-  return new TranslateHttpLoader(http);
-}
+export const httpLoaderFactory = (http: HttpClient) => new TranslateHttpLoader(http);
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -36,7 +35,7 @@ export function HttpLoaderFactory(http: HttpClient) {
       useDefaultLang: true,
       loader: {
         provide: TranslateLoader,
-        useFactory: HttpLoaderFactory,
+        useFactory: httpLoaderFactory,
         deps: [HttpClient],
       },
     }),
