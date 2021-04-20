@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { AppComponent } from './app.component';
-import { HttpLoaderFactory } from './app.module';
+import { httpLoaderFactory } from './app.module';
 
 describe('AppComponent', () => {
   let component: AppComponent;
@@ -22,7 +22,7 @@ describe('AppComponent', () => {
           useDefaultLang: true,
           loader: {
             provide: TranslateLoader,
-            useFactory: HttpLoaderFactory,
+            useFactory: httpLoaderFactory,
             deps: [HttpClient],
           },
         }),

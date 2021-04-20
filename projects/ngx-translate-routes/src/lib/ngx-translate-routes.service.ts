@@ -75,13 +75,12 @@ export class NgxTranslateRoutesService {
   }
 
   private translateTitle() {
-    let appTitle: string;
     let child = this.activatedRoute.firstChild;
     while (child.firstChild) {
       child = child.firstChild;
     }
     const routeTitle: string = child.snapshot.data.title;
-    appTitle = routeTitle
+    const appTitle = routeTitle
       ? this.translate.instant(routeTitle)
       : this.title.getTitle();
     this.title.setTitle(appTitle);
