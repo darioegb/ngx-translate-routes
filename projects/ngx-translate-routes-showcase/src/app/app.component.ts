@@ -19,7 +19,7 @@ export class AppComponent implements OnInit {
       value: 'es',
     },
   ];
-  languaje: string;
+  languaje!: string;
 
   constructor(
     private translate: TranslateService

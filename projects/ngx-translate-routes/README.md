@@ -13,6 +13,7 @@ Latest version available for each version of Angular
 
 | ngx-translate |   Angular     |
 |---------------|---------------|
+| 1.4.0         |  13.x to 9.x  |
 | 1.3.0         |  11.x to 8.x  |
 | 1.2.0         |  9.x 8.x 7.x  |
 | 1.1.0         |  9.x 8.x 7.x  |
