@@ -1,4 +1,4 @@
-import { Injectable, Optional } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 
 import { TranslateService } from '@ngx-translate/core';
 import { Title } from '@angular/platform-browser';
@@ -16,6 +16,7 @@ import {
   lastRouteKey,
   RoutePath,
 } from './ngx-translate-routes-constant';
+import { NGX_TRANSLATE_ROUTES_CONFING } from './ngx-translate-routes.token';
 
 @Injectable({
   providedIn: 'root',
@@ -29,12 +30,10 @@ export class NgxTranslateRoutesService {
     private title: Title,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    @Optional() config?: NgxTranslateRoutesConfig
+    @Inject(NGX_TRANSLATE_ROUTES_CONFING)
+    config: NgxTranslateRoutesConfig
   ) {
-    this.config = new NgxTranslateRoutesConfig(
-      config?.enableRouteTranslate,
-      config?.enableTitleTranslate
-    );
+    this.config = config;
     this.translate.onDefaultLangChange
       .pipe(skip(1))
       .subscribe({ next: () => this.checkConfigValueAndMakeTranslations() });
@@ -48,16 +47,15 @@ export class NgxTranslateRoutesService {
             event instanceof NavigationEnd ||
             (event instanceof NavigationStart &&
               event.id === 1 &&
-              JSON.parse(localStorage.getItem(lastRouteKey))?.translatedPath ===
-                event.url)
+              JSON.parse(localStorage.getItem(lastRouteKey) || '{}')
+                ?.translatedPath === event.url)
         )
       )
       .subscribe({
         next: (event) => {
           if (event instanceof NavigationStart) {
-            const lastLocationPath: RoutePath = JSON.parse(
-              localStorage.getItem(lastRouteKey)
-            );
+            const item = localStorage.getItem(lastRouteKey);
+            const lastLocationPath: RoutePath = item && JSON.parse(item);
             localStorage.removeItem(lastRouteKey);
             this.router.navigateByUrl(lastLocationPath.path);
           } else {
@@ -68,20 +66,16 @@ export class NgxTranslateRoutesService {
   }
 
   checkConfigValueAndMakeTranslations() {
-    if (this.config.enableTitleTranslate) {
-      this.translateTitle();
-    }
-    if (this.config.enableRouteTranslate) {
-      this.translateRoute();
-    }
+    this.config.enableTitleTranslate && this.translateTitle();
+    this.config.enableRouteTranslate && this.translateRoute();
   }
 
   private translateTitle() {
     let child = this.activatedRoute.firstChild;
-    while (child.firstChild) {
+    while (child?.firstChild) {
       child = child.firstChild;
     }
-    const routeTitle: string = child.snapshot.data.title;
+    const routeTitle = child?.snapshot.data?.title;
     const appTitle = routeTitle
       ? this.translate.instant(routeTitle)
       : this.title.getTitle();
