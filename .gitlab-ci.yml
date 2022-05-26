@@ -49,6 +49,6 @@ deploy:
   stage: deploy
   image: trion/ng-cli
   script:
-    - ng build ngx-translate-routes --prod && cd dist/ngx-translate-routes && echo '//registry.npmjs.org/:_authToken='$NPM_TOKEN>.npmrc && npm publish
+    - ng build ngx-translate-routes && cd dist/ngx-translate-routes && echo '//registry.npmjs.org/:_authToken='$NPM_TOKEN>.npmrc && npm publish
   only:
     - tags
