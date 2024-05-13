@@ -39,10 +39,7 @@ export const httpLoaderFactory = (http: HttpClient) => new TranslateHttpLoader(h
         deps: [HttpClient],
       },
     }),
-    NgxTranslateRoutesModule.forRoot({
-      enableRouteTranslate: true,
-      enableTitleTranslate: true
-    }),
+    NgxTranslateRoutesModule.forRoot(),
   ],
   providers: [],
   bootstrap: [AppComponent],

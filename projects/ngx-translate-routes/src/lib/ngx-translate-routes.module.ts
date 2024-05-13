@@ -20,13 +20,9 @@ export class NgxTranslateRoutesModule {
       ngModule: NgxTranslateRoutesModule,
       providers: [{ provide: NGX_TRANSLATE_ROUTES_CONFING, useValue: {
         enableRouteTranslate:
-          config?.enableRouteTranslate !== undefined
-            ? config.enableRouteTranslate
-            : true,
+          config?.enableRouteTranslate ?? true,
         enableTitleTranslate:
-          config?.enableTitleTranslate !== undefined
-            ? config.enableTitleTranslate
-            : true,
+          config?.enableTitleTranslate ?? true,
       } }],
     };
   }
