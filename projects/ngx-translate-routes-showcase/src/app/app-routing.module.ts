@@ -8,17 +8,43 @@ import { NotFoundComponent } from './not-found/not-found.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-  { path: 'about', component: AboutComponent, data: {title: 'titles.about'} },
-  { path: 'profile', component: MyprofileComponent, data: {title: 'titles.profile'} },
-  { path: 'myaccount', component: MyaccountComponent, data: {title: 'titles.myaccount'} },
-  { path: 'dashboard', component: DashboardComponent, data: {title: 'Dashboard'} },
-  { path: 'users',  loadChildren: () => import('./users/users.module').then(m => m.UsersModule) },
-  {path: '404', component: NotFoundComponent},
-  {path: '**', redirectTo: '/404'}
+  {
+    path: 'about',
+    component: AboutComponent,
+    data: {
+      title: 'about'
+    }
+  },
+  {
+    path: 'profile',
+    component: MyprofileComponent,
+    data: {
+      title: 'profile',
+    }
+  },
+  {
+    path: 'myaccount',
+    component: MyaccountComponent,
+    data: {
+      title: 'myaccount',
+    }
+  },
+  {
+    path: 'dashboard',
+    title: 'Dashboard',
+    component: DashboardComponent,
+  },
+  {
+    path: 'users',
+    loadChildren: () =>
+      import('./users/users.module').then((m) => m.UsersModule),
+  },
+  { path: '404', component: NotFoundComponent },
+  { path: '**', redirectTo: '/404' },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}
