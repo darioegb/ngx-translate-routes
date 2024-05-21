@@ -1,4 +1,4 @@
-import { Inject, Injectable, inject } from '@angular/core';
+import { Inject, Injectable, OnDestroy, inject } from '@angular/core';
 
 import { TranslateService } from '@ngx-translate/core';
 import { Title } from '@angular/platform-browser';
@@ -24,7 +24,7 @@ import { NGX_TRANSLATE_ROUTES_CONFING } from './ngx-translate-routes.token';
 @Injectable({
   providedIn: 'root',
 })
-export class NgxTranslateRoutesService {
+export class NgxTranslateRoutesService implements OnDestroy {
   #destroy$ = new Subject<void>();
   #translate = inject(TranslateService);
   #location = inject(Location);

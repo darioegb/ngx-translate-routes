@@ -1,13 +1,14 @@
 {
   "extends": "../../.eslintrc.json",
   "ignorePatterns": [
-    "!**/*"
+    "src/environments/*.ts",
+    "src/**/*.spec.ts",
+    "src/test.ts",
+    "e2e/**"
   ],
   "overrides": [
     {
-      "files": [
-        "*.ts"
-      ],
+      "files": ["*.ts"],
       "parserOptions": {
         "project": [
           "projects/ngx-translate-routes-showcase/tsconfig.app.json",
@@ -39,17 +40,12 @@
             "accessibility": "explicit"
           }
         ],
-        "arrow-parens": [
-          "off",
-          "always"
-        ],
+        "arrow-parens": ["off", "always"],
         "import/order": "off"
       }
     },
     {
-      "files": [
-        "*.html"
-      ],
+      "files": ["*.html"],
       "rules": {}
     }
   ]
