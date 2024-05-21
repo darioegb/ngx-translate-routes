@@ -1,6 +1,6 @@
 {
     "name": "ngx-translate-routes",
-    "version": "1.4.1",
+    "version": "2.0.0",
     "author": {
         "name": "Dario E Gonzalez B",
         "email": "darioegb@gmail.com"
@@ -8,15 +8,22 @@
     "description": "A package to translate title and route path",
     "keywords": [
         "ngx-translate-routes",
+        "translate routes",
+        "angular routing",
         "angular translate title",
-        "angular translate route"
+        "angular translate route",
+        "angular",
+        "typescript",
+        "i18n"
     ],
     "repository": {
         "type": "git",
-        "url": "https://gitlab.com/darioegb/ngx-translate-routes/"
+        "url": "https://github.com/darioegb/ngx-translate-routes/"
     },
-    "dependencies": {
-      "tslib": "^2.3.1"
+    "peerDependencies": {
+      "@ngx-translate/core": ">=14.0.0",
+      "ngx-translate/http-loader": ">=7.0.0",
+      "rxjs": ">=7.0.0"
     },
     "license": "MIT"
 }

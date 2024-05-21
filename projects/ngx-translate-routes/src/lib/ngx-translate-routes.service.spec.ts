@@ -1,5 +1,5 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { TestBed } from '@angular/core/testing';
+import { TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { Title } from '@angular/platform-browser';
 import {
   ActivatedRoute,
@@ -13,6 +13,7 @@ import { TranslateTestingModule } from 'ngx-translate-testing';
 
 import { ReplaySubject } from 'rxjs';
 import { of } from 'rxjs/internal/observable/of';
+import { Location } from '@angular/common';
 import { TRANSLATIONS } from '../test';
 import { NgxTranslateRoutesModule } from './ngx-translate-routes.module';
 import { NgxTranslateRoutesService } from './ngx-translate-routes.service';
@@ -21,6 +22,7 @@ describe('NgxTranslateRoutesService', () => {
   describe('With object config', () => {
     let service: NgxTranslateRoutesService;
     let title: Title;
+    let location: Location;
 
     beforeEach(() => {
       TestBed.configureTestingModule({
@@ -29,10 +31,7 @@ describe('NgxTranslateRoutesService', () => {
           TranslateTestingModule.withTranslations(
             TRANSLATIONS
           ).withDefaultLanguage('en'),
-          NgxTranslateRoutesModule.forRoot({
-            enableRouteTranslate: true,
-            enableTitleTranslate: true,
-          }),
+          NgxTranslateRoutesModule.forRoot(),
         ],
         providers: [
           {
@@ -50,7 +49,7 @@ describe('NgxTranslateRoutesService', () => {
                 firstChild: {
                   snapshot: {
                     data: {
-                      title: 'titles.users.profile',
+                      title: 'users.profile',
                     },
                   },
                 },
@@ -61,22 +60,26 @@ describe('NgxTranslateRoutesService', () => {
       });
       title = TestBed.inject(Title);
       service = TestBed.inject(NgxTranslateRoutesService);
+      location = TestBed.inject(Location);
       localStorage.clear();
+      service.init();
     });
 
     it('should be created', () => {
       expect(service).toBeTruthy();
     });
 
-    it('#checkConfigValueAndMakeTranslations should set title and url', () => {
+    it('#checkConfigValueAndMakeTranslations should set title and url', fakeAsync(() => {
       service.checkConfigValueAndMakeTranslations();
+      tick();
       expect(title.getTitle()).toEqual(TRANSLATIONS.en.titles.users.profile);
-      expect(document.location.pathname).toEqual('/users/profile/1');
-    });
+      expect(location.path()).toEqual('/users/profile/1');
+    }));
   });
 
   describe('With object config and 404 error ocurred', () => {
     let service: NgxTranslateRoutesService;
+    let location: Location;
 
     beforeEach(() => {
       TestBed.configureTestingModule({
@@ -85,10 +88,7 @@ describe('NgxTranslateRoutesService', () => {
           TranslateTestingModule.withTranslations(
             TRANSLATIONS
           ).withDefaultLanguage('en'),
-          NgxTranslateRoutesModule.forRoot({
-            enableRouteTranslate: true,
-            enableTitleTranslate: true,
-          }),
+          NgxTranslateRoutesModule.forRoot(),
         ],
         providers: [
           {
@@ -114,6 +114,7 @@ describe('NgxTranslateRoutesService', () => {
         ],
       });
       service = TestBed.inject(NgxTranslateRoutesService);
+      location = TestBed.inject(Location);
       localStorage.clear();
     });
 
@@ -122,8 +123,7 @@ describe('NgxTranslateRoutesService', () => {
     });
 
     it('#checkConfigValueAndMakeTranslations should not set title and url when 404', () => {
-      service.checkConfigValueAndMakeTranslations();
-      expect(document.location.pathname).not.toEqual(
+      expect(location.path()).not.toEqual(
         `/${TRANSLATIONS.es.routes.about}`
       );
     });
@@ -141,7 +141,7 @@ describe('NgxTranslateRoutesService', () => {
       firstChild: {
         snapshot: {
           data: {
-            title: 'titles.about',
+            title: 'about',
           },
         },
       },
@@ -149,6 +149,7 @@ describe('NgxTranslateRoutesService', () => {
 
     let service: NgxTranslateRoutesService;
     let title: Title;
+    let location: Location;
 
     beforeEach(() => {
       TestBed.configureTestingModule({
@@ -172,6 +173,7 @@ describe('NgxTranslateRoutesService', () => {
       });
       title = TestBed.inject(Title);
       service = TestBed.inject(NgxTranslateRoutesService);
+      location = TestBed.inject(Location);
       localStorage.clear();
     });
 
@@ -179,26 +181,29 @@ describe('NgxTranslateRoutesService', () => {
       expect(service).toBeTruthy();
     });
 
-    it('#checkConfigValueAndMakeTranslations should set title and url', () => {
+    it('#checkConfigValueAndMakeTranslations should set title and url', fakeAsync(() => {
       eventSubject.next(new NavigationEnd(1, '/about', 'imperative'));
+      tick();
       expect(title.getTitle()).toEqual(TRANSLATIONS.es.titles.about);
-      expect(document.location.pathname).toEqual(
+      expect(location.path()).toEqual(
         `/${TRANSLATIONS.es.routes.about}`
       );
-    });
+    }));
 
-    it('#checkConfigValueAndMakeTranslations should set title and url', () => {
+    it('#checkConfigValueAndMakeTranslations should set title and url', fakeAsync(() => {
       eventSubject.next(new NavigationEnd(1, '/about', 'imperative'));
       eventSubject.next(new NavigationStart(1, '/sobreNosotros', 'imperative'));
+      tick();
       expect(title.getTitle()).toEqual(TRANSLATIONS.es.titles.about);
-      expect(document.location.pathname).toEqual(
+      expect(location.path()).toEqual(
         `/${TRANSLATIONS.es.routes.about}`
       );
-    });
+    }));
   });
 
   describe('With object config false', () => {
     let service: NgxTranslateRoutesService;
+    let title: Title;
 
     beforeEach(() => {
       TestBed.configureTestingModule({
@@ -236,6 +241,7 @@ describe('NgxTranslateRoutesService', () => {
         ],
       });
       service = TestBed.inject(NgxTranslateRoutesService);
+      title = TestBed.inject(Title);
       localStorage.clear();
     });
 
@@ -245,8 +251,8 @@ describe('NgxTranslateRoutesService', () => {
 
     it('#checkConfigValueAndMakeTranslations should not translate route and title when config is false', () => {
       service.checkConfigValueAndMakeTranslations();
-      const privateSpyTitle = spyOn<any>(service, 'translateTitle');
-      const privateSpyRoute = spyOn<any>(service, 'translateRoute');
+      const privateSpyRoute = spyOn(localStorage, 'setItem');
+      const privateSpyTitle = spyOn(title, 'setTitle');
       expect(privateSpyTitle).not.toHaveBeenCalled();
       expect(privateSpyRoute).not.toHaveBeenCalled();
     });
@@ -319,5 +325,108 @@ describe('NgxTranslateRoutesService', () => {
         expect(service.checkConfigValueAndMakeTranslations).toHaveBeenCalled();
       });
     });
+  });
+
+  describe('Route translation with custom strategy', () => {
+    let service: NgxTranslateRoutesService;
+    let location: Location;
+
+    const config = {
+      enableRouteTranslate: true,
+      routeTranslationStrategy: (route: string) => `custom-${route}`,
+      routesUsingStrategy: ['test'],
+    };
+
+    beforeEach(() => {
+      TestBed.configureTestingModule({
+        imports: [
+          HttpClientTestingModule,
+          TranslateTestingModule.withTranslations(TRANSLATIONS).withDefaultLanguage('en'),
+          NgxTranslateRoutesModule.forRoot(config),
+        ],
+        providers: [
+          {
+            provide: Router,
+            useValue: {
+              events: of('/'),
+              navigateByUrl: (_: any) => {},
+              url: '/test',
+            },
+          },
+          {
+            provide: ActivatedRoute,
+            useValue: {
+              firstChild: {
+                firstChild: {
+                  snapshot: {
+                    data: {},
+                  },
+                },
+              },
+            },
+          },
+        ],
+      });
+      service = TestBed.inject(NgxTranslateRoutesService);
+      location = TestBed.inject(Location);
+      localStorage.clear();
+      service.init();
+    });
+
+    it('should use custom translation strategy for routes', fakeAsync(() => {
+      service.checkConfigValueAndMakeTranslations();
+      tick();
+      expect(location.path()).toEqual('/custom-test');
+    }));
+  });
+
+  describe('Title translation fallback to default title', () => {
+    let service: NgxTranslateRoutesService;
+    let title: Title;
+    let location: Location;
+
+    beforeEach(() => {
+      TestBed.configureTestingModule({
+        imports: [
+          HttpClientTestingModule,
+          TranslateTestingModule.withTranslations(TRANSLATIONS).withDefaultLanguage('en'),
+          NgxTranslateRoutesModule.forRoot(),
+        ],
+        providers: [
+          {
+            provide: Router,
+            useValue: {
+              events: of('/'),
+              navigateByUrl: (_: any) => {},
+              url: '/no-title',
+            },
+          },
+          {
+            provide: ActivatedRoute,
+            useValue: {
+              firstChild: {
+                firstChild: {
+                  snapshot: {
+                    data: {},
+                  },
+                },
+              },
+            },
+          },
+        ],
+      });
+      title = TestBed.inject(Title);
+      spyOn(title, 'getTitle').and.returnValue('Default Title');
+      service = TestBed.inject(NgxTranslateRoutesService);
+      location = TestBed.inject(Location);
+      localStorage.clear();
+      service.init();
+    });
+
+    it('should fall back to default title if no title data is present', fakeAsync(() => {
+      service.checkConfigValueAndMakeTranslations();
+      tick();
+      expect(title.getTitle()).toEqual('Default Title');
+    }));
   });
 });

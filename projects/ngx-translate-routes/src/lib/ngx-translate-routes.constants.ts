@@ -4,8 +4,3 @@ export const translatePrefixes = {
 };
 
 export const lastRouteKey = 'lastLocationPath';
-
-export interface RoutePath {
-  path: string;
-  translatedPath: string;
-}

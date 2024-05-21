@@ -1,16 +1,16 @@
 {
-    "titles": {
-        "profile": "Profile",
-        "about": "About Us",
-        "myaccount": "My account",
-        "users": {
-            "root": "Users",
-            "profile": "User Profile",
-            "myaccount": "List Users"
-        }
-    },
-    "routes": {
-        "about": "aboutUs",
-        "myaccount": "myAccount"
+  "titles": {
+    "profile": "Profile",
+    "about": "About Us",
+    "myaccount": "My account",
+    "users": {
+      "root": "Users",
+      "profile": "User Profile {{userId}}",
+      "myaccount": "List Users"
     }
+  },
+  "routes": {
+    "about": "aboutUs",
+    "myaccount": "myAccount"
+  }
 }

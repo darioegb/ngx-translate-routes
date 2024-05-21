@@ -111,18 +111,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "ngx-translate-routes-showcase:build"
+            "buildTarget": "ngx-translate-routes-showcase:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "ngx-translate-routes-showcase:build:production"
+              "buildTarget": "ngx-translate-routes-showcase:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "ngx-translate-routes-showcase:build"
+            "buildTarget": "ngx-translate-routes-showcase:build"
           }
         },
         "test": {
@@ -166,9 +166,10 @@
       }
     }
   },
-  "defaultProject": "ngx-translate-routes",
   "cli": {
     "analytics": false,
-    "defaultCollection": "@angular-eslint/schematics"
+    "schematicCollections": [
+      "@angular-eslint/schematics"
+    ]
   }
 }

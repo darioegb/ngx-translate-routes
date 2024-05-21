@@ -4,14 +4,25 @@ import { ProfileComponent } from '../profile/profile.component';
 import { ListusersComponent } from '../listusers/listusers.component';
 
 const routes: Routes = [
-  { path: '', data: {title: 'titles.users.root'} },
-  { path: 'profile/:id', component: ProfileComponent, data: {title: 'titles.users.profile'} },
-  { path: 'myaccount', component: ListusersComponent, data: {title: 'titles.users.myaccount'} }
+  { path: '', title: 'users.root', children: [] },
+  {
+    path: 'profile/:userId',
+    component: ProfileComponent,
+    data: {
+      title: 'users.profile',
+    }
+  },
+  {
+    path: 'myaccount',
+    component: ListusersComponent,
+    data: {
+      title: 'users.myaccount',
+    }
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-
-export class UsersRoutingModule { }
+export class UsersRoutingModule {}

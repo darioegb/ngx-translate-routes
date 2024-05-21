@@ -1,0 +1,86 @@
+name: CI
+on:
+  push:
+    branches:
+      - '**'
+  pull_request:
+    branches:
+      - master
+      - develop
+  release:
+    types: [created]
+jobs:
+  test_lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Install dependencies
+        run: npm install
+      - name: Run linting
+        run: npm run lint
+
+  test_karma:
+    runs-on: ubuntu-latest
+    container: trion/ng-cli-karma
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Install dependencies
+        run: npm install
+      - name: Run Karma tests
+        run: npm run test-prod
+      - name: Upload coverage
+        uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: "${{ github.job }}"
+          path: coverage/
+
+  sonarcloud_check:
+    name: SonarCloud
+    runs-on: ubuntu-latest
+    needs: [test_lint, test_karma]
+    if: github.event_name == 'pull_request' || github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
+      - uses: actions/cache@v3
+        with:
+          node-version: '20.x'
+          path: |-
+            node_modules/
+            .sonar/cache
+          key: "${{ github.job }}"
+      - uses: actions/download-artifact@v4
+        with:
+          name: test_karma
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+  deploy:
+    runs-on: ubuntu-latest
+    container: trion/ng-cli-karma
+    needs: [sonarcloud_check] # Wait for sonarcloud_check job to complete successfully
+    if: github.event_name == 'release' # Only deploy on tag creation
+    steps:
+      - uses: actions/checkout@v4
+      # Setup .npmrc file to publish to npm
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          registry-url: 'https://registry.npmjs.org'
+      - run: |
+          npm install
+          ng build ngx-translate-routes
+          cd dist/ngx-translate-routes
+          npm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
