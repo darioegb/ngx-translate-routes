@@ -326,4 +326,107 @@ describe('NgxTranslateRoutesService', () => {
       });
     });
   });
+
+  describe('Route translation with custom strategy', () => {
+    let service: NgxTranslateRoutesService;
+    let location: Location;
+
+    const config = {
+      enableRouteTranslate: true,
+      routeTranslationStrategy: (route: string) => `custom-${route}`,
+      routesUsingStrategy: ['test'],
+    };
+
+    beforeEach(() => {
+      TestBed.configureTestingModule({
+        imports: [
+          HttpClientTestingModule,
+          TranslateTestingModule.withTranslations(TRANSLATIONS).withDefaultLanguage('en'),
+          NgxTranslateRoutesModule.forRoot(config),
+        ],
+        providers: [
+          {
+            provide: Router,
+            useValue: {
+              events: of('/'),
+              navigateByUrl: (_: any) => {},
+              url: '/test',
+            },
+          },
+          {
+            provide: ActivatedRoute,
+            useValue: {
+              firstChild: {
+                firstChild: {
+                  snapshot: {
+                    data: {},
+                  },
+                },
+              },
+            },
+          },
+        ],
+      });
+      service = TestBed.inject(NgxTranslateRoutesService);
+      location = TestBed.inject(Location);
+      localStorage.clear();
+      service.init();
+    });
+
+    it('should use custom translation strategy for routes', fakeAsync(() => {
+      service.checkConfigValueAndMakeTranslations();
+      tick();
+      expect(location.path()).toEqual('/custom-test');
+    }));
+  });
+
+  describe('Title translation fallback to default title', () => {
+    let service: NgxTranslateRoutesService;
+    let title: Title;
+    let location: Location;
+
+    beforeEach(() => {
+      TestBed.configureTestingModule({
+        imports: [
+          HttpClientTestingModule,
+          TranslateTestingModule.withTranslations(TRANSLATIONS).withDefaultLanguage('en'),
+          NgxTranslateRoutesModule.forRoot(),
+        ],
+        providers: [
+          {
+            provide: Router,
+            useValue: {
+              events: of('/'),
+              navigateByUrl: (_: any) => {},
+              url: '/no-title',
+            },
+          },
+          {
+            provide: ActivatedRoute,
+            useValue: {
+              firstChild: {
+                firstChild: {
+                  snapshot: {
+                    data: {},
+                  },
+                },
+              },
+            },
+          },
+        ],
+      });
+      title = TestBed.inject(Title);
+      spyOn(title, 'getTitle').and.returnValue('Default Title');
+      service = TestBed.inject(NgxTranslateRoutesService);
+      location = TestBed.inject(Location);
+      localStorage.clear();
+      service.init();
+    });
+
+    it('should fall back to default title if no title data is present', fakeAsync(() => {
+      service.checkConfigValueAndMakeTranslations();
+      tick();
+      expect(title.getTitle()).toEqual('Default Title');
+    }));
+  });
 });

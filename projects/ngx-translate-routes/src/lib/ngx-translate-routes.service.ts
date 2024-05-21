@@ -34,7 +34,7 @@ export class NgxTranslateRoutesService {
 
   constructor(
     @Inject(NGX_TRANSLATE_ROUTES_CONFING)
-    private readonly config: NgxTranslateRoutesConfig
+    private config: NgxTranslateRoutesConfig
   ) {
     this.#translate.onDefaultLangChange
       .pipe(skip(1), takeUntil(this.#destroy$))
@@ -109,44 +109,44 @@ export class NgxTranslateRoutesService {
   }
 
   async #translateRoute(): Promise<void> {
-    let routeUrl = '';
-    const subPaths = this.#router.url.split('/');
-    await subPaths.forEach(async (subPath: string) => {
-      let translatePath: string;
-      if (
-        this.config.routeTranslationStrategy &&
-        this.config.routesUsingStrategy?.includes(subPath)
-      ) {
-        translatePath = this.config.routeTranslationStrategy(subPath);
-      } else {
-        translatePath = await firstValueFrom(
-          this.#translate.get(`${this.config.routePrefix}.${subPath}`)
-        );
+    try {
+      const { routeTranslationStrategy, routesUsingStrategy } = this.config;
+      const subPaths = this.#router.url.split('/');
+      let routeUrl = '';
+
+      for (const subPath of subPaths) {
+        const translatePath = routeTranslationStrategy && routesUsingStrategy?.includes(subPath)
+          ? routeTranslationStrategy(subPath)
+          : await this.#getTranslatedPath(subPath);
+
+        routeUrl = this.#concatenateRouteUrl(routeUrl, translatePath, subPath);
       }
-      routeUrl =
-        subPath.length > 0
-          ? this.#routeUrlConcat(routeUrl, translatePath, subPath)
-          : subPath;
-    });
-    const lastLocationPath: RoutePath = {
-      path: this.#location.path(),
-      translatedPath: routeUrl,
-    };
-    this.#location.replaceState(routeUrl);
-    localStorage.setItem(lastRouteKey, JSON.stringify(lastLocationPath));
+
+      this.#updateLocationIfChanged(routeUrl);
+    } catch (error) {
+      console.error('Error translating route:', error);
+    }
   }
 
-  #routeUrlConcat(
-    routeUrl: string,
-    translatePath: string,
-    subPath: string
-  ): string {
-    return routeUrl.concat(
-      `/${
-        !translatePath.startsWith(translatePrefixes.route)
-          ? translatePath
-          : subPath
-      }`
-    );
+  async #getTranslatedPath(subPath: string): Promise<string> {
+    return firstValueFrom(this.#translate.get(`${this.config.routePrefix}.${subPath}`));
+  }
+
+  #concatenateRouteUrl(routeUrl: string, translatePath: string, subPath: string): string {
+    return subPath.length > 0
+      ? routeUrl.concat(`/${!translatePath.startsWith(translatePrefixes.route) ? translatePath : subPath}`)
+      : subPath;
+  }
+
+  #updateLocationIfChanged(newRouteUrl: string): void {
+    const currentPath = this.#location.path();
+    if (currentPath !== newRouteUrl) {
+      const lastLocationPath: RoutePath = {
+        path: currentPath,
+        translatedPath: newRouteUrl,
+      };
+      this.#location.replaceState(newRouteUrl);
+      localStorage.setItem(lastRouteKey, JSON.stringify(lastLocationPath));
+    }
   }
 }

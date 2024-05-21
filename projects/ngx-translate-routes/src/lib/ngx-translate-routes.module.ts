@@ -40,6 +40,8 @@ export class NgxTranslateRoutesModule {
             enableTitleTranslate: config?.enableTitleTranslate ?? true,
             routePrefix: config?.routePrefix ?? 'routes',
             titlePrefix: config?.titlePrefix ?? 'titles',
+            onLanguageChange: config?.onLanguageChange ?? undefined,
+            routeTranslationStrategy: config?.routeTranslationStrategy ?? undefined,
             routesUsingStrategy: config?.routesUsingStrategy ?? [],
           },
         },
