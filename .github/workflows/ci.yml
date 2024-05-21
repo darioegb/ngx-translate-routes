@@ -52,13 +52,14 @@ jobs:
           fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
       - uses: actions/cache@v3
         with:
+          node-version: '20.x'
           path: |-
             node_modules/
             .sonar/cache
           key: "${{ github.job }}"
       - uses: actions/download-artifact@v4
         with:
-          name: test:karma
+          name: test_karma
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
