@@ -133,9 +133,11 @@ export class NgxTranslateRoutesService implements OnDestroy {
   }
 
   #concatenateRouteUrl(routeUrl: string, translatePath: string, subPath: string): string {
-    return subPath.length > 0
-      ? routeUrl.concat(`/${!translatePath.startsWith(translatePrefixes.route) ? translatePath : subPath}`)
-      : subPath;
+    if (subPath.length > 0) {
+      const segmentToConcat = !translatePath.startsWith(translatePrefixes.route) ? translatePath : subPath;
+      return `${routeUrl}/${segmentToConcat}`;
+    }
+    return subPath;
   }
 
   #updateLocationIfChanged(newRouteUrl: string): void {
