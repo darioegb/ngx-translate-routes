@@ -44,7 +44,7 @@ jobs:
   sonarcloud_check:
     name: SonarCloud
     runs-on: ubuntu-latest
-    needs: [test-lint, test-karma]
+    needs: [test_lint, test_karma]
     if: github.event_name == 'pull_request' || github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop'
     steps:
       - uses: actions/checkout@v4
