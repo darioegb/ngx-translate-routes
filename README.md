@@ -1,6 +1,6 @@
 # NgxTranslateRoutes
 
-[![pipeline status](https://gitlab.com/darioegb/ngx-translate-routes/badges/master/pipeline.svg)](https://gitlab.com/darioegb/ngx-translate-routes/-/commits/master)
+![pipeline status](https://github.com/darioegb/ngx-translate-routes/actions/workflows/ci.yml/badge.svg)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=darioegb_ngx-translate-routes&metric=alert_status)](https://sonarcloud.io/dashboard?id=darioegb_ngx-translate-routes)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=darioegb_ngx-translate-routes&metric=coverage)](https://sonarcloud.io/dashboard?id=darioegb_ngx-translate-routes)
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=darioegb_ngx-translate-routes&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=darioegb_ngx-translate-routes)
