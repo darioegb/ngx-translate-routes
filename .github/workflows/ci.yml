@@ -68,7 +68,6 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     container: trion/ng-cli-karma
-    needs: [sonarcloud_check] # Wait for sonarcloud_check job to complete successfully
     if: github.event_name == 'release' # Only deploy on tag creation
     steps:
       - uses: actions/checkout@v4
