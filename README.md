@@ -115,14 +115,13 @@ By default the configuration object is:
     enableTitleTranslate?: boolean,
     routePrefix?: string,
     titlePrefix?: string,
+    onLanguageChange?: () => void,
     routeTranslationStrategy?: (originalRoute: string) => string,
-    onLanguageChange?: () => void
+    routesUsingStrategy?: string[]
   }
 ```
 
-**Step 2**
-**Add error message configuration in JSON file**
-Ngx-translate and others internationalizations packages manage json files for each idiom thant manage. For example is your application manage english langague you must create in assets/i18n/en.jsone all the titles and routes you need to translate in your application. Every property in the json will be named as we want to discribe route, by example:
+**Step 2:** Add error message configuration in JSON file. Ngx-translate and others internationalizations packages manage json files for each idiom thant manage. For example is your application manage english langague you must create in assets/i18n/en.jsone all the titles and routes you need to translate in your application. Every property in the json will be named as we want to discribe route, by example:
 
 ```javascript
   // assets/i18n/en.json

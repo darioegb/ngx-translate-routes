@@ -68,7 +68,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     container: trion/ng-cli-karma
-    needs: [sonarcloud_check] # Wait for sonarcloud_check job to complete successfully
+    needs: [test_lint, test_karma]
     if: github.event_name == 'release' # Only deploy on tag creation
     steps:
       - uses: actions/checkout@v4
@@ -76,11 +76,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20.x'
-          registry-url: 'https://registry.npmjs.org'
       - run: |
           npm install
           ng build ngx-translate-routes
           cd dist/ngx-translate-routes
-          npm publish --provenance --access public
+          npx semantic-release
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

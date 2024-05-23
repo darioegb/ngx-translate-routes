@@ -5,14 +5,15 @@
     {
       "files": ["*.ts"],
       "parserOptions": {
-        "project": ["tsconfig.json", "e2e/tsconfig.json"],
+        "project": ["tsconfig.json"],
         "createDefaultProgram": true
       },
       "extends": [
         "eslint:recommended",
         "plugin:@typescript-eslint/recommended",
         "plugin:@angular-eslint/recommended",
-        "plugin:@angular-eslint/template/process-inline-templates"
+        "plugin:@angular-eslint/template/process-inline-templates",
+        "plugin:prettier/recommended"
       ],
       "rules": {
         "@typescript-eslint/explicit-member-accessibility": [
@@ -24,12 +25,18 @@
         "arrow-parens": ["off", "always"],
         "import/order": "off",
         "no-unused-expressions": "off",
-        "@typescript-eslint/no-unused-expressions": ["error", { "allowShortCircuit": true, "allowTernary": true }]
+        "@typescript-eslint/no-unused-expressions": [
+          "error",
+          { "allowShortCircuit": true, "allowTernary": true }
+        ]
       }
     },
     {
       "files": ["*.html"],
-      "extends": ["plugin:@angular-eslint/template/recommended"],
+      "extends": [
+        "plugin:@angular-eslint/template/recommended",
+        "plugin:prettier/recommended"
+      ],
       "rules": {}
     }
   ]
