@@ -18,11 +18,11 @@
     ],
     "repository": {
         "type": "git",
-        "url": "https://github.com/darioegb/ngx-translate-routes/"
+        "url": "git+https://github.com/darioegb/ngx-translate-routes.git"
     },
     "peerDependencies": {
       "@ngx-translate/core": ">=14.0.0",
-      "ngx-translate/http-loader": ">=7.0.0",
+      "@ngx-translate/http-loader": ">=7.0.0",
       "rxjs": ">=7.0.0"
     },
     "license": "MIT"

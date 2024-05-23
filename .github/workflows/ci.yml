@@ -9,6 +9,11 @@ on:
       - develop
   release:
     types: [created]
+
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   test_lint:
     runs-on: ubuntu-latest
@@ -67,8 +72,8 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
-    container: trion/ng-cli-karma
     needs: [test_lint, test_karma]
+    container: trion/ng-cli-karma
     if: github.event_name == 'release' # Only deploy on tag creation
     steps:
       - uses: actions/checkout@v4
