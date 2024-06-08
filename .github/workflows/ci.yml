@@ -48,7 +48,7 @@ jobs:
       - name: Install dependencies
         run: pnpm install
       - name: Run Karma tests
-        run: pnpm test-prod
+        run: pnpm test:prod
       - name: Upload coverage
         uses: actions/upload-artifact@v4
         if: success()
