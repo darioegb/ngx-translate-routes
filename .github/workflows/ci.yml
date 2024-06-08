@@ -18,27 +18,31 @@ jobs:
   test_lint:
     runs-on: ubuntu-latest
     steps:
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - name: Install dependencies
-        run: npm install
+        run: pnpm install
       - name: Run linting
-        run: npm run lint
+        run: pnpm lint
 
   test_karma:
     runs-on: ubuntu-latest
     container: trion/ng-cli-karma
     steps:
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - name: Install dependencies
-        run: npm install
+        run: pnpm install
       - name: Run Karma tests
-        run: npm run test-prod
+        run: pnpm test-prod
       - name: Upload coverage
         uses: actions/upload-artifact@v4
         if: success()
@@ -76,13 +80,15 @@ jobs:
     container: trion/ng-cli-karma
     if: github.event_name == 'release' # Only deploy on tag creation
     steps:
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
       - uses: actions/checkout@v4
       # Setup .npmrc file to publish to npm
       - uses: actions/setup-node@v4
         with:
           node-version: '20.x'
       - run: |
-          npm install
+          pnpm install
           ng build ngx-translate-routes
           cd dist/ngx-translate-routes
           npx semantic-release
