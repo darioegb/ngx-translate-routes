@@ -18,12 +18,15 @@ jobs:
   test_lint:
     runs-on: ubuntu-latest
     steps:
-      - name: Install pnpm
-        uses: pnpm/action-setup@v2
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+          run_install: false
       - name: Install dependencies
         run: pnpm install
       - name: Run linting
@@ -33,12 +36,15 @@ jobs:
     runs-on: ubuntu-latest
     container: trion/ng-cli-karma
     steps:
-      - name: Install pnpm
-        uses: pnpm/action-setup@v2
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+          run_install: false
       - name: Install dependencies
         run: pnpm install
       - name: Run Karma tests
@@ -80,10 +86,13 @@ jobs:
     container: trion/ng-cli-karma
     if: github.event_name == 'release' # Only deploy on tag creation
     steps:
-      - name: Install pnpm
-        uses: pnpm/action-setup@v2
       - uses: actions/checkout@v4
       # Setup .npmrc file to publish to npm
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+          run_install: false
       - uses: actions/setup-node@v4
         with:
           node-version: '20.x'
