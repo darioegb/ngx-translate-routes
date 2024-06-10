@@ -5,7 +5,7 @@ on:
       - '**'
   pull_request:
     branches:
-      - master
+      - main
       - develop
   release:
     types: [created]
@@ -50,7 +50,7 @@ jobs:
     name: SonarCloud
     runs-on: ubuntu-latest
     needs: [test_lint, test_karma]
-    if: github.event_name == 'pull_request' || github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop'
+    if: github.event_name == 'pull_request' || github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
     steps:
       - uses: actions/checkout@v4
         with:
@@ -81,10 +81,11 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20.x'
+          registry-url: 'https://registry.npmjs.org'
       - run: |
           npm install
           ng build ngx-translate-routes
           cd dist/ngx-translate-routes
-          npx semantic-release
+          npm publish --provenance --access public
         env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

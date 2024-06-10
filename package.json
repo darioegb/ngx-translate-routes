@@ -1,6 +1,6 @@
 {
   "name": "ngx-translate-routes",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -42,8 +42,6 @@
     "@angular/language-service": "^17.3.8",
     "@commitlint/cli": "^19.3.0",
     "@commitlint/config-conventional": "^19.2.2",
-    "@semantic-release/changelog": "^6.0.3",
-    "@semantic-release/git": "^10.0.1",
     "@types/jasmine": "~3.6.0",
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "^12.11.1",
@@ -65,7 +63,6 @@
     "karma-jasmine-html-reporter": "^2.1.0",
     "ng-packagr": "^17.3.0",
     "prettier": "^3.2.5",
-    "semantic-release": "^23.1.1",
     "ts-node": "~8.3.0",
     "typescript": "~5.4.5"
   }

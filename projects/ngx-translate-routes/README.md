@@ -15,7 +15,8 @@ Latest version available for each version of Angular
 
 | ngx-translate | Angular      |
 | ------------- | ------------ |
-| 2.0.0         | 14.x to 17.x |
+| 2.0.1         | 14.x to 18.x |
+| 2.0.0         | 14.x to 18.x |
 | 1.4.0         | 13.x to 9.x  |
 | 1.3.0         | 11.x to 8.x  |
 | 1.2.0         | 9.x 8.x 7.x  |
@@ -181,7 +182,7 @@ In the translation file you should respect the same name as the dynamic variable
 {
   "titles": {
     "users": {
-      "profile": "Perfil de Usuario {{userId}}",
+      "profile": "User Profile {{userId}}",
     }
   },
   // others translations
