@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, inject } from '@angular/core'
 import { TranslateService } from '@ngx-translate/core'
 
 @Component({
@@ -20,17 +20,16 @@ export class AppComponent implements OnInit {
     },
   ]
   languaje!: string
+  #translate = inject(TranslateService)
 
-  constructor(private translate: TranslateService) {}
-
-  ngOnInit() {
+  ngOnInit(): void {
     const lang = localStorage.getItem('lang')
-    this.languaje = lang ? lang : this.translate.defaultLang
-    this.translate.setDefaultLang(this.languaje)
+    this.languaje = lang ? lang : this.#translate.defaultLang
+    this.#translate.setDefaultLang(this.languaje)
   }
 
   changeLanguaje() {
-    this.translate.setDefaultLang(this.languaje)
+    this.#translate.setDefaultLang(this.languaje)
     localStorage.setItem('lang', this.languaje)
   }
 }
