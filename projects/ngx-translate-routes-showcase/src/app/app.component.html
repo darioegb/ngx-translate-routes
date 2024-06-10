@@ -1,21 +1,26 @@
 <div class="container-fluid">
-    <div style="text-align:center; background-color: aqua">
-        <h1>
-            Welcome to {{ title }}!
-        </h1>
-        <ul class="links">
-            <li><a [routerLink]="['/about']">About</a></li>
-            <li><a [routerLink]="['/dashboard']">Dashboard</a></li>
-            <li><a [routerLink]="['/profile']">Profile</a></li>
-            <li><a [routerLink]="['/myaccount']">My Account</a></li>
-            <li><a [routerLink]="['/users/profile', idUser]">Users</a></li>
-        </ul>
-    </div>
-    <div class="form-group col-md-6 offset-3">
-        <label for="changeLanguaje"> Select a languaje</label>
-        <select class="custom-select" id="changeLanguaje" [(ngModel)]="languaje" (change)="changeLanguaje()">
-      <option [value]="item.value" *ngFor="let item of languajes">{{item.key}}</option>
+  <div style="text-align: center; background-color: aqua">
+    <h1>Welcome to {{ title }}!</h1>
+    <ul class="links">
+      <li><a [routerLink]="['/about']">About</a></li>
+      <li><a [routerLink]="['/dashboard']">Dashboard</a></li>
+      <li><a [routerLink]="['/profile']">Profile</a></li>
+      <li><a [routerLink]="['/myaccount']">My Account</a></li>
+      <li><a [routerLink]="['/users/profile', idUser]">Users</a></li>
+    </ul>
+  </div>
+  <div class="form-group col-md-6 offset-3">
+    <label for="changeLanguaje"> Select a languaje</label>
+    <select
+      class="custom-select"
+      id="changeLanguaje"
+      [(ngModel)]="languaje"
+      (change)="changeLanguaje()"
+    >
+      <option [value]="item.value" *ngFor="let item of languajes">
+        {{ item.key }}
+      </option>
     </select>
-    </div>
+  </div>
 </div>
 <router-outlet></router-outlet>

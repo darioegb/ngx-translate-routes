@@ -15,7 +15,8 @@ Latest version available for each version of Angular
 
 | ngx-translate | Angular      |
 | ------------- | ------------ |
-| 2.0.0         | 14.x to 17.x |
+| 2.0.1         | 14.x to 18.x |
+| 2.0.0         | 14.x to 18.x |
 | 1.4.0         | 13.x to 9.x  |
 | 1.3.0         | 11.x to 8.x  |
 | 1.2.0         | 9.x 8.x 7.x  |
@@ -115,14 +116,13 @@ By default the configuration object is:
     enableTitleTranslate?: boolean,
     routePrefix?: string,
     titlePrefix?: string,
+    onLanguageChange?: () => void,
     routeTranslationStrategy?: (originalRoute: string) => string,
-    onLanguageChange?: () => void
+    routesUsingStrategy?: string[]
   }
 ```
 
-**Step 2**
-**Add error message configuration in JSON file**
-Ngx-translate and others internationalizations packages manage json files for each idiom thant manage. For example is your application manage english langague you must create in assets/i18n/en.jsone all the titles and routes you need to translate in your application. Every property in the json will be named as we want to discribe route, by example:
+**Step 2:** Add error message configuration in JSON file. Ngx-translate and others internationalizations packages manage json files for each idiom thant manage. For example is your application manage english langague you must create in assets/i18n/en.jsone all the titles and routes you need to translate in your application. Every property in the json will be named as we want to discribe route, by example:
 
 ```javascript
   // assets/i18n/en.json
@@ -182,7 +182,7 @@ In the translation file you should respect the same name as the dynamic variable
 {
   "titles": {
     "users": {
-      "profile": "Perfil de Usuario {{userId}}",
+      "profile": "User Profile {{userId}}",
     }
   },
   // others translations

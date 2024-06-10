@@ -150,18 +150,6 @@
               "projects/ngx-translate-routes-showcase/**/*.html"
             ]
           }
-        },
-        "e2e": {
-          "builder": "@angular-devkit/build-angular:protractor",
-          "options": {
-            "protractorConfig": "projects/ngx-translate-routes-showcase/e2e/protractor.conf.js",
-            "devServerTarget": "ngx-translate-routes-showcase:serve"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "ngx-translate-routes-showcase:serve:production"
-            }
-          }
         }
       }
     }
