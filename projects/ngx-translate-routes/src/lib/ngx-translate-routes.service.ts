@@ -1,7 +1,8 @@
+import { Location } from '@angular/common'
 import { Injectable, OnDestroy, inject, Inject } from '@angular/core'
 import { TranslateService } from '@ngx-translate/core'
 import { Router, NavigationEnd, NavigationStart } from '@angular/router'
-import { filter, skip, takeUntil } from 'rxjs/operators'
+import { filter, map, skip, takeUntil } from 'rxjs/operators'
 import { Subject } from 'rxjs'
 import {
   NgxTranslateRoutesConfig,
@@ -16,9 +17,11 @@ import { lastRouteKey } from './ngx-translate-routes.constants'
   providedIn: 'root',
 })
 export class NgxTranslateRoutesService implements OnDestroy {
+  #isNavigatingBackOrForward = false
   #destroy$ = new Subject<void>()
   #translate = inject(TranslateService)
   #router = inject(Router)
+  #location = inject(Location)
   #titleService = inject(NgxTranslateRoutesTitleService)
   #routeService = inject(NgxTranslateRoutesRouteService)
 
@@ -30,7 +33,14 @@ export class NgxTranslateRoutesService implements OnDestroy {
       .pipe(skip(1), takeUntil(this.#destroy$))
       .subscribe({
         next: () => {
-          this.checkConfigValueAndMakeTranslations()
+          const translatedPaths: RoutePath[] = this.#getTranslatedPaths()
+          const lastTranslatedPath = translatedPaths.find(
+            (path) => path.translatedPath === this.#location.path(),
+          )
+          if (lastTranslatedPath) {
+            this.#location.replaceState(lastTranslatedPath.originalPath)
+            localStorage.removeItem(lastRouteKey)
+          }
           if (this.config.onLanguageChange) {
             this.config.onLanguageChange()
           }
@@ -41,26 +51,42 @@ export class NgxTranslateRoutesService implements OnDestroy {
   init(): void {
     this.#router.events
       .pipe(
-        filter(
-          (event) =>
-            event instanceof NavigationEnd ||
-            (event instanceof NavigationStart &&
-              event.id === 1 &&
-              JSON.parse(localStorage.getItem(lastRouteKey) || '{}')
-                ?.translatedPath === event.url),
-        ),
+        filter((event) => event instanceof NavigationStart),
+        map((event) => event as NavigationStart),
         takeUntil(this.#destroy$),
       )
       .subscribe({
         next: (event) => {
-          if (event instanceof NavigationStart) {
-            const item = localStorage.getItem(lastRouteKey)
-            const lastLocationPath: RoutePath = item && JSON.parse(item)
-            localStorage.removeItem(lastRouteKey)
-            this.#router.navigateByUrl(lastLocationPath.path)
-          } else {
+          const item = localStorage.getItem(lastRouteKey)
+          if (
+            event.navigationTrigger === 'popstate' ||
+            (event.id === 1 && item)
+          ) {
+            this.#isNavigatingBackOrForward = true
+            const translatedPaths: RoutePath[] = this.#getTranslatedPaths()
+            const lastTranslatedPath = translatedPaths.find(
+              (path) => path.translatedPath === event.url,
+            )
+
+            if (lastTranslatedPath) {
+              this.#router.navigateByUrl(lastTranslatedPath.originalPath, {
+                skipLocationChange: true,
+              })
+            }
+          }
+        },
+      })
+    this.#router.events
+      .pipe(
+        filter((event) => event instanceof NavigationEnd),
+        takeUntil(this.#destroy$),
+      )
+      .subscribe({
+        next: () => {
+          if (!this.#isNavigatingBackOrForward) {
             this.checkConfigValueAndMakeTranslations()
           }
+          this.#isNavigatingBackOrForward = false
         },
       })
   }
@@ -73,5 +99,9 @@ export class NgxTranslateRoutesService implements OnDestroy {
   ngOnDestroy(): void {
     this.#destroy$.next()
     this.#destroy$.complete()
+  }
+
+  #getTranslatedPaths(): RoutePath[] {
+    return JSON.parse(localStorage.getItem(lastRouteKey) ?? '[]')
   }
 }

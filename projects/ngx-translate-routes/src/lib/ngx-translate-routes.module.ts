@@ -36,12 +36,18 @@ export class NgxTranslateRoutesModule {
           useValue: {
             enableRouteTranslate: config?.enableRouteTranslate ?? true,
             enableTitleTranslate: config?.enableTitleTranslate ?? true,
+            enableQueryParamsTranslate: config?.enableQueryParamsTranslate,
             routePrefix: config?.routePrefix ?? 'routes',
+            routeSuffixesWithQueryParams:
+              config?.routeSuffixesWithQueryParams ?? {
+                route: 'root',
+                params: 'params',
+              },
+            routesUsingStrategy: config?.routesUsingStrategy ?? [],
             titlePrefix: config?.titlePrefix ?? 'titles',
             onLanguageChange: config?.onLanguageChange ?? undefined,
             routeTranslationStrategy:
               config?.routeTranslationStrategy ?? undefined,
-            routesUsingStrategy: config?.routesUsingStrategy ?? [],
           },
         },
       ],

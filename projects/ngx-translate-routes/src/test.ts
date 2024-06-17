@@ -1,20 +1,21 @@
 // This file is required by karma.conf.js and loads recursively all the .spec and framework files
 
-import 'zone.js';
-import 'zone.js/testing';
-import { getTestBed } from '@angular/core/testing';
+import 'zone.js'
+import 'zone.js/testing'
+import { getTestBed } from '@angular/core/testing'
 import {
   BrowserDynamicTestingModule,
   platformBrowserDynamicTesting,
-} from '@angular/platform-browser-dynamic/testing';
+} from '@angular/platform-browser-dynamic/testing'
 
 // First, initialize the Angular testing environment.
 getTestBed().initTestEnvironment(
   BrowserDynamicTestingModule,
-  platformBrowserDynamicTesting(), {
-    teardown: { destroyAfterEach: false }
-}
-);
+  platformBrowserDynamicTesting(),
+  {
+    teardown: { destroyAfterEach: false },
+  },
+)
 
 // translation const
 const ENGLISH_TRANSLATIONS = {
@@ -29,10 +30,15 @@ const ENGLISH_TRANSLATIONS = {
     },
   },
   routes: {
-    about: 'aboutUs',
+    about: {
+      root: 'aboutAs',
+      params: {
+        name: 'name',
+      },
+    },
     myaccount: 'myAccount',
   },
-};
+}
 
 const SPANISH_TRANSLATIONS = {
   titles: {
@@ -47,13 +53,18 @@ const SPANISH_TRANSLATIONS = {
   },
   routes: {
     profile: 'perfil',
-    about: 'sobreNosotros',
+    about: {
+      root: 'sobreNosotros',
+      params: {
+        name: 'nombre',
+      },
+    },
     myaccount: 'miCuenta',
     users: 'usuarios',
   },
-};
+}
 
 export const TRANSLATIONS = {
   es: SPANISH_TRANSLATIONS,
-  en: ENGLISH_TRANSLATIONS
-};
+  en: ENGLISH_TRANSLATIONS,
+}

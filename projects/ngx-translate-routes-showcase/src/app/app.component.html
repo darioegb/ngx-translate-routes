@@ -2,7 +2,9 @@
   <div style="text-align: center; background-color: aqua">
     <h1>Welcome to {{ title }}!</h1>
     <ul class="links">
-      <li><a [routerLink]="['/about']">About</a></li>
+      <li>
+        <a [routerLink]="['/about']" [queryParams]="{ name: 'Test' }">About</a>
+      </li>
       <li><a [routerLink]="['/dashboard']">Dashboard</a></li>
       <li><a [routerLink]="['/profile']">Profile</a></li>
       <li><a [routerLink]="['/myaccount']">My Account</a></li>

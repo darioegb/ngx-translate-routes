@@ -11,7 +11,7 @@ import {
 import { DefaultLangChangeEvent, TranslateService } from '@ngx-translate/core'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 
-import { ReplaySubject, Subject } from 'rxjs'
+import { ReplaySubject } from 'rxjs'
 import { of } from 'rxjs/internal/observable/of'
 import { Location } from '@angular/common'
 import { TRANSLATIONS } from '../test'
@@ -23,6 +23,7 @@ describe('NgxTranslateRoutesService', () => {
     let service: NgxTranslateRoutesService
     let title: Title
     let location: Location
+    const url = '/users/profile/1'
 
     beforeEach(() => {
       TestBed.configureTestingModule({
@@ -38,8 +39,28 @@ describe('NgxTranslateRoutesService', () => {
             provide: Router,
             useValue: {
               events: of('/'),
+              createUrlTree: (_: any) => url,
               navigateByUrl: (_: any) => {},
-              url: '/users/profile/1',
+              parseUrl: (_: any) => ({
+                root: {
+                  children: {
+                    primary: {
+                      segments: [
+                        {
+                          path: 'users',
+                        },
+                        {
+                          path: 'profile',
+                        },
+                        {
+                          path: '1',
+                        },
+                      ],
+                    },
+                  },
+                },
+              }),
+              url,
             },
           },
           {
@@ -123,17 +144,22 @@ describe('NgxTranslateRoutesService', () => {
     })
 
     it('#checkConfigValueAndMakeTranslations should not set title and url when 404', () => {
-      expect(location.path()).not.toEqual(`/${TRANSLATIONS.es.routes.about}`)
+      expect(location.path()).not.toEqual(
+        `/${TRANSLATIONS.es.routes.about.root}`,
+      )
     })
   })
 
   describe('Without object config', () => {
+    const url = '/sobreNosotros'
     const eventSubject = new ReplaySubject<RouterEvent>(1)
 
     const routerStub = {
       events: eventSubject.asObservable(),
       navigateByUrl: jasmine.createSpy('navigateByUrl'),
-      url: '/about',
+      createUrlTree: (_: any) => url,
+      parseUrl: jasmine.createSpy('parseUrl'),
+      url,
     }
     const activatedRouteStub = {
       firstChild: {
@@ -149,6 +175,7 @@ describe('NgxTranslateRoutesService', () => {
     let title: Title
     let location: Location
     let activatedRoute: ActivatedRoute
+    let router: Router
 
     beforeEach(() => {
       TestBed.configureTestingModule({
@@ -157,7 +184,9 @@ describe('NgxTranslateRoutesService', () => {
           TranslateTestingModule.withTranslations(
             TRANSLATIONS,
           ).withDefaultLanguage('es'),
-          NgxTranslateRoutesModule.forRoot(),
+          NgxTranslateRoutesModule.forRoot({
+            enableQueryParamsTranslate: true,
+          }),
         ],
         providers: [
           {
@@ -174,8 +203,9 @@ describe('NgxTranslateRoutesService', () => {
       service = TestBed.inject(NgxTranslateRoutesService)
       location = TestBed.inject(Location)
       activatedRoute = TestBed.inject(ActivatedRoute)
+      router = TestBed.inject(Router)
       localStorage.clear()
-      activatedRoute.firstChild!.snapshot.data.skipTranslation = false
+      activatedRoute.firstChild!.snapshot.data['skipTranslation'] = false
     })
 
     it('should be created', () => {
@@ -183,22 +213,42 @@ describe('NgxTranslateRoutesService', () => {
     })
 
     it('#checkConfigValueAndMakeTranslations should set title and url', fakeAsync(() => {
-      eventSubject.next(new NavigationEnd(1, '/about', 'imperative'))
+      (router.parseUrl as jasmine.Spy).and.returnValue({
+        root: {
+          children: {
+            primary: {
+              segments: [{ path: 'about' }],
+            },
+          },
+        },
+        queryParams: { name: 'Test' },
+      })
+      eventSubject.next(new NavigationEnd(1, url, 'imperative'))
       tick()
       expect(title.getTitle()).toEqual(TRANSLATIONS.es.titles.about)
-      expect(location.path()).toEqual(`/${TRANSLATIONS.es.routes.about}`)
+      expect(location.path()).toEqual(`/${TRANSLATIONS.es.routes.about.root}`)
     }))
 
     it('#checkConfigValueAndMakeTranslations should set title and url', fakeAsync(() => {
+      (router.parseUrl as jasmine.Spy).and.returnValue({
+        root: {
+          children: {
+            primary: {
+              segments: [{ path: 'about' }],
+            },
+          },
+        },
+        queryParams: { name: 'Test' },
+      })
       eventSubject.next(new NavigationEnd(1, '/about', 'imperative'))
       eventSubject.next(new NavigationStart(1, '/sobreNosotros', 'imperative'))
       tick()
       expect(title.getTitle()).toEqual(TRANSLATIONS.es.titles.about)
-      expect(location.path()).toEqual(`/${TRANSLATIONS.es.routes.about}`)
+      expect(location.path()).toEqual(`/${TRANSLATIONS.es.routes.about.root}`)
     }))
 
     it('should set title without translation if skipTranslation is true', fakeAsync(() => {
-      activatedRoute.firstChild!.snapshot.data.skipTranslation = true
+      activatedRoute.firstChild!.snapshot.data['skipTranslation'] = true
       service.checkConfigValueAndMakeTranslations()
       tick()
       expect(title.getTitle()).toEqual('about')
@@ -227,6 +277,7 @@ describe('NgxTranslateRoutesService', () => {
             useValue: {
               events: of('/'),
               navigateByUrl: (_: any) => {},
+              parseUrl: (_: any) => {},
               url: '/',
             },
           },
@@ -291,6 +342,15 @@ describe('NgxTranslateRoutesService', () => {
             useValue: {
               events: of('/'),
               navigateByUrl: (_: any) => {},
+              parseUrl: (_: any) => ({
+                root: {
+                  children: {
+                    primary: {
+                      segments: [],
+                    },
+                  },
+                },
+              }),
               url: '/',
             },
           },
@@ -326,7 +386,9 @@ describe('NgxTranslateRoutesService', () => {
       eventSubject.next({ lang: 'es', translations: [] })
       fakeTranslate.onDefaultLangChange.subscribe((newLang) => {
         expect(newLang.lang).toEqual('es')
-        expect(service.checkConfigValueAndMakeTranslations).toHaveBeenCalled()
+        expect(
+          service.checkConfigValueAndMakeTranslations,
+        ).not.toHaveBeenCalled()
       })
     })
   })
@@ -340,7 +402,9 @@ describe('NgxTranslateRoutesService', () => {
       onDefaultLangChange: eventSubject.asObservable(),
       setDefaultLang: jasmine.createSpy('setDefaultLang'),
       defaultLang: 'en',
-      get: jasmine.createSpy('translate.get').and.returnValue(of('translatedPath'))
+      get: jasmine
+        .createSpy('translate.get')
+        .and.returnValue(of('translatedPath')),
     }
     const config = {
       onLanguageChange: jasmine.createSpy('onLanguageChange'),
@@ -417,7 +481,21 @@ describe('NgxTranslateRoutesService', () => {
             provide: Router,
             useValue: {
               events: of('/'),
+              createUrlTree: (_: any) => 'custom-test',
               navigateByUrl: (_: any) => {},
+              parseUrl: (_: any) => ({
+                root: {
+                  children: {
+                    primary: {
+                      segments: [
+                        {
+                          path: 'test',
+                        },
+                      ],
+                    },
+                  },
+                },
+              }),
               url: '/test',
             },
           },
@@ -451,6 +529,7 @@ describe('NgxTranslateRoutesService', () => {
   describe('Title translation fallback to default title', () => {
     let service: NgxTranslateRoutesService
     let title: Title
+    const url = '/no-title'
 
     beforeEach(() => {
       TestBed.configureTestingModule({
@@ -466,8 +545,22 @@ describe('NgxTranslateRoutesService', () => {
             provide: Router,
             useValue: {
               events: of('/'),
+              createUrlTree: (_: any) => url,
               navigateByUrl: (_: any) => {},
-              url: '/no-title',
+              parseUrl: (_: any) => ({
+                root: {
+                  children: {
+                    primary: {
+                      segments: [
+                        {
+                          path: 'no-title',
+                        },
+                      ],
+                    },
+                  },
+                },
+              }),
+              url,
             },
           },
           {

@@ -1,14 +1,21 @@
 export interface NgxTranslateRoutesConfig {
   enableTitleTranslate?: boolean
   enableRouteTranslate?: boolean
+  enableQueryParamsTranslate?: boolean
   routePrefix?: string
+  routeSuffixesWithQueryParams?: RouteSuffixesWithQueryParams
+  routesUsingStrategy?: string[]
   titlePrefix?: string
   onLanguageChange?: () => void
   routeTranslationStrategy?: (originalRoute: string) => string
-  routesUsingStrategy?: string[]
 }
 
 export interface RoutePath {
-  path: string
+  originalPath: string
   translatedPath: string
+}
+
+export interface RouteSuffixesWithQueryParams {
+  route: string
+  params: string
 }
