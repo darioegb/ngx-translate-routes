@@ -24,8 +24,8 @@ export class NgxTranslateRoutesTitleService {
     while (child?.firstChild) {
       child = child.firstChild
     }
-    const routeTitle = child?.snapshot.data?.title
-    const skipTranslation = !!child?.snapshot.data?.skipTranslation
+    const routeTitle = child?.snapshot.data?.['title']
+    const skipTranslation = !!child?.snapshot.data?.['skipTranslation']
     const params = child?.snapshot.params
     let appTitle: string
     if (skipTranslation) {

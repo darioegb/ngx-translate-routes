@@ -11,7 +11,12 @@
   },
   "routes": {
     "profile": "perfil",
-    "about": "sobreNosotros",
+    "about": {
+      "root": "sobreNosotros",
+      "params": {
+        "name": "nombre"
+      }
+    },
     "myaccount": "miCuenta",
     "users": "usuarios"
   }

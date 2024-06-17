@@ -10,7 +10,12 @@
     }
   },
   "routes": {
-    "about": "aboutUs",
+    "about": {
+      "root": "aboutAs",
+      "params": {
+        "name": "name"
+      }
+    },
     "myaccount": "myAccount"
   }
 }

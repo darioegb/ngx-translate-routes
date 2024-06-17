@@ -15,6 +15,7 @@ Latest version available for each version of Angular
 
 | ngx-translate | Angular      |
 | ------------- | ------------ |
+| 2.1.0         | 14.x to 18.x |
 | 2.0.1         | 14.x to 18.x |
 | 2.0.0         | 14.x to 18.x |
 | 1.4.0         | 13.x to 9.x  |
@@ -51,16 +52,16 @@ https://github.com/ngx-translate/core
 **Step 1:** Add NgxTranslateRoutesModule to appModule, make sure you have configured ngx-translate as well
 
 ```typescript
-import { BrowserModule } from "@angular/platform-browser";
-import { HttpClientModule, HttpClient } from "@angular/common/http";
-import { TranslateModule, TranslateLoader } from "@ngx-translate/core";
-import { TranslateHttpLoader } from "@ngx-translate/http-loader";
+import { BrowserModule } from '@angular/platform-browser'
+import { HttpClientModule, HttpClient } from '@angular/common/http'
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core'
+import { TranslateHttpLoader } from '@ngx-translate/http-loader'
 
-import { NgxTranslateRoutesModule } from "ngx-translate-routes";
+import { NgxTranslateRoutesModule } from 'ngx-translate-routes'
 
 // part of configuration ngx translate loader function
 export function HttpLoaderFactory(http: HttpClient) {
-  return new TranslateHttpLoader(http); // make sure your assets files are in default assets/i18n/*
+  return new TranslateHttpLoader(http) // make sure your assets files are in default assets/i18n/*
 }
 
 @NgModule({
@@ -70,7 +71,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     HttpClientModule, // required module for ngx-translate
     // required ngx-translate module
     TranslateModule.forRoot({
-      defaultLanguage: "en",
+      defaultLanguage: 'en',
       useDefaultLang: true,
       loader: {
         provide: TranslateLoader,
@@ -92,7 +93,7 @@ We can pass to forRoot the following object if dont want to translate titles.
 ```typescript
 NgxTranslateRoutesModule.forRoot({
   enableTitleTranslate: false,
-});
+})
 ```
 
 ### Default configuration
@@ -105,21 +106,28 @@ By default the configuration object is:
   enableTitleTranslate:  true,
   routePrefix: 'routes',
   titlePrefix: 'titles',
+  enableQueryParamsTranslate: false,
+  routeSuffixesWithQueryParams: {
+    route: 'root',
+    params: 'params',
+  }
 }
 ```
 
 ### NgxTranslateRoutesConfig interface
 
 ```typescript
-  NgxTranslateRoutesConfig {
-    enableRouteTranslate?: boolean,
-    enableTitleTranslate?: boolean,
-    routePrefix?: string,
-    titlePrefix?: string,
-    onLanguageChange?: () => void,
-    routeTranslationStrategy?: (originalRoute: string) => string,
-    routesUsingStrategy?: string[]
-  }
+export interface NgxTranslateRoutesConfig {
+  enableTitleTranslate?: boolean
+  enableRouteTranslate?: boolean
+  enableQueryParamsTranslate?: boolean
+  routePrefix?: string
+  routeSuffixesWithQueryParams?: RouteSuffixesWithQueryParams
+  routesUsingStrategy?: string[]
+  titlePrefix?: string
+  onLanguageChange?: () => void
+  routeTranslationStrategy?: (originalRoute: string) => string
+}
 ```
 
 **Step 2:** Add error message configuration in JSON file. Ngx-translate and others internationalizations packages manage json files for each idiom thant manage. For example is your application manage english langague you must create in assets/i18n/en.jsone all the titles and routes you need to translate in your application. Every property in the json will be named as we want to discribe route, by example:
@@ -149,11 +157,19 @@ After configuration you can use the service customizing your routes object as fo
 ```typescript
 // app.routing.modules.ts
 const routes: Routes = [
-  { path: "about", component: AboutComponent, data: { title: "about" } },
-  { path: "profile", component: MyprofileComponent, data: { title: "profile" } },
-  { path: "myaccount", component: MyaccountComponent, data: { title: "myaccount" } },
-  { path: "dashboard", component: DashboardComponent, title: "Dashboard" },
-];
+  { path: 'about', component: AboutComponent, data: { title: 'about' } },
+  {
+    path: 'profile',
+    component: MyprofileComponent,
+    data: { title: 'profile' },
+  },
+  {
+    path: 'myaccount',
+    component: MyaccountComponent,
+    data: { title: 'myaccount' },
+  },
+  { path: 'dashboard', component: DashboardComponent, title: 'Dashboard' },
+]
 ```
 
 For translate titles we need to add in data object title value respecting the tree we create for translate titles for example title: **'about'**, will be replace with about value inside json translation file, follow the json in step 2 of cofiguration it title will replace with **About Us**. If we dont add translate for some title we will follow Dashboard example only add title attribute with the final value.
@@ -189,6 +205,46 @@ In the translation file you should respect the same name as the dynamic variable
 }
 ```
 
+### Query params translation
+
+Skip this configuration if you only wish to translate the path of the route with query parameters without translating the parameters themselves.
+
+```typescript
+// app.modules.ts
+
+@NgModule({
+  imports: [
+    //  Others configurations
+    NgxTranslateRoutesModule.forRoot({
+      enableQueryParamsTranslate: true,
+      // Optional setting
+      routeSuffixesWithQueryParams: {
+        route: 'customRoot',
+        params: 'customParams',
+      },
+    }),
+  ],
+})
+export class AppModule {}
+```
+
+```javascript
+  // assets/i18n/en.json
+  {
+    "routes": {
+      //  translations
+      "example": {
+        "customRoot": "example",
+        "customParams": {
+          "param1": "paramOne"
+        }
+      }
+    }
+  }
+```
+
+In this example, the library will now perform translations for the query parameters. If you want to skip the query parameter translations, the library will by default translate the path alone while keeping the original name of the query parameters. This allows users to organize their translation keys according to their own preferences or existing structures.
+
 ### Customizing Route & Title paths
 
 ```typescript
@@ -198,8 +254,8 @@ In the translation file you should respect the same name as the dynamic variable
   imports: [
     //  Others configurations
     NgxTranslateRoutesModule.forRoot({
-      routePrefix: "customRoutes",
-      titlePrefix: "customTitles",
+      routePrefix: 'customRoutes',
+      titlePrefix: 'customTitles',
     }),
   ],
 })
@@ -227,7 +283,7 @@ In this example, the library will now use customRoutes as the prefix for route t
   imports: [
     NgxTranslateRoutesModule.forRoot({
       routeTranslationStrategy: (path: string) => `new-${path}`,
-      routesUsingStrategy: ["products"],
+      routesUsingStrategy: ['products'],
     }),
   ],
 })
@@ -243,7 +299,9 @@ In this example, only the products routes will use the routeTranslationStrategy.
   imports: [
     NgxTranslateRoutesModule.forRoot({
       onLanguageChange: () => {
-        console.log("The application language has changed. Perform additional actions here.");
+        console.log(
+          'The application language has changed. Perform additional actions here.',
+        )
         // For example, you could reload translated data or notify components.
       },
     }),

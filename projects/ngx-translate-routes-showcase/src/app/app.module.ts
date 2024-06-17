@@ -40,7 +40,9 @@ export const httpLoaderFactory = (http: HttpClient) =>
         deps: [HttpClient],
       },
     }),
-    NgxTranslateRoutesModule.forRoot(),
+    NgxTranslateRoutesModule.forRoot({
+      // enableQueryParamsTranslate: true,
+    }),
   ],
   providers: [],
   bootstrap: [AppComponent],
