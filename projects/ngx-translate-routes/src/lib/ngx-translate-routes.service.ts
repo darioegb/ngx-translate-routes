@@ -41,6 +41,7 @@ export class NgxTranslateRoutesService implements OnDestroy {
             this.#location.replaceState(lastTranslatedPath.originalPath)
             localStorage.removeItem(lastRouteKey)
           }
+          this.checkConfigValueAndMakeTranslations()
           if (this.config.onLanguageChange) {
             this.config.onLanguageChange()
           }

@@ -229,7 +229,7 @@ describe('NgxTranslateRoutesService', () => {
       expect(location.path()).toEqual(`/${TRANSLATIONS.es.routes.about.root}`)
     }))
 
-    it('#checkConfigValueAndMakeTranslations should set title and url', fakeAsync(() => {
+    it('#checkConfigValueAndMakeTranslations should set title and url complex example', fakeAsync(() => {
       (router.parseUrl as jasmine.Spy).and.returnValue({
         root: {
           children: {
@@ -342,6 +342,7 @@ describe('NgxTranslateRoutesService', () => {
             useValue: {
               events: of('/'),
               navigateByUrl: (_: any) => {},
+              createUrlTree: (_: any) => '/',
               parseUrl: (_: any) => ({
                 root: {
                   children: {
@@ -386,9 +387,7 @@ describe('NgxTranslateRoutesService', () => {
       eventSubject.next({ lang: 'es', translations: [] })
       fakeTranslate.onDefaultLangChange.subscribe((newLang) => {
         expect(newLang.lang).toEqual('es')
-        expect(
-          service.checkConfigValueAndMakeTranslations,
-        ).not.toHaveBeenCalled()
+        expect(service.checkConfigValueAndMakeTranslations).toHaveBeenCalled()
       })
     })
   })
@@ -425,6 +424,20 @@ describe('NgxTranslateRoutesService', () => {
             useValue: {
               events: of('/'),
               navigateByUrl: (_: any) => {},
+              createUrlTree: (_: any) => '/',
+              parseUrl: (_: any) => ({
+                root: {
+                  children: {
+                    primary: {
+                      segments: [
+                        {
+                          path: '',
+                        },
+                      ],
+                    },
+                  },
+                },
+              }),
               url: '/',
             },
           },
