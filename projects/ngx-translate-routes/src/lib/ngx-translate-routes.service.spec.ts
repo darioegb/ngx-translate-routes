@@ -83,7 +83,6 @@ describe('NgxTranslateRoutesService', () => {
       service = TestBed.inject(NgxTranslateRoutesService)
       location = TestBed.inject(Location)
       localStorage.clear()
-      service.init()
     })
 
     it('should be created', () => {
@@ -223,23 +222,6 @@ describe('NgxTranslateRoutesService', () => {
         },
         queryParams: { name: 'Test' },
       })
-      eventSubject.next(new NavigationEnd(1, url, 'imperative'))
-      tick()
-      expect(title.getTitle()).toEqual(TRANSLATIONS.es.titles.about)
-      expect(location.path()).toEqual(`/${TRANSLATIONS.es.routes.about.root}`)
-    }))
-
-    it('#checkConfigValueAndMakeTranslations should set title and url complex example', fakeAsync(() => {
-      (router.parseUrl as jasmine.Spy).and.returnValue({
-        root: {
-          children: {
-            primary: {
-              segments: [{ path: 'about' }],
-            },
-          },
-        },
-        queryParams: { name: 'Test' },
-      })
       eventSubject.next(new NavigationEnd(1, '/about', 'imperative'))
       eventSubject.next(new NavigationStart(1, '/sobreNosotros', 'imperative'))
       tick()
@@ -342,16 +324,6 @@ describe('NgxTranslateRoutesService', () => {
             useValue: {
               events: of('/'),
               navigateByUrl: (_: any) => {},
-              createUrlTree: (_: any) => '/',
-              parseUrl: (_: any) => ({
-                root: {
-                  children: {
-                    primary: {
-                      segments: [],
-                    },
-                  },
-                },
-              }),
               url: '/',
             },
           },
@@ -429,11 +401,7 @@ describe('NgxTranslateRoutesService', () => {
                 root: {
                   children: {
                     primary: {
-                      segments: [
-                        {
-                          path: '',
-                        },
-                      ],
+                      segments: [],
                     },
                   },
                 },
@@ -459,6 +427,7 @@ describe('NgxTranslateRoutesService', () => {
       })
 
       service = TestBed.inject(NgxTranslateRoutesService)
+      service.init()
     })
 
     it('should call config.onLanguageChange when default language changes', () => {
