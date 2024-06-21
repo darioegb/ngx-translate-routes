@@ -31,17 +31,20 @@ export class NgxTranslateRoutesRouteService {
         enableQueryParamsTranslate,
         routeSuffixesWithQueryParams,
       } = this.config
-
       const urlTree = this.#router.parseUrl(this.#router.url)
       const subPaths = urlTree?.root?.children['primary']?.segments?.map(
         (segment) => segment.path,
       )
+
+      if (!subPaths || subPaths.length === 0) {
+        return
+      }
+
       const queryParams = urlTree?.queryParams ?? {}
       const isQueryParamsNeedsTranslation =
         Object.keys(queryParams).length > 0 && enableQueryParamsTranslate
-
       const translatedPaths = await Promise.all(
-        subPaths?.map((subPath) => {
+        subPaths.map((subPath) => {
           if (
             routeTranslationStrategy &&
             routesUsingStrategy?.includes(subPath)
