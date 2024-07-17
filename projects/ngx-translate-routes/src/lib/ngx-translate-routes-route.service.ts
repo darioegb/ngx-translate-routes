@@ -114,34 +114,33 @@ export class NgxTranslateRoutesRouteService {
   }
 
   #updateLocationIfChanged(newRouteUrl: string, queryParams: Params): void {
-    const currentPath = this.#location.path()
-    const originalPath = this.#router
-      .parseUrl(currentPath)
-      .root.children['primary'].segments.map((segment) => segment.path)
-      .join('/')
+    const currentPathWithParams = this.#router
+      .createUrlTree([], {
+        queryParams: this.#router.parseUrl(this.#location.path()).queryParams,
+      })
+      .toString()
+
     const newPathWithParams = this.#router
       .createUrlTree([newRouteUrl], { queryParams })
       .toString()
 
-    if (currentPath !== newPathWithParams) {
-      const translatedPaths: RoutePath[] = JSON.parse(
-        localStorage.getItem(lastRouteKey) ?? '[]',
-      )
-      const index = translatedPaths.findIndex(
-        (path) => path.originalPath === originalPath,
-      )
+    const translatedPaths: RoutePath[] = JSON.parse(
+      localStorage.getItem(lastRouteKey) ?? '[]',
+    )
+    const index = translatedPaths.findIndex(
+      (path) => path.originalPath === currentPathWithParams,
+    )
 
-      if (index !== -1) {
-        translatedPaths[index].translatedPath = newPathWithParams
-      } else {
-        translatedPaths.push({
-          originalPath,
-          translatedPath: newPathWithParams,
-        })
-      }
-
-      this.#location.replaceState(newPathWithParams)
-      localStorage.setItem(lastRouteKey, JSON.stringify(translatedPaths))
+    if (index !== -1) {
+      translatedPaths[index].translatedPath = newPathWithParams
+    } else {
+      translatedPaths.push({
+        originalPath: currentPathWithParams,
+        translatedPath: newPathWithParams,
+      })
     }
+
+    this.#location.replaceState(newPathWithParams)
+    localStorage.setItem(lastRouteKey, JSON.stringify(translatedPaths))
   }
 }
