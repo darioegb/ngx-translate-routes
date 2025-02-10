@@ -1,12 +1,9 @@
-import { Injectable, inject, Inject } from '@angular/core'
+import { Injectable, inject, PLATFORM_ID } from '@angular/core'
 import { TranslateService } from '@ngx-translate/core'
-import { Location } from '@angular/common'
+import { isPlatformBrowser, Location } from '@angular/common'
 import { Params, Router } from '@angular/router'
 import { firstValueFrom } from 'rxjs'
-import {
-  NgxTranslateRoutesConfig,
-  RoutePath,
-} from './ngx-translate-routes.interfaces'
+import { RoutePath } from './ngx-translate-routes.interfaces'
 import { NGX_TRANSLATE_ROUTES_CONFING } from './ngx-translate-routes.token'
 import { lastRouteKey } from './ngx-translate-routes.constants'
 
@@ -17,11 +14,8 @@ export class NgxTranslateRoutesRouteService {
   #translate = inject(TranslateService)
   #location = inject(Location)
   #router = inject(Router)
-
-  constructor(
-    @Inject(NGX_TRANSLATE_ROUTES_CONFING)
-    private config: NgxTranslateRoutesConfig,
-  ) {}
+  #config = inject(NGX_TRANSLATE_ROUTES_CONFING)
+  #isBrowser = isPlatformBrowser(inject(PLATFORM_ID))
 
   async translateRoute(): Promise<void> {
     try {
@@ -30,7 +24,7 @@ export class NgxTranslateRoutesRouteService {
         routesUsingStrategy,
         enableQueryParamsTranslate,
         routeSuffixesWithQueryParams,
-      } = this.config
+      } = this.#config
       const urlTree = this.#router.parseUrl(this.#router.url)
       const subPaths = urlTree?.root?.children['primary']?.segments?.map(
         (segment) => segment.path,
@@ -76,7 +70,7 @@ export class NgxTranslateRoutesRouteService {
 
   async #getTranslatedPath(subPath: string): Promise<string> {
     return firstValueFrom(
-      this.#translate.get(`${this.config.routePrefix}.${subPath}`),
+      this.#translate.get(`${this.#config.routePrefix}.${subPath}`),
     )
   }
 
@@ -87,7 +81,7 @@ export class NgxTranslateRoutesRouteService {
   ): string {
     if (subPath.length > 0) {
       const segmentToConcat = !translatePath.startsWith(
-        this.config.routePrefix!,
+        this.#config.routePrefix!,
       )
         ? translatePath
         : subPath
@@ -104,7 +98,7 @@ export class NgxTranslateRoutesRouteService {
           .match(new RegExp(`[^/]*${key}`))?.[0]
           .replace(new RegExp(`${key}|[^\\w\\s]`, 'g'), '')
         const translatedKey = await this.#getTranslatedPath(
-          `${path}.${this.config.routeSuffixesWithQueryParams?.params}.${key}`,
+          `${path}.${this.#config.routeSuffixesWithQueryParams?.params}.${key}`,
         )
         const value = queryParams[key]
         translatedQueryParams[translatedKey] = value
@@ -124,9 +118,9 @@ export class NgxTranslateRoutesRouteService {
       .createUrlTree([newRouteUrl], { queryParams })
       .toString()
 
-    const translatedPaths: RoutePath[] = JSON.parse(
-      localStorage.getItem(lastRouteKey) ?? '[]',
-    )
+    const translatedPaths: RoutePath[] = this.#isBrowser
+      ? JSON.parse(localStorage.getItem(lastRouteKey) ?? '[]')
+      : []
     const index = translatedPaths.findIndex(
       (path) => path.originalPath === currentPathWithParams,
     )
@@ -141,6 +135,7 @@ export class NgxTranslateRoutesRouteService {
     }
 
     this.#location.replaceState(newPathWithParams)
-    localStorage.setItem(lastRouteKey, JSON.stringify(translatedPaths))
+    this.#isBrowser &&
+      localStorage.setItem(lastRouteKey, JSON.stringify(translatedPaths))
   }
 }
