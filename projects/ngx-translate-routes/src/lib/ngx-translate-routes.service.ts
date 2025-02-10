@@ -1,13 +1,10 @@
-import { Location } from '@angular/common'
-import { Injectable, OnDestroy, inject, Inject } from '@angular/core'
+import { isPlatformBrowser, Location } from '@angular/common'
+import { Injectable, OnDestroy, inject, PLATFORM_ID } from '@angular/core'
 import { TranslateService } from '@ngx-translate/core'
 import { Router, NavigationEnd, NavigationStart } from '@angular/router'
 import { filter, map, skip, takeUntil } from 'rxjs/operators'
 import { Subject } from 'rxjs'
-import {
-  NgxTranslateRoutesConfig,
-  RoutePath,
-} from './ngx-translate-routes.interfaces'
+import { RoutePath } from './ngx-translate-routes.interfaces'
 import { NGX_TRANSLATE_ROUTES_CONFING } from './ngx-translate-routes.token'
 import { NgxTranslateRoutesTitleService } from './ngx-translate-routes-title.service'
 import { NgxTranslateRoutesRouteService } from './ngx-translate-routes-route.service'
@@ -24,11 +21,10 @@ export class NgxTranslateRoutesService implements OnDestroy {
   #location = inject(Location)
   #titleService = inject(NgxTranslateRoutesTitleService)
   #routeService = inject(NgxTranslateRoutesRouteService)
+  #config = inject(NGX_TRANSLATE_ROUTES_CONFING)
+  #isBrowser = isPlatformBrowser(inject(PLATFORM_ID))
 
-  constructor(
-    @Inject(NGX_TRANSLATE_ROUTES_CONFING)
-    private config: NgxTranslateRoutesConfig,
-  ) {
+  constructor() {
     this.#translate.onDefaultLangChange
       .pipe(skip(1), takeUntil(this.#destroy$))
       .subscribe({
@@ -39,11 +35,11 @@ export class NgxTranslateRoutesService implements OnDestroy {
           )
           if (lastTranslatedPath) {
             this.#location.replaceState(lastTranslatedPath.originalPath)
-            localStorage.removeItem(lastRouteKey)
+            this.#isBrowser && localStorage.removeItem(lastRouteKey)
           }
           this.checkConfigValueAndMakeTranslations()
-          if (this.config.onLanguageChange) {
-            this.config.onLanguageChange()
+          if (this.#config.onLanguageChange) {
+            this.#config.onLanguageChange()
           }
         },
       })
@@ -58,7 +54,7 @@ export class NgxTranslateRoutesService implements OnDestroy {
       )
       .subscribe({
         next: (event) => {
-          const item = localStorage.getItem(lastRouteKey)
+          const item = this.#isBrowser ? localStorage.getItem(lastRouteKey) : {}
           if (
             event.navigationTrigger === 'popstate' ||
             (event.id === 1 && item)
@@ -93,8 +89,8 @@ export class NgxTranslateRoutesService implements OnDestroy {
   }
 
   checkConfigValueAndMakeTranslations(): void {
-    this.config.enableTitleTranslate && this.#titleService.translateTitle()
-    this.config.enableRouteTranslate && this.#routeService.translateRoute()
+    this.#config.enableTitleTranslate && this.#titleService.translateTitle()
+    this.#config.enableRouteTranslate && this.#routeService.translateRoute()
   }
 
   ngOnDestroy(): void {
@@ -103,6 +99,8 @@ export class NgxTranslateRoutesService implements OnDestroy {
   }
 
   #getTranslatedPaths(): RoutePath[] {
-    return JSON.parse(localStorage.getItem(lastRouteKey) ?? '[]')
+    return this.#isBrowser
+      ? JSON.parse(localStorage.getItem(lastRouteKey) || '[]')
+      : []
   }
 }
