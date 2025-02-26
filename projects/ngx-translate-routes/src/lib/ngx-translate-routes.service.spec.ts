@@ -89,7 +89,7 @@ describe('NgxTranslateRoutesService', () => {
       expect(service).toBeTruthy()
     })
 
-    it('#checkConfigValueAndMakeTranslations should set title and url', fakeAsync(() => {
+    it('checkConfigValueAndMakeTranslations should set title and url', fakeAsync(() => {
       service.checkConfigValueAndMakeTranslations()
       tick()
       expect(title.getTitle()).toEqual(TRANSLATIONS.en.titles.users.profile)
@@ -142,7 +142,7 @@ describe('NgxTranslateRoutesService', () => {
       expect(service).toBeTruthy()
     })
 
-    it('#checkConfigValueAndMakeTranslations should not set title and url when 404', () => {
+    it('checkConfigValueAndMakeTranslations should not set title and url when 404', () => {
       expect(location.path()).not.toEqual(
         `/${TRANSLATIONS.es.routes.about.root}`,
       )
@@ -211,7 +211,7 @@ describe('NgxTranslateRoutesService', () => {
       expect(service).toBeTruthy()
     })
 
-    it('#checkConfigValueAndMakeTranslations should set title and url', fakeAsync(() => {
+    it('checkConfigValueAndMakeTranslations should set title and url', fakeAsync(() => {
       (router.parseUrl as jasmine.Spy).and.returnValue({
         root: {
           children: {
@@ -286,7 +286,7 @@ describe('NgxTranslateRoutesService', () => {
       expect(service).toBeTruthy()
     })
 
-    it('#checkConfigValueAndMakeTranslations should not translate route and title when config is false', () => {
+    it('checkConfigValueAndMakeTranslations should not translate route and title when config is false', () => {
       service.checkConfigValueAndMakeTranslations()
       const privateSpyRoute = spyOn(localStorage, 'setItem')
       const privateSpyTitle = spyOn(title, 'setTitle')
@@ -353,7 +353,7 @@ describe('NgxTranslateRoutesService', () => {
       expect(service).toBeTruthy()
     })
 
-    it('#checkConfigValueAndMakeTranslations should be called when defaultLangChange', () => {
+    it('checkConfigValueAndMakeTranslations should be called when defaultLangChange', () => {
       spyOn(service, 'checkConfigValueAndMakeTranslations')
       eventSubject.next({ lang: 'en', translations: [] })
       eventSubject.next({ lang: 'es', translations: [] })

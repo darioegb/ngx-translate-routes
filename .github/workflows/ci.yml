@@ -80,11 +80,40 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-  deploy:
+  update_docs:
     runs-on: ubuntu-latest
     needs: [test_lint, test_karma]
+    if: github.event_name == 'release' # Only update docs on tag creation
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+          run_install: false
+      - run: pnpm install
+      - name: Update Package Version
+        run: pnpm update:package-version
+      - name: Update Changelog
+        run: pnpm update:changelog
+      - name: Update README
+        run: pnpm update:readme
+      - name: Commit and Push Changes
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add .
+          git commit -m "chore: update package version, changelog, and README"
+          git push origin ${{ github.ref }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [update_docs]
     container: trion/ng-cli-karma
-    if: github.event_name == 'release' # Only deploy on tag creation
     steps:
       - uses: actions/checkout@v4
       - name: Install pnpm
@@ -92,13 +121,13 @@ jobs:
         with:
           version: 8
           run_install: false
+      - run: pnpm install
       # Setup .npmrc file to publish to npm
       - uses: actions/setup-node@v4
         with:
           node-version: '20.x'
           registry-url: 'https://registry.npmjs.org'
       - run: |
-          pnpm install
           ng build ngx-translate-routes
           cd dist/ngx-translate-routes
           pnpm publish --provenance --access public

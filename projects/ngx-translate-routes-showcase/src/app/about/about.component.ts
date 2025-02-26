@@ -8,10 +8,10 @@ import { firstValueFrom } from 'rxjs/internal/firstValueFrom'
   styleUrls: ['./about.component.scss'],
 })
 export class AboutComponent implements OnInit {
-  #activatedRoute = inject(ActivatedRoute)
+  private readonly activatedRoute = inject(ActivatedRoute)
 
   async ngOnInit(): Promise<void> {
-    const params = await firstValueFrom(this.#activatedRoute.queryParams)
+    const params = await firstValueFrom(this.activatedRoute.queryParams)
     const name = params['name']
     console.log(name)
   }

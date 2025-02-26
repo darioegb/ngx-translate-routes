@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<main class="container-fluid">
   <div style="text-align: center; background-color: aqua">
     <h1>Welcome to {{ title }}!</h1>
     <ul class="links">
@@ -12,17 +12,17 @@
     </ul>
   </div>
   <div class="form-group col-md-6 offset-3">
-    <label for="changeLanguaje"> Select a languaje</label>
+    <label for="changeLanguage"> Select a language</label>
     <select
       class="custom-select"
-      id="changeLanguaje"
-      [(ngModel)]="languaje"
-      (change)="changeLanguaje()"
+      id="changeLanguage"
+      [(ngModel)]="language"
+      (change)="changeLanguage()"
     >
-      <option [value]="item.value" *ngFor="let item of languajes">
+      <option [value]="item.value" *ngFor="let item of languages">
         {{ item.key }}
       </option>
     </select>
   </div>
-</div>
-<router-outlet></router-outlet>
+</main>
+<router-outlet />

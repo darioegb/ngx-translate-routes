@@ -32,8 +32,9 @@ Latest version available for each version of Angular
 
 ## Live Example
 
-You can check how these library work in the next link, on live example:
-https://stackblitz.com/edit/ngx-translate-routes-example
+You can check how these library work in the next links, on live examples:
+- Standalone application with SSR: https://stackblitz.com/edit/ngx-translate-routes-ssr-example
+- Angular with modules: https://stackblitz.com/edit/ngx-translate-routes-example
 
 ## Install
 
@@ -53,7 +54,81 @@ https://github.com/ngx-translate/core
 
 ## Setup
 
-**Step 1:** Add NgxTranslateRoutesModule to appModule, make sure you have configured ngx-translate as well
+**Step 1:** Add provideNgxTranslateRoutes to your standalone application config, make sure you have configured ngx-translate as well
+
+```typescript
+import { ApplicationConfig, importProvidersFrom } from '@angular/core'
+import { provideRouter } from '@angular/router'
+import { provideClientHydration } from '@angular/platform-browser'
+import { provideHttpClient, HttpClient, withFetch } from '@angular/common/http'
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core'
+import { provideNgxTranslateRoutes } from 'ngx-translate-routes'
+import { TranslateHttpLoader } from '@ngx-translate/http-loader'
+
+import { routes } from './app.routes'
+
+export const httpLoaderFactory = (http: HttpClient) =>
+  new TranslateHttpLoader(http)
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideHttpClient(withFetch()),
+    provideRouter(routes),
+    provideClientHydration(),
+    importProvidersFrom(
+      TranslateModule.forRoot({
+        defaultLanguage: 'en',
+        useDefaultLang: true,
+        loader: {
+          provide: TranslateLoader,
+          useFactory: httpLoaderFactory,
+          deps: [HttpClient],
+        },
+      }),
+    ),
+    provideNgxTranslateRoutes(), // provideNgxTranslateRoutes added
+  ],
+}
+```
+
+If you use version 2.1.4 or above to use module instead of importing the provider, you can import `NgxTranslateRoutesModule` instead of `provideNgxTranslateRoutes` inside `importProvidersFrom`:
+
+```typescript
+import { ApplicationConfig, importProvidersFrom } from '@angular/core'
+import { provideRouter } from '@angular/router'
+import { provideClientHydration } from '@angular/platform-browser'
+import { provideHttpClient, HttpClient, withFetch } from '@angular/common/http'
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core'
+import { NgxTranslateRoutesModule } from 'ngx-translate-routes'
+import { TranslateHttpLoader } from '@ngx-translate/http-loader'
+
+import { routes } from './app.routes'
+
+export const httpLoaderFactory = (http: HttpClient) =>
+  new TranslateHttpLoader(http)
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideHttpClient(withFetch()),
+    provideRouter(routes),
+    provideClientHydration(),
+    importProvidersFrom(
+      TranslateModule.forRoot({
+        defaultLanguage: 'en',
+        useDefaultLang: true,
+        loader: {
+          provide: TranslateLoader,
+          useFactory: httpLoaderFactory,
+          deps: [HttpClient],
+        },
+      }),
+      NgxTranslateRoutesModule.forRoot() //NgxTranslateRoutesModule added
+    ),
+  ],
+}
+```
+
+If you are using modules, you can configure it as follows:
 
 ```typescript
 import { BrowserModule } from '@angular/platform-browser'
@@ -114,7 +189,9 @@ By default the configuration object is:
   routeSuffixesWithQueryParams: {
     route: 'root',
     params: 'params',
-  }
+  },
+  cacheStrategy: 'localStorage', // default cache strategy
+  cookieExpirationDays: 7, // default cookie expiration in days
 }
 ```
 
@@ -131,6 +208,8 @@ export interface NgxTranslateRoutesConfig {
   titlePrefix?: string
   onLanguageChange?: () => void
   routeTranslationStrategy?: (originalRoute: string) => string
+  cacheStrategy?: 'localStorage' | 'cookie'
+  cookieExpirationDays?: number
 }
 ```
 
@@ -315,6 +394,24 @@ export class AppModule {}
 ```
 
 With this in mind, you can provide your own function to handle events when the language changes in your application. This allows them to execute custom actions in response to the language change, such as updating data, notifying components, reloading the page, etc.
+
+### Customizing cache strategy
+
+You can choose between `localStorage` and `cookie` for caching the translations. If you choose `cookie`, you can also set the expiration time for the cookies.
+
+```typescript
+@NgModule({
+  imports: [
+    NgxTranslateRoutesModule.forRoot({
+      cacheStrategy: 'cookie',
+      cookieExpirationDays: 30, // cookies will expire in 30 days
+    }),
+  ],
+})
+export class AppModule {}
+```
+
+In this example, the library will use cookies to cache the translations, and the cookies will expire in 30 days.
 
 ## Test
 

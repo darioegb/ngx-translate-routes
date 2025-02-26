@@ -1,0 +1,23 @@
+{
+  "titles": {
+    "profile": "Perfil",
+    "about": "Sobre Nosotros",
+    "myaccount": "Mi cuenta",
+    "users": {
+      "root": "Usuarios",
+      "profile": "Perfil de Usuario {{userId}}",
+      "myaccount": "List Users"
+    }
+  },
+  "routes": {
+    "profile": "perfil",
+    "about": {
+      "root": "sobreNosotros",
+      "params": {
+        "name": "nombre"
+      }
+    },
+    "myaccount": "miCuenta",
+    "users": "usuarios"
+  }
+}
