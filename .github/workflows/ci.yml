@@ -10,10 +10,6 @@ on:
   release:
     types: [created]
 
-permissions:
-  id-token: write
-  contents: write
-
 jobs:
   test_lint:
     runs-on: ubuntu-latest
@@ -53,7 +49,7 @@ jobs:
         uses: actions/upload-artifact@v4
         if: success()
         with:
-          name: "${{ github.job }}"
+          name: '${{ github.job }}'
           path: coverage/
 
   sonarcloud_check:
@@ -67,11 +63,10 @@ jobs:
           fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
       - uses: actions/cache@v3
         with:
-          node-version: '20.x'
           path: |-
             node_modules/
             .sonar/cache
-          key: "${{ github.job }}"
+          key: '${{ github.job }}'
       - uses: actions/download-artifact@v4
         with:
           name: test_karma
@@ -80,44 +75,59 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-  update_docs:
+  update_version:
     runs-on: ubuntu-latest
     needs: [test_lint, test_karma]
-    if: github.event_name == 'release' # Only update docs on tag creation
+    if: github.event_name == 'release' # Only update version on tag creation
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          ref: main
       - name: Install pnpm
         uses: pnpm/action-setup@v2
         with:
           version: 8
           run_install: false
       - run: pnpm install
-      - name: Install semver
-        run: pnpm add semver
-      - name: Update Package Version
-        run: pnpm update:package-version
-      - name: Update Changelog
-        run: pnpm update:changelog
-      - name: Update README
-        run: pnpm update:readme
-      - name: Commit and Push Changes
+      - name: Create commit
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          pnpm update:package-version
           git add .
-          git commit -m "chore: update package version, changelog, and README" --no-verify
-          git push origin ${{ github.ref }} --no-verify
+          git commit -m "chore: update package version" --no-verify
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create Pull Request
+        id: cpr
+        uses: peter-evans/create-pull-request@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          title: 'Update package version'
+          body: 'This PR updates the package version.'
+          delete-branch: true
+      - name: Approve Pull Request
+        if: steps.cpr.outputs.pull-request-operation == 'created'
+        run: gh pr review --approve "${{ steps.cpr.outputs.pull-request-number }}"
+        env:
+          GH_TOKEN: ${{ secrets.PAT_TOKEN }}
+      - name: Merge Pull Request
+        if: steps.cpr.outputs.pull-request-operation == 'created'
+        run: gh pr merge "${{ steps.cpr.outputs.pull-request-number }}" --merge --auto
+        env:
+          GH_TOKEN: ${{ secrets.PAT_TOKEN }}
 
   deploy:
     runs-on: ubuntu-latest
-    needs: [update_docs]
+    needs: [update_version]
     container: trion/ng-cli-karma
     steps:
       - uses: actions/checkout@v4
+      - name: Configure safe directory
+        run: git config --global --add safe.directory /__w/ngx-translate-routes/ngx-translate-routes
+      - name: Pull latest changes
+        run: git pull origin main
       - name: Install pnpm
         uses: pnpm/action-setup@v2
         with:
@@ -135,3 +145,46 @@ jobs:
           pnpm publish --provenance --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  update_docs:
+    runs-on: ubuntu-latest
+    needs: [deploy]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: main
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+          run_install: false
+      - run: pnpm install
+      - name: Create commit
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          pnpm update:changelog
+          pnpm update:readme
+          git add .
+          git commit -m "chore: update changelog and README" --no-verify
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create Pull Request
+        id: cpr
+        uses: peter-evans/create-pull-request@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          title: 'Update changelog and README'
+          body: 'This PR updates the changelog and README.'
+          delete-branch: true
+      - name: Approve Pull Request
+        if: steps.cpr.outputs.pull-request-operation == 'created'
+        run: gh pr review --approve "${{ steps.cpr.outputs.pull-request-number }}"
+        env:
+          GH_TOKEN: ${{ secrets.PAT_TOKEN }}
+      - name: Merge Pull Request
+        if: steps.cpr.outputs.pull-request-operation == 'created'
+        run: gh pr merge "${{ steps.cpr.outputs.pull-request-number }}" --merge --auto
+        env:
+          GH_TOKEN: ${{ secrets.PAT_TOKEN }}
