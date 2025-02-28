@@ -94,6 +94,8 @@ jobs:
           version: 8
           run_install: false
       - run: pnpm install
+      - name: Install semver
+        run: pnpm add semver
       - name: Update Package Version
         run: pnpm update:package-version
       - name: Update Changelog
