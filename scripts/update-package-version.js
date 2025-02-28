@@ -6,8 +6,8 @@ const packageJson = require(`../${packageJsonPath}`);
 
 const currentVersion = packageJson.version;
 
-// Get the commit message of the latest commit
-const commitMessage = execSync('git log -1 --pretty=%B').toString().trim();
+// Get the commit message of the latest merged PR
+const commitMessage = execSync('git log --merges -1 --pretty=%B').toString().trim();
 let releaseType = 'patch';
 
 if (commitMessage.includes('feat') || commitMessage.includes('feature')) {
