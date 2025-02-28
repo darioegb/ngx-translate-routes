@@ -1,106 +1,107 @@
-import { isPlatformBrowser, Location } from '@angular/common'
-import { Injectable, OnDestroy, inject, PLATFORM_ID } from '@angular/core'
+import { Location } from '@angular/common'
+import { Injectable, OnDestroy, inject } from '@angular/core'
 import { TranslateService } from '@ngx-translate/core'
 import { Router, NavigationEnd, NavigationStart } from '@angular/router'
-import { filter, map, skip, takeUntil } from 'rxjs/operators'
+import { filter, map, takeUntil } from 'rxjs/operators'
 import { Subject } from 'rxjs'
 import { RoutePath } from './ngx-translate-routes.interfaces'
 import { NGX_TRANSLATE_ROUTES_CONFING } from './ngx-translate-routes.token'
 import { NgxTranslateRoutesTitleService } from './ngx-translate-routes-title.service'
 import { NgxTranslateRoutesRouteService } from './ngx-translate-routes-route.service'
 import { lastRouteKey } from './ngx-translate-routes.constants'
+import { NgxTranslateRoutesGlobalStorageService } from './ngx-translate-routes-global-storage.service'
 
 @Injectable({
   providedIn: 'root',
 })
 export class NgxTranslateRoutesService implements OnDestroy {
-  #isNavigatingBackOrForward = false
-  #destroy$ = new Subject<void>()
-  #translate = inject(TranslateService)
-  #router = inject(Router)
-  #location = inject(Location)
-  #titleService = inject(NgxTranslateRoutesTitleService)
-  #routeService = inject(NgxTranslateRoutesRouteService)
-  #config = inject(NGX_TRANSLATE_ROUTES_CONFING)
-  #isBrowser = isPlatformBrowser(inject(PLATFORM_ID))
+  private readonly destroy$ = new Subject<void>()
+  private readonly translate = inject(TranslateService)
+  private readonly router = inject(Router)
+  private readonly location = inject(Location)
+  private readonly titleService = inject(NgxTranslateRoutesTitleService)
+  private readonly routeService = inject(NgxTranslateRoutesRouteService)
+  private readonly config = inject(NGX_TRANSLATE_ROUTES_CONFING)
+  private readonly globalStorageService = inject(
+    NgxTranslateRoutesGlobalStorageService,
+  )
 
   constructor() {
-    this.#translate.onDefaultLangChange
-      .pipe(skip(1), takeUntil(this.#destroy$))
+    this.translate.onDefaultLangChange
+      .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: () => {
-          const translatedPaths: RoutePath[] = this.#getTranslatedPaths()
-          const lastTranslatedPath = translatedPaths.find(
-            (path) => path.translatedPath === this.#location.path(),
-          )
-          if (lastTranslatedPath) {
-            this.#location.replaceState(lastTranslatedPath.originalPath)
-            this.#isBrowser && localStorage.removeItem(lastRouteKey)
-          }
-          this.checkConfigValueAndMakeTranslations()
-          if (this.#config.onLanguageChange) {
-            this.#config.onLanguageChange()
-          }
+          this.handleLanguageChange()
         },
       })
   }
 
   init(): void {
-    this.#router.events
+    this.router.events
       .pipe(
         filter((event) => event instanceof NavigationStart),
         map((event) => event as NavigationStart),
-        takeUntil(this.#destroy$),
+        takeUntil(this.destroy$),
       )
       .subscribe({
         next: (event) => {
-          const item = this.#isBrowser ? localStorage.getItem(lastRouteKey) : {}
+          const item = this.globalStorageService.getItem(lastRouteKey)
           if (
             event.navigationTrigger === 'popstate' ||
             (event.id === 1 && item)
           ) {
-            this.#isNavigatingBackOrForward = true
-            const translatedPaths: RoutePath[] = this.#getTranslatedPaths()
+            const translatedPaths: RoutePath[] = this.getTranslatedPaths()
             const lastTranslatedPath = translatedPaths.find(
               (path) => path.translatedPath === event.url,
             )
 
             if (lastTranslatedPath) {
-              this.#router.navigateByUrl(lastTranslatedPath.originalPath, {
+              this.router.navigateByUrl(lastTranslatedPath.originalPath, {
                 skipLocationChange: true,
               })
             }
           }
         },
       })
-    this.#router.events
+
+    this.router.events
       .pipe(
         filter((event) => event instanceof NavigationEnd),
-        takeUntil(this.#destroy$),
+        takeUntil(this.destroy$),
       )
       .subscribe({
         next: () => {
-          if (!this.#isNavigatingBackOrForward) {
-            this.checkConfigValueAndMakeTranslations()
-          }
-          this.#isNavigatingBackOrForward = false
+          this.checkConfigValueAndMakeTranslations()
         },
       })
   }
 
   checkConfigValueAndMakeTranslations(): void {
-    this.#config.enableTitleTranslate && this.#titleService.translateTitle()
-    this.#config.enableRouteTranslate && this.#routeService.translateRoute()
+    this.config.enableTitleTranslate && this.titleService.translateTitle()
+    this.config.enableRouteTranslate && this.routeService.translateRoute()
   }
 
   ngOnDestroy(): void {
-    this.#destroy$.next()
-    this.#destroy$.complete()
+    this.destroy$.next()
+    this.destroy$.complete()
   }
 
-  #getTranslatedPaths(): RoutePath[] {
-    return this.#isBrowser
-      ? JSON.parse(localStorage.getItem(lastRouteKey) || '[]')
-      : []
+  private handleLanguageChange(): void {
+    const translatedPaths: RoutePath[] = this.getTranslatedPaths()
+    const lastTranslatedPath = translatedPaths.find(
+      (path) => path.translatedPath === this.location.path(),
+    )
+    if (lastTranslatedPath) {
+      this.location.replaceState(lastTranslatedPath.originalPath)
+      this.globalStorageService.removeItem(lastRouteKey)
+    }
+    this.checkConfigValueAndMakeTranslations()
+    if (this.config.onLanguageChange) {
+      this.config.onLanguageChange()
+    }
+  }
+
+  private getTranslatedPaths(): RoutePath[] {
+    return this.globalStorageService.getItem(lastRouteKey) ?? []
   }
 }

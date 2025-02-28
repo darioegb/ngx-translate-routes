@@ -152,6 +152,114 @@
           }
         }
       }
+    },
+    "ngx-translate-routes-ssr-showcase": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
+      "root": "projects/ngx-translate-routes-ssr-showcase",
+      "sourceRoot": "projects/ngx-translate-routes-ssr-showcase/src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:application",
+          "options": {
+            "outputPath": "dist/ngx-translate-routes-ssr-showcase",
+            "index": "projects/ngx-translate-routes-ssr-showcase/src/index.html",
+            "browser": "projects/ngx-translate-routes-ssr-showcase/src/main.ts",
+            "polyfills": [
+              "zone.js"
+            ],
+            "tsConfig": "projects/ngx-translate-routes-ssr-showcase/tsconfig.app.json",
+            "inlineStyleLanguage": "scss",
+            "assets": [
+              "projects/ngx-translate-routes-ssr-showcase/src/favicon.ico",
+              "projects/ngx-translate-routes-ssr-showcase/src/assets"
+            ],
+            "styles": [
+              "projects/ngx-translate-routes-ssr-showcase/src/styles.scss"
+            ],
+            "scripts": [],
+            "server": "projects/ngx-translate-routes-ssr-showcase/src/main.server.ts",
+            "prerender": true,
+            "ssr": {
+              "entry": "projects/ngx-translate-routes-ssr-showcase/server.ts"
+            }
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
+                }
+              ],
+              "outputHashing": "all"
+            },
+            "development": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "configurations": {
+            "production": {
+              "buildTarget": "ngx-translate-routes-ssr-showcase:build:production"
+            },
+            "development": {
+              "buildTarget": "ngx-translate-routes-ssr-showcase:build:development"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "buildTarget": "ngx-translate-routes-ssr-showcase:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ],
+            "tsConfig": "projects/ngx-translate-routes-ssr-showcase/tsconfig.spec.json",
+            "inlineStyleLanguage": "scss",
+            "assets": [
+              "projects/ngx-translate-routes-ssr-showcase/src/favicon.ico",
+              "projects/ngx-translate-routes-ssr-showcase/src/assets"
+            ],
+            "styles": [
+              "projects/ngx-translate-routes-ssr-showcase/src/styles.scss"
+            ],
+            "scripts": []
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "projects/ngx-translate-routes-ssr-showcase/**/*.ts",
+              "projects/ngx-translate-routes-ssr-showcase/**/*.html"
+            ]
+          }
+        }
+      }
     }
   },
   "cli": {

@@ -16,14 +16,14 @@ import { NgxTranslateRoutesConfig } from './ngx-translate-routes.interfaces'
   providers: [TitleCasePipe],
 })
 export class NgxTranslateRoutesModule {
-  #translateRoutesService = inject(NgxTranslateRoutesService)
+  private readonly translateRoutesService = inject(NgxTranslateRoutesService)
   constructor(@Optional() @SkipSelf() parentModule?: NgxTranslateRoutesModule) {
     if (parentModule) {
       throw new Error(
         'NgxTranslateRoutesModule is already loaded. Import it in the AppModule only',
       )
     }
-    this.#translateRoutesService.init()
+    this.translateRoutesService.init()
   }
   static forRoot(
     config?: NgxTranslateRoutesConfig,
@@ -48,6 +48,8 @@ export class NgxTranslateRoutesModule {
             onLanguageChange: config?.onLanguageChange ?? undefined,
             routeTranslationStrategy:
               config?.routeTranslationStrategy ?? undefined,
+            cacheMethod: config?.cacheMethod ?? 'localStorage',
+            cookieExpirationDays: config?.cookieExpirationDays ?? 30,
           },
         },
       ],

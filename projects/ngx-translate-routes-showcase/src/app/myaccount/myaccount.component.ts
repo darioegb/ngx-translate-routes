@@ -7,9 +7,9 @@ import { Component, inject } from '@angular/core'
   styleUrls: ['./myaccount.component.scss'],
 })
 export class MyaccountComponent {
-  #location = inject(Location)
+  private readonly location = inject(Location)
 
   goBack(): void {
-    this.#location.back()
+    this.location.back()
   }
 }

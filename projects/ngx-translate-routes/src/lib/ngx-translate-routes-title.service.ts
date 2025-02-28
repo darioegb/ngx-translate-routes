@@ -9,32 +9,29 @@ import { NGX_TRANSLATE_ROUTES_CONFING } from './ngx-translate-routes.token'
   providedIn: 'root',
 })
 export class NgxTranslateRoutesTitleService {
-  #translate = inject(TranslateService)
-  #title = inject(Title)
-  #activatedRoute = inject(ActivatedRoute)
-  #config = inject(NGX_TRANSLATE_ROUTES_CONFING)
+  private readonly translate = inject(TranslateService)
+  private readonly title = inject(Title)
+  private readonly activatedRoute = inject(ActivatedRoute)
+  private readonly config = inject(NGX_TRANSLATE_ROUTES_CONFING)
 
   async translateTitle(): Promise<void> {
-    let child = this.#activatedRoute.firstChild
+    let child = this.activatedRoute.firstChild
     while (child?.firstChild) {
       child = child.firstChild
     }
-    const routeTitle = child?.snapshot.data?.['title']
-    const skipTranslation = !!child?.snapshot.data?.['skipTranslation']
+    const { title: routeTitle, skipTranslation } = child?.snapshot.data || {}
     const params = child?.snapshot.params
     let appTitle: string
+
     if (skipTranslation) {
       appTitle = routeTitle
     } else if (routeTitle) {
       appTitle = await firstValueFrom(
-        this.#translate.get(
-          `${this.#config.titlePrefix}.${routeTitle}`,
-          params,
-        ),
+        this.translate.get(`${this.config.titlePrefix}.${routeTitle}`, params),
       )
     } else {
-      appTitle = this.#title.getTitle()
+      appTitle = this.title.getTitle()
     }
-    this.#title.setTitle(appTitle)
+    this.title.setTitle(appTitle)
   }
 }

@@ -1,0 +1,43 @@
+import { Routes } from '@angular/router'
+import { AboutComponent } from './about/about.component'
+import { DashboardComponent } from './dashboard/dashboard.component'
+import { MyaccountComponent } from './myaccount/myaccount.component'
+import { MyprofileComponent } from './myprofile/myprofile.component'
+import { NotFoundComponent } from './not-found/not-found.component'
+
+export const routes: Routes = [
+  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+  {
+    path: 'about',
+    component: AboutComponent,
+    data: {
+      title: 'about',
+    },
+  },
+  {
+    path: 'profile',
+    component: MyprofileComponent,
+    data: {
+      title: 'profile',
+    },
+  },
+  {
+    path: 'myaccount',
+    component: MyaccountComponent,
+    data: {
+      title: 'myaccount',
+    },
+  },
+  {
+    path: 'dashboard',
+    title: 'Dashboard',
+    component: DashboardComponent,
+  },
+  {
+    path: 'users',
+    loadChildren: () =>
+      import('./users/users.routes').then((r) => r.usersRoutes),
+  },
+  { path: '404', component: NotFoundComponent },
+  { path: '**', redirectTo: '/404' },
+]

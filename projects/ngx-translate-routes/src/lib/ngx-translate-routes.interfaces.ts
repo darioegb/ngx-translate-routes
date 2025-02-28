@@ -6,6 +6,8 @@ export interface NgxTranslateRoutesConfig {
   routeSuffixesWithQueryParams?: RouteSuffixesWithQueryParams
   routesUsingStrategy?: string[]
   titlePrefix?: string
+  cacheMethod?: 'localStorage' | 'cookies'
+  cookieExpirationDays?: number
   onLanguageChange?: () => void
   routeTranslationStrategy?: (originalRoute: string) => string
 }

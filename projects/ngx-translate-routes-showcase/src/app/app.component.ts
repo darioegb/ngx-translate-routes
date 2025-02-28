@@ -9,7 +9,7 @@ import { TranslateService } from '@ngx-translate/core'
 export class AppComponent implements OnInit {
   title = 'angulartitle'
   idUser = 1
-  languajes = [
+  languages = [
     {
       key: 'English',
       value: 'en',
@@ -19,17 +19,17 @@ export class AppComponent implements OnInit {
       value: 'es',
     },
   ]
-  languaje!: string
-  #translate = inject(TranslateService)
+  language!: string
+  private readonly translate = inject(TranslateService)
 
   ngOnInit(): void {
     const lang = localStorage.getItem('lang')
-    this.languaje = lang ? lang : this.#translate.defaultLang
-    this.#translate.setDefaultLang(this.languaje)
+    this.language = lang ? lang : this.translate.defaultLang
+    this.translate.setDefaultLang(this.language)
   }
 
-  changeLanguaje() {
-    this.#translate.setDefaultLang(this.languaje)
-    localStorage.setItem('lang', this.languaje)
+  changeLanguage() {
+    this.translate.setDefaultLang(this.language)
+    localStorage.setItem('lang', this.language)
   }
 }
