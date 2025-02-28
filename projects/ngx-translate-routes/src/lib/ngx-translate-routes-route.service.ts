@@ -82,7 +82,9 @@ export class NgxTranslateRoutesRouteService {
     translatePath: string,
     subPath: string,
   ): string {
-    const segmentToConcat = translatePath.startsWith(this.config.routePrefix!)
+    const segmentToConcat = translatePath.startsWith(
+      this.config.routePrefix ?? '',
+    )
       ? subPath
       : translatePath
     return subPath.length > 0 ? `${routeUrl}/${segmentToConcat}` : subPath

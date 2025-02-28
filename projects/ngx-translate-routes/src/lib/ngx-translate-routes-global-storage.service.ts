@@ -1,6 +1,5 @@
-import { Injectable, inject } from '@angular/core'
+import { Injectable, PLATFORM_ID, inject } from '@angular/core'
 import { DOCUMENT, isPlatformBrowser } from '@angular/common'
-import { PLATFORM_ID } from '@angular/core'
 import { millisecondsInADay } from './ngx-translate-routes.constants'
 import { NGX_TRANSLATE_ROUTES_CONFING } from './ngx-translate-routes.token'
 
