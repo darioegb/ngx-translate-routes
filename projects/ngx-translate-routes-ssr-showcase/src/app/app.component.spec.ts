@@ -1,6 +1,10 @@
 import { TestBed } from '@angular/core/testing'
 import { AppComponent } from './app.component'
-import { HttpClient, HttpClientModule } from '@angular/common/http'
+import {
+  HttpClient,
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from '@angular/common/http'
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core'
 import { httpLoaderFactory } from './app.config'
 import { ActivatedRoute } from '@angular/router'
@@ -11,7 +15,6 @@ describe('AppComponent', () => {
     await TestBed.configureTestingModule({
       imports: [
         AppComponent,
-        HttpClientModule,
         TranslateModule.forRoot({
           defaultLanguage: 'en',
           useDefaultLang: true,
@@ -34,6 +37,7 @@ describe('AppComponent', () => {
             },
           },
         },
+        provideHttpClient(withInterceptorsFromDi()),
       ],
     }).compileComponents()
   })

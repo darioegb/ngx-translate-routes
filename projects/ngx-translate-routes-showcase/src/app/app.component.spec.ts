@@ -1,4 +1,4 @@
-import { HttpClientModule, HttpClient } from '@angular/common/http'
+import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core'
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing'
 import { FormsModule } from '@angular/forms'
@@ -14,36 +14,34 @@ describe('AppComponent', () => {
   let fixture: ComponentFixture<AppComponent>
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      schemas: [CUSTOM_ELEMENTS_SCHEMA],
-      declarations: [AppComponent],
-      imports: [
-        RouterModule.forRoot([]),
-        HttpClientModule,
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    declarations: [AppComponent],
+    imports: [RouterModule.forRoot([]),
         TranslateModule.forRoot({
-          defaultLanguage: 'en',
-          useDefaultLang: true,
-          loader: {
-            provide: TranslateLoader,
-            useFactory: httpLoaderFactory,
-            deps: [HttpClient],
-          },
-        }),
-        FormsModule,
-      ],
-      providers: [
-        {
-          provide: ActivatedRoute,
-          useValue: {
-            params: of({}),
-            snapshot: {
-              paramMap: {
-                get: () => 'en',
-              },
+            defaultLanguage: 'en',
+            useDefaultLang: true,
+            loader: {
+                provide: TranslateLoader,
+                useFactory: httpLoaderFactory,
+                deps: [HttpClient],
             },
-          },
+        }),
+        FormsModule],
+    providers: [
+        {
+            provide: ActivatedRoute,
+            useValue: {
+                params: of({}),
+                snapshot: {
+                    paramMap: {
+                        get: () => 'en',
+                    },
+                },
+            },
         },
-      ],
-    }).compileComponents()
+        provideHttpClient(withInterceptorsFromDi()),
+    ]
+}).compileComponents()
   }))
 
   beforeEach(() => {

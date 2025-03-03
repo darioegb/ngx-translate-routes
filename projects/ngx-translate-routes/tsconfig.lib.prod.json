@@ -1,9 +1,16 @@
 {
   "extends": "./tsconfig.lib.json",
   "compilerOptions": {
-    "declarationMap": false
+    "declarationMap": false,
+    "removeComments": true,
+    "target": "es2022",
+    "module": "esnext"
   },
   "angularCompilerOptions": {
-    "compilationMode": "partial"
+    "compilationMode": "partial",
+    "annotateForClosureCompiler": true,
+    "strictMetadataEmit": true,
+    "skipTemplateCodegen": true,
+    "fullTemplateTypeCheck": true
   }
 }
