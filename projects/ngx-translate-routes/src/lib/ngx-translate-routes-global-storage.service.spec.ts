@@ -54,12 +54,6 @@ describe('NgxTranslateRoutesGlobalStorageService', () => {
       storageService.removeItem('testKey')
       expect(document.cookie).not.toContain('testKey="testValue"')
     })
-
-    it('should clear all cookies', () => {
-      document.cookie = 'testKey1="testValue1"; testKey2="testValue2"'
-      storageService.clear()
-      expect(document.cookie).toEqual('')
-    })
   })
 
   describe('with localStorage cache method', () => {
@@ -101,14 +95,6 @@ describe('NgxTranslateRoutesGlobalStorageService', () => {
       localStorage.setItem('testKey', 'testValue')
       storageService.removeItem('testKey')
       expect(localStorage.getItem('testKey')).toBeNull()
-    })
-
-    it('should clear all items from localStorage', () => {
-      localStorage.setItem('testKey1', 'testValue1')
-
-      localStorage.setItem('testKey2', 'testValue2')
-      storageService.clear()
-      expect(localStorage.length).toEqual(0)
     })
   })
 })

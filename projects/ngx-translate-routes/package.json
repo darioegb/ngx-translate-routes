@@ -21,8 +21,8 @@
     "url": "git+https://github.com/darioegb/ngx-translate-routes.git"
   },
   "peerDependencies": {
-    "@angular/common": ">=14.0.0",
-    "@angular/core": ">=14.0.0",
+    "@angular/common": ">=16.0.0",
+    "@angular/core": ">=16.0.0",
     "@ngx-translate/core": ">=14.0.0",
     "@ngx-translate/http-loader": ">=7.0.0",
     "rxjs": ">=7.0.0"

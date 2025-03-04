@@ -57,19 +57,4 @@ export class NgxTranslateRoutesGlobalStorageService {
       }
     }
   }
-
-  clear(): void {
-    if (this.isBrowser) {
-      if (this.config.cacheMethod === 'cookies') {
-        const cookies = this.document.cookie.split(';')
-        for (const cookie of cookies) {
-          const eqPos = cookie.indexOf('=')
-          const name = eqPos > -1 ? cookie.slice(0, eqPos) : cookie
-          this.document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`
-        }
-      } else {
-        localStorage.clear()
-      }
-    }
-  }
 }

@@ -6,6 +6,7 @@ import { firstValueFrom } from 'rxjs/internal/firstValueFrom'
   selector: 'app-about',
   templateUrl: './about.component.html',
   styleUrls: ['./about.component.scss'],
+  standalone: false,
 })
 export class AboutComponent implements OnInit {
   private readonly activatedRoute = inject(ActivatedRoute)
