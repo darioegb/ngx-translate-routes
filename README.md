@@ -15,16 +15,16 @@ Latest version available for each version of Angular
 
 | ngx-translate | Angular      |
 | ------------- | ------------ |
-| 2.2.0         | 14.x to 18.x |
-| 2.1.4         | 14.x to 18.x |
-| 2.1.3         | 14.x to 18.x |
-| 2.1.2         | 14.x to 18.x |
-| 2.1.1         | 14.x to 18.x |
-| 2.1.0         | 14.x to 18.x |
-| 2.0.1         | 14.x to 18.x |
-| 2.0.0         | 14.x to 18.x |
-| 1.4.0         | 13.x to 9.x  |
-| 1.3.0         | 11.x to 8.x  |
+| 2.2.0         | 16.x to 19.x |
+| 2.1.4         | 16.x to 18.x |
+| 2.1.3         | 16.x to 18.x |
+| 2.1.2         | 16.x to 18.x |
+| 2.1.1         | 16.x to 18.x |
+| 2.1.0         | 16.x to 18.x |
+| 2.0.1         | 16.x to 18.x |
+| 2.0.0         | 16.x to 18.x |
+| 1.4.0         | 13.x to 15.x |
+| 1.3.0         | 8.x to 12.x  |
 | 1.2.0         | 9.x 8.x 7.x  |
 | 1.1.0         | 9.x 8.x 7.x  |
 | 1.0.2         | 9.x 8.x 7.x  |
@@ -34,7 +34,7 @@ Latest version available for each version of Angular
 ## Live Example
 
 You can check how these library work in the next links, on live examples:
-- Standalone application with SSR: https://stackblitz.com/edit/ngx-translate-routes-ssr-example
+- Standalone application with SSR: https://stackblitz.com/edit/ngx-translate-routes-example-standalone
 - Angular with modules: https://stackblitz.com/edit/ngx-translate-routes-example
 
 ## Install
@@ -49,9 +49,7 @@ You can check how these library work in the next links, on live examples:
   npm install @ngx-translate/core --save
   npm install @ngx-translate/http-loader --save
 ```
-
-Follows this link for more information about ngx-translate:
-https://github.com/ngx-translate/core
+For more information about ngx-translate-routes, please visit the [npm package page](https://www.npmjs.com/package/ngx-translate-routes).
 
 ## Setup
 
@@ -416,7 +414,29 @@ In this example, the library will use cookies to cache the translations, and the
 
 ## Test
 
-Ngx-translate-routes-showcase is the testing project. Use ng s to run it.
+To test the library, you can use the following showcase projects:
+
+- **Ngx-translate-routes-showcase**: This project demonstrates the usage of the library in a standard Angular application.
+- **Ngx-translate-routes-ssr-showcase**: This project demonstrates the usage of the library in an Angular application with server-side rendering (SSR).
+
+### Running the Projects
+
+1. Clone the repository and navigate to the project directory.
+2. Install the dependencies by running:
+  ```bash
+  npm install
+  ```
+3. To run the standard showcase project, navigate to the `ngx-translate-routes-showcase` directory and execute:
+  ```bash
+  ng serve
+  ```
+4. To run the SSR showcase project, navigate to the `ngx-translate-routes-ssr-showcase` directory and execute:
+  ```bash
+  npm run dev:ssr
+  ```
+
+These commands will start the respective projects, and you can view them in your browser at `http://localhost:4200`.
+
 
 ## License
 
