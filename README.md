@@ -19,6 +19,7 @@ Latest version available for each version of Angular
 
 | ngx-translate | Angular      |
 | ------------- | ------------ |
+| 2.2.1         | 16.x to 19.x |
 | 2.2.0         | 16.x to 19.x |
 | 2.1.4         | 16.x to 18.x |
 | 2.1.3         | 16.x to 18.x |
