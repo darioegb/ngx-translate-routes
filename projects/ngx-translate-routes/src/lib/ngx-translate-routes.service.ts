@@ -1,34 +1,32 @@
 import { Location } from '@angular/common'
-import { Injectable, OnDestroy, inject } from '@angular/core'
+import { DestroyRef, Injectable, inject } from '@angular/core'
 import { TranslateService } from '@ngx-translate/core'
 import { Router, NavigationEnd, NavigationStart } from '@angular/router'
-import { filter, map, takeUntil } from 'rxjs/operators'
-import { Subject } from 'rxjs'
+import { filter, map } from 'rxjs/operators'
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { RoutePath } from './ngx-translate-routes.interfaces'
-import { NGX_TRANSLATE_ROUTES_CONFING } from './ngx-translate-routes.token'
-import { NgxTranslateRoutesTitleService } from './ngx-translate-routes-title.service'
-import { NgxTranslateRoutesRouteService } from './ngx-translate-routes-route.service'
+import { NGX_TRANSLATE_ROUTES_CONFIG } from './ngx-translate-routes.token'
+import { NgxTranslateRoutesHelperService } from './ngx-translate-routes-helper.service'
 import { lastRouteKey } from './ngx-translate-routes.constants'
 import { NgxTranslateRoutesGlobalStorageService } from './ngx-translate-routes-global-storage.service'
 
 @Injectable({
   providedIn: 'root',
 })
-export class NgxTranslateRoutesService implements OnDestroy {
-  private readonly destroy$ = new Subject<void>()
+export class NgxTranslateRoutesService {
   private readonly translate = inject(TranslateService)
   private readonly router = inject(Router)
   private readonly location = inject(Location)
-  private readonly titleService = inject(NgxTranslateRoutesTitleService)
-  private readonly routeService = inject(NgxTranslateRoutesRouteService)
-  private readonly config = inject(NGX_TRANSLATE_ROUTES_CONFING)
+  private readonly helperService = inject(NgxTranslateRoutesHelperService)
+  private readonly config = inject(NGX_TRANSLATE_ROUTES_CONFIG)
   private readonly globalStorageService = inject(
     NgxTranslateRoutesGlobalStorageService,
   )
+  private readonly _destroyRef = inject(DestroyRef)
 
   constructor() {
     this.translate.onDefaultLangChange
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this._destroyRef))
       .subscribe({
         next: () => {
           this.handleLanguageChange()
@@ -41,7 +39,7 @@ export class NgxTranslateRoutesService implements OnDestroy {
       .pipe(
         filter((event) => event instanceof NavigationStart),
         map((event) => event as NavigationStart),
-        takeUntil(this.destroy$),
+        takeUntilDestroyed(this._destroyRef),
       )
       .subscribe({
         next: (event) => {
@@ -67,7 +65,7 @@ export class NgxTranslateRoutesService implements OnDestroy {
     this.router.events
       .pipe(
         filter((event) => event instanceof NavigationEnd),
-        takeUntil(this.destroy$),
+        takeUntilDestroyed(this._destroyRef),
       )
       .subscribe({
         next: () => {
@@ -77,13 +75,8 @@ export class NgxTranslateRoutesService implements OnDestroy {
   }
 
   checkConfigValueAndMakeTranslations(): void {
-    this.config.enableTitleTranslate && this.titleService.translateTitle()
-    this.config.enableRouteTranslate && this.routeService.translateRoute()
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next()
-    this.destroy$.complete()
+    this.config.enableTitleTranslate && this.helperService.translateTitle()
+    this.config.enableRouteTranslate && this.helperService.translateRoute()
   }
 
   private handleLanguageChange(): void {

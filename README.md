@@ -4,6 +4,10 @@
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=darioegb_ngx-translate-routes&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=darioegb_ngx-translate-routes)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=darioegb_ngx-translate-routes&metric=coverage)](https://sonarcloud.io/summary/new_code?id=darioegb_ngx-translate-routes)
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=darioegb_ngx-translate-routes&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=darioegb_ngx-translate-routes)
+![NPM Unpacked Size](https://img.shields.io/npm/unpacked-size/ngx-translate-routes?labelColor=%235C5C5C&color=%2320AA1B)
+![npm bundle size](https://img.shields.io/bundlephobia/minzip/ngx-translate-routes?labelColor=%235C5C5C&color=%2320AA1B)
+![NPM Version](https://img.shields.io/npm/v/ngx-translate-routes?label=npm%20package&labelColor=%235C5C5C&color=%2320AA1B)
+
 
 ## Features
 
@@ -49,7 +53,6 @@ You can check how these library work in the next links, on live examples:
   npm install @ngx-translate/core --save
   npm install @ngx-translate/http-loader --save
 ```
-For more information about ngx-translate-routes, please visit the [npm package page](https://www.npmjs.com/package/ngx-translate-routes).
 
 ## Setup
 

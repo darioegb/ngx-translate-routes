@@ -14,17 +14,26 @@
     "angular translate route",
     "angular",
     "typescript",
-    "i18n"
+    "i18n",
+    "internationalization",
+    "localization",
+    "angular i18n",
+    "angular localization",
+    "route translation",
+    "title translation"
   ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/darioegb/ngx-translate-routes.git"
   },
+  "bugs": {
+    "url": "https://github.com/darioegb/ngx-translate-routes/issues"
+  },
+  "homepage": "https://github.com/darioegb/ngx-translate-routes#readme",
   "peerDependencies": {
     "@angular/common": ">=16.0.0",
     "@angular/core": ">=16.0.0",
     "@ngx-translate/core": ">=14.0.0",
-    "@ngx-translate/http-loader": ">=7.0.0",
     "rxjs": ">=7.0.0"
   },
   "dependencies": {

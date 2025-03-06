@@ -1,7 +1,7 @@
 import { Injectable, PLATFORM_ID, inject } from '@angular/core'
 import { DOCUMENT, isPlatformBrowser } from '@angular/common'
 import { millisecondsInADay } from './ngx-translate-routes.constants'
-import { NGX_TRANSLATE_ROUTES_CONFING } from './ngx-translate-routes.token'
+import { NGX_TRANSLATE_ROUTES_CONFIG } from './ngx-translate-routes.token'
 
 @Injectable({
   providedIn: 'root',
@@ -9,7 +9,7 @@ import { NGX_TRANSLATE_ROUTES_CONFING } from './ngx-translate-routes.token'
 export class NgxTranslateRoutesGlobalStorageService {
   private readonly document = inject(DOCUMENT)
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID))
-  private readonly config = inject(NGX_TRANSLATE_ROUTES_CONFING)
+  private readonly config = inject(NGX_TRANSLATE_ROUTES_CONFIG)
 
   setItem<T>(key: string, value: T): void {
     if (this.isBrowser) {

@@ -1,24 +1,48 @@
 import { Injectable, inject } from '@angular/core'
 import { TranslateService } from '@ngx-translate/core'
+import { Title } from '@angular/platform-browser'
+import { ActivatedRoute, Params, Router } from '@angular/router'
 import { Location } from '@angular/common'
-import { Params, Router } from '@angular/router'
 import { firstValueFrom } from 'rxjs'
 import { RoutePath } from './ngx-translate-routes.interfaces'
-import { NGX_TRANSLATE_ROUTES_CONFING } from './ngx-translate-routes.token'
+import { NGX_TRANSLATE_ROUTES_CONFIG } from './ngx-translate-routes.token'
 import { lastRouteKey } from './ngx-translate-routes.constants'
 import { NgxTranslateRoutesGlobalStorageService } from './ngx-translate-routes-global-storage.service'
 
 @Injectable({
   providedIn: 'root',
 })
-export class NgxTranslateRoutesRouteService {
+export class NgxTranslateRoutesHelperService {
   private readonly translate = inject(TranslateService)
+  private readonly title = inject(Title)
+  private readonly activatedRoute = inject(ActivatedRoute)
+  private readonly config = inject(NGX_TRANSLATE_ROUTES_CONFIG)
   private readonly location = inject(Location)
   private readonly router = inject(Router)
-  private readonly config = inject(NGX_TRANSLATE_ROUTES_CONFING)
   private readonly globalStorageService = inject(
     NgxTranslateRoutesGlobalStorageService,
   )
+
+  async translateTitle(): Promise<void> {
+    let child = this.activatedRoute.firstChild
+    while (child?.firstChild) {
+      child = child.firstChild
+    }
+    const { title: routeTitle, skipTranslation } = child?.snapshot.data || {}
+    const params = child?.snapshot.params
+    let appTitle: string
+
+    if (skipTranslation) {
+      appTitle = routeTitle
+    } else if (routeTitle) {
+      appTitle = await firstValueFrom(
+        this.translate.get(`${this.config.titlePrefix}.${routeTitle}`, params),
+      )
+    } else {
+      appTitle = this.title.getTitle()
+    }
+    this.title.setTitle(appTitle)
+  }
 
   async translateRoute(): Promise<void> {
     try {

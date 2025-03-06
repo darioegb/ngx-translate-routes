@@ -6,6 +6,7 @@ import { firstValueFrom } from 'rxjs/internal/firstValueFrom'
   selector: 'app-about',
   templateUrl: './about.component.html',
   styleUrls: ['./about.component.scss'],
+  // eslint-disable-next-line @angular-eslint/prefer-standalone
   standalone: false,
 })
 export class AboutComponent implements OnInit {

@@ -1,6 +1,6 @@
 import { Provider } from '@angular/core'
 import { TitleCasePipe } from '@angular/common'
-import { NGX_TRANSLATE_ROUTES_CONFING } from './ngx-translate-routes.token'
+import { NGX_TRANSLATE_ROUTES_CONFIG } from './ngx-translate-routes.token'
 import { NgxTranslateRoutesConfig } from './ngx-translate-routes.interfaces'
 
 export function provideNgxTranslateRoutes(
@@ -8,7 +8,7 @@ export function provideNgxTranslateRoutes(
 ): Provider[] {
   return [
     {
-      provide: NGX_TRANSLATE_ROUTES_CONFING,
+      provide: NGX_TRANSLATE_ROUTES_CONFIG,
       useValue: {
         enableRouteTranslate: config?.enableRouteTranslate ?? true,
         enableTitleTranslate: config?.enableTitleTranslate ?? true,

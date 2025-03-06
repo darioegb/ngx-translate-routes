@@ -6,5 +6,7 @@
   },
   "allowedNonPeerDependencies": [
     "tslib"
-  ]
+  ],
+  "deleteDestPath": false,
+  "keepLifecycleScripts": false
 }
