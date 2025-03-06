@@ -8,11 +8,11 @@ import {
 import { CommonModule, TitleCasePipe } from '@angular/common'
 import { TranslateModule } from '@ngx-translate/core'
 import { NgxTranslateRoutesService } from './ngx-translate-routes.service'
-import { NGX_TRANSLATE_ROUTES_CONFING } from './ngx-translate-routes.token'
+import { NGX_TRANSLATE_ROUTES_CONFIG } from './ngx-translate-routes.token'
 import { NgxTranslateRoutesConfig } from './ngx-translate-routes.interfaces'
 
 @NgModule({
-  imports: [CommonModule, TranslateModule],
+  imports: [CommonModule, TranslateModule.forChild()],
   providers: [TitleCasePipe],
 })
 export class NgxTranslateRoutesModule {
@@ -32,7 +32,7 @@ export class NgxTranslateRoutesModule {
       ngModule: NgxTranslateRoutesModule,
       providers: [
         {
-          provide: NGX_TRANSLATE_ROUTES_CONFING,
+          provide: NGX_TRANSLATE_ROUTES_CONFIG,
           useValue: {
             enableRouteTranslate: config?.enableRouteTranslate ?? true,
             enableTitleTranslate: config?.enableTitleTranslate ?? true,

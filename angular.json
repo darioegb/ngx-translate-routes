@@ -53,12 +53,15 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/ngx-translate-routes-showcase",
+            "outputPath": {
+              "base": "dist/ngx-translate-routes-showcase"
+            },
             "index": "projects/ngx-translate-routes-showcase/src/index.html",
-            "main": "projects/ngx-translate-routes-showcase/src/main.ts",
-            "polyfills": "projects/ngx-translate-routes-showcase/src/polyfills.ts",
+            "polyfills": [
+              "projects/ngx-translate-routes-showcase/src/polyfills.ts"
+            ],
             "tsConfig": "projects/ngx-translate-routes-showcase/tsconfig.app.json",
             "preserveSymlinks": true,
             "aot": false,
@@ -70,12 +73,11 @@
               "projects/ngx-translate-routes-showcase/src/styles.scss"
             ],
             "scripts": [],
-            "vendorChunk": true,
             "extractLicenses": false,
-            "buildOptimizer": false,
             "sourceMap": true,
             "optimization": false,
-            "namedChunks": true
+            "namedChunks": true,
+            "browser": "projects/ngx-translate-routes-showcase/src/main.ts"
           },
           "configurations": {
             "production": {
@@ -90,8 +92,6 @@
               "sourceMap": false,
               "namedChunks": false,
               "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
               "budgets": [
                 {
                   "type": "initial",

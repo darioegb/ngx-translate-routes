@@ -2,10 +2,11 @@ import { TestBed } from '@angular/core/testing'
 import { DOCUMENT } from '@angular/common'
 import { NgxTranslateRoutesGlobalStorageService } from './ngx-translate-routes-global-storage.service'
 import { NgxTranslateRoutesModule } from './ngx-translate-routes.module'
-import { HttpClientTestingModule } from '@angular/common/http/testing'
+import { provideHttpClientTesting } from '@angular/common/http/testing'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 import { TRANSLATIONS } from '../test'
 import { ActivatedRoute } from '@angular/router'
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('NgxTranslateRoutesGlobalStorageService', () => {
   let storageService: NgxTranslateRoutesGlobalStorageService
@@ -14,27 +15,24 @@ describe('NgxTranslateRoutesGlobalStorageService', () => {
   describe('with cookies cache method', () => {
     beforeEach(() => {
       TestBed.configureTestingModule({
-        imports: [
-          HttpClientTestingModule,
-          TranslateTestingModule.withTranslations(
-            TRANSLATIONS,
-          ).withDefaultLanguage('en'),
-          NgxTranslateRoutesModule.forRoot({
+    imports: [TranslateTestingModule.withTranslations(TRANSLATIONS).withDefaultLanguage('en'),
+        NgxTranslateRoutesModule.forRoot({
             cacheMethod: 'cookies',
             cookieExpirationDays: 7,
-          }),
-        ],
-        providers: [
-          {
+        })],
+    providers: [
+        {
             provide: ActivatedRoute,
             useValue: {
-              snapshot: {
-                data: {},
-              },
+                snapshot: {
+                    data: {},
+                },
             },
-          },
-        ],
-      })
+        },
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
+    ]
+})
       storageService = TestBed.inject(NgxTranslateRoutesGlobalStorageService)
       document = TestBed.inject(DOCUMENT)
       document.cookie = ''
@@ -56,37 +54,28 @@ describe('NgxTranslateRoutesGlobalStorageService', () => {
       storageService.removeItem('testKey')
       expect(document.cookie).not.toContain('testKey="testValue"')
     })
-
-    it('should clear all cookies', () => {
-      document.cookie = 'testKey1="testValue1"; testKey2="testValue2"'
-      storageService.clear()
-      expect(document.cookie).toEqual('')
-    })
   })
 
   describe('with localStorage cache method', () => {
     beforeEach(() => {
       TestBed.configureTestingModule({
-        imports: [
-          HttpClientTestingModule,
-          TranslateTestingModule.withTranslations(
-            TRANSLATIONS,
-          ).withDefaultLanguage('en'),
-          NgxTranslateRoutesModule.forRoot({
+    imports: [TranslateTestingModule.withTranslations(TRANSLATIONS).withDefaultLanguage('en'),
+        NgxTranslateRoutesModule.forRoot({
             cacheMethod: 'localStorage',
-          }),
-        ],
-        providers: [
-          {
+        })],
+    providers: [
+        {
             provide: ActivatedRoute,
             useValue: {
-              snapshot: {
-                data: {},
-              },
+                snapshot: {
+                    data: {},
+                },
             },
-          },
-        ],
-      })
+        },
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
+    ]
+})
       storageService = TestBed.inject(NgxTranslateRoutesGlobalStorageService)
       localStorage.clear()
     })
@@ -106,14 +95,6 @@ describe('NgxTranslateRoutesGlobalStorageService', () => {
       localStorage.setItem('testKey', 'testValue')
       storageService.removeItem('testKey')
       expect(localStorage.getItem('testKey')).toBeNull()
-    })
-
-    it('should clear all items from localStorage', () => {
-      localStorage.setItem('testKey1', 'testValue1')
-
-      localStorage.setItem('testKey2', 'testValue2')
-      storageService.clear()
-      expect(localStorage.length).toEqual(0)
     })
   })
 })
