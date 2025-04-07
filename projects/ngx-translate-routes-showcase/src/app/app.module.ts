@@ -44,9 +44,7 @@ export const httpLoaderFactory = (http: HttpClient) =>
         deps: [HttpClient],
       },
     }),
-    NgxTranslateRoutesModule.forRoot({
-      enableQueryParamsTranslate: true,
-    }),
+    NgxTranslateRoutesModule.forRoot(),
   ],
   providers: [provideHttpClient(withInterceptorsFromDi())],
 })

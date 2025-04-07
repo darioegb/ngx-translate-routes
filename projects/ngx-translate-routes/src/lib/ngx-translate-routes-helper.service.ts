@@ -24,16 +24,11 @@ export class NgxTranslateRoutesHelperService {
   )
 
   async translateTitle(): Promise<void> {
-    let child = this.activatedRoute.firstChild
-    while (child?.firstChild) {
-      child = child.firstChild
-    }
-    const { title: routeTitle, skipTranslation } = child?.snapshot.data || {}
-    const params = child?.snapshot.params
+    const { skipTranslation, routeTitle, params } = this.getDeepestChildRoute()
     let appTitle: string
 
     if (skipTranslation) {
-      appTitle = routeTitle
+      appTitle = routeTitle!
     } else if (routeTitle) {
       appTitle = await firstValueFrom(
         this.translate.get(`${this.config.titlePrefix}.${routeTitle}`, params),
@@ -46,12 +41,21 @@ export class NgxTranslateRoutesHelperService {
 
   async translateRoute(): Promise<void> {
     try {
+      const { skipTranslation } = this.getDeepestChildRoute()
+
+      if (skipTranslation) {
+        return
+      }
+
       const {
         routeTranslationStrategy,
         routesUsingStrategy,
         enableQueryParamsTranslate,
         routeSuffixesWithQueryParams,
+        enableLanguageInPath,
+        includeDefaultLanguageInPath,
       } = this.config
+
       const urlTree = this.router.parseUrl(this.router.url)
       const subPaths = urlTree?.root?.children['primary']?.segments?.map(
         (segment) => segment.path,
@@ -63,7 +67,9 @@ export class NgxTranslateRoutesHelperService {
 
       const queryParams = urlTree?.queryParams ?? {}
       const isQueryParamsNeedsTranslation =
-        Object.keys(queryParams).length > 0 && enableQueryParamsTranslate
+        Object.keys(queryParams).length > 0 &&
+        enableQueryParamsTranslate &&
+        this.translate.currentLang !== this.translate.defaultLang
       const translatedPaths = await Promise.all(
         subPaths.map((subPath) => {
           if (
@@ -79,20 +85,54 @@ export class NgxTranslateRoutesHelperService {
         }),
       )
 
-      const routeUrl = translatedPaths.reduce(
+      let routeUrl = translatedPaths.reduce(
         (acc, translatedPath, index) =>
-          this.concatenateRouteUrl(acc, translatedPath, subPaths[index]),
+          this.concatenateRouteUrl(
+            acc,
+            typeof translatedPath === 'string'
+              ? translatedPath
+              : translatedPath['root'],
+            subPaths[index],
+          ),
         '',
       )
 
+      if (
+        enableLanguageInPath &&
+        ((this.translate.currentLang !== this.translate.defaultLang &&
+          !includeDefaultLanguageInPath) ||
+          includeDefaultLanguageInPath)
+      ) {
+        routeUrl = !this.isLangInPath(this.router.url)
+          ? `/${this.translate.currentLang}${routeUrl}`
+          : routeUrl
+      }
+
       const translatedQueryParams = isQueryParamsNeedsTranslation
-        ? await this.translateQueryParams(queryParams)
+        ? await this.translateQueryParams(
+            queryParams,
+            subPaths[subPaths.length - 1],
+          )
         : queryParams
 
       this.updateLocationIfChanged(routeUrl, translatedQueryParams)
     } catch (error) {
       console.error('Error translating route:', error)
     }
+  }
+
+  private getDeepestChildRoute(): {
+    skipTranslation: boolean
+    routeTitle?: string
+    params?: Params
+  } {
+    let child = this.activatedRoute.firstChild
+    while (child?.firstChild) {
+      child = child.firstChild
+    }
+    const { title: routeTitle, skipTranslation } = child?.snapshot.data || {}
+    const params = child?.snapshot.params
+    return { skipTranslation, routeTitle, params }
   }
 
   private async getTranslatedPath(subPath: string): Promise<string> {
@@ -114,12 +154,12 @@ export class NgxTranslateRoutesHelperService {
     return subPath.length > 0 ? `${routeUrl}/${segmentToConcat}` : subPath
   }
 
-  private async translateQueryParams(queryParams: Params): Promise<Params> {
+  private async translateQueryParams(
+    queryParams: Params,
+    path: string,
+  ): Promise<Params> {
     const translatedQueryParams: Params = {}
     for (const key of Object.keys(queryParams)) {
-      const path = this.router.url
-        .match(new RegExp(`[^/]*${key}`))?.[0]
-        .replace(new RegExp(`${key}|[^\\w\\s]`, 'g'), '')
       const translatedKey = await this.getTranslatedPath(
         `${path}.${this.config.routeSuffixesWithQueryParams?.params}.${key}`,
       )
@@ -130,7 +170,7 @@ export class NgxTranslateRoutesHelperService {
 
   private updateLocationIfChanged(
     newRouteUrl: string,
-    queryParams: Params,
+    queryParams?: Params,
   ): void {
     const currentPathWithParams = this.router
       .createUrlTree([], {
@@ -159,5 +199,10 @@ export class NgxTranslateRoutesHelperService {
 
     this.location.replaceState(newPathWithParams)
     this.globalStorageService.setItem(lastRouteKey, translatedPaths)
+  }
+
+  private isLangInPath(path: string): boolean {
+    const langRegex = /^\/[a-z]{2}(-[A-Z]{2})?(\/|$)/
+    return langRegex.test(path)
   }
 }

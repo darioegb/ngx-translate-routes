@@ -9,10 +9,10 @@ import { NotFoundComponent } from './not-found/not-found.component'
 const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
   {
-    path: 'about',
+    path: 'aboutAs',
     component: AboutComponent,
     data: {
-      title: 'about',
+      title: 'aboutAs',
     },
   },
   {
@@ -23,10 +23,10 @@ const routes: Routes = [
     },
   },
   {
-    path: 'myaccount',
+    path: 'myAccount',
     component: MyaccountComponent,
     data: {
-      title: 'myaccount',
+      title: 'myAccount',
     },
   },
   {
@@ -39,8 +39,7 @@ const routes: Routes = [
     loadChildren: () =>
       import('./users/users.module').then((m) => m.UsersModule),
   },
-  { path: '404', component: NotFoundComponent },
-  { path: '**', redirectTo: '/404' },
+  { path: '**', component: NotFoundComponent },
 ]
 
 @NgModule({

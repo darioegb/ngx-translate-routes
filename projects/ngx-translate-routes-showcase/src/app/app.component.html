@@ -3,11 +3,16 @@
     <h1>Welcome to {{ title }}!</h1>
     <ul class="links">
       <li>
-        <a [routerLink]="['/about']" [queryParams]="{ name: 'Test' }">About</a>
+        <a
+          [routerLink]="['/aboutAs']"
+          [queryParams]="{ name: 'Test', email: 'test@test.com' }"
+        >
+          About
+        </a>
       </li>
       <li><a [routerLink]="['/dashboard']">Dashboard</a></li>
       <li><a [routerLink]="['/profile']">Profile</a></li>
-      <li><a [routerLink]="['/myaccount']">My Account</a></li>
+      <li><a [routerLink]="['/myAccount']">My Account</a></li>
       <li><a [routerLink]="['/users/profile', idUser]">Users</a></li>
     </ul>
   </div>
