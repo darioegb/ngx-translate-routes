@@ -14,7 +14,6 @@ export class AboutComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     const params = await firstValueFrom(this.activatedRoute.queryParams)
-    const name = params['name']
-    console.log(name)
+    console.log(params)
   }
 }

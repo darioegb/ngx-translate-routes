@@ -12,8 +12,7 @@ export class AboutComponent implements OnInit {
 
   ngOnInit(): void {
     this.activatedRoute.queryParams.subscribe((params) => {
-      const name = params['name']
-      console.log(name)
+      console.log(params)
     })
   }
 }

@@ -2,7 +2,7 @@ import { Location } from '@angular/common'
 import { DestroyRef, Injectable, inject } from '@angular/core'
 import { TranslateService } from '@ngx-translate/core'
 import { Router, NavigationEnd, NavigationStart } from '@angular/router'
-import { filter, map } from 'rxjs/operators'
+import { filter, map, skip } from 'rxjs/operators'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { RoutePath } from './ngx-translate-routes.interfaces'
 import { NGX_TRANSLATE_ROUTES_CONFIG } from './ngx-translate-routes.token'
@@ -25,8 +25,8 @@ export class NgxTranslateRoutesService {
   private readonly _destroyRef = inject(DestroyRef)
 
   constructor() {
-    this.translate.onDefaultLangChange
-      .pipe(takeUntilDestroyed(this._destroyRef))
+    this.translate.onLangChange
+      .pipe(skip(1), takeUntilDestroyed(this._destroyRef))
       .subscribe({
         next: () => {
           this.handleLanguageChange()

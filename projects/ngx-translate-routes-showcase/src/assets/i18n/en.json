@@ -1,21 +1,12 @@
 {
   "titles": {
     "profile": "Profile",
-    "about": "About Us",
-    "myaccount": "My account",
+    "aboutAs": "About Us",
+    "myAccount": "My account",
     "users": {
       "root": "Users",
       "profile": "User Profile {{userId}}",
-      "myaccount": "List Users"
+      "myAccount": "List Users"
     }
-  },
-  "routes": {
-    "about": {
-      "root": "aboutAs",
-      "params": {
-        "name": "name"
-      }
-    },
-    "myaccount": "myAccount"
   }
 }

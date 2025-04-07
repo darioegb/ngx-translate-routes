@@ -17,6 +17,7 @@ import { NgxTranslateRoutesConfig } from './ngx-translate-routes.interfaces'
 })
 export class NgxTranslateRoutesModule {
   private readonly translateRoutesService = inject(NgxTranslateRoutesService)
+
   constructor(@Optional() @SkipSelf() parentModule?: NgxTranslateRoutesModule) {
     if (parentModule) {
       throw new Error(
@@ -25,6 +26,7 @@ export class NgxTranslateRoutesModule {
     }
     this.translateRoutesService.init()
   }
+
   static forRoot(
     config?: NgxTranslateRoutesConfig,
   ): ModuleWithProviders<NgxTranslateRoutesModule> {
@@ -36,7 +38,11 @@ export class NgxTranslateRoutesModule {
           useValue: {
             enableRouteTranslate: config?.enableRouteTranslate ?? true,
             enableTitleTranslate: config?.enableTitleTranslate ?? true,
-            enableQueryParamsTranslate: config?.enableQueryParamsTranslate,
+            enableQueryParamsTranslate:
+              config?.enableQueryParamsTranslate ?? false,
+            enableLanguageInPath: config?.enableLanguageInPath ?? false,
+            includeDefaultLanguageInPath:
+              config?.includeDefaultLanguageInPath ?? false,
             routePrefix: config?.routePrefix ?? 'routes',
             routeSuffixesWithQueryParams:
               config?.routeSuffixesWithQueryParams ?? {
@@ -45,11 +51,11 @@ export class NgxTranslateRoutesModule {
               },
             routesUsingStrategy: config?.routesUsingStrategy ?? [],
             titlePrefix: config?.titlePrefix ?? 'titles',
+            cacheMethod: config?.cacheMethod ?? 'localStorage',
+            cookieExpirationDays: config?.cookieExpirationDays ?? 30,
             onLanguageChange: config?.onLanguageChange ?? undefined,
             routeTranslationStrategy:
               config?.routeTranslationStrategy ?? undefined,
-            cacheMethod: config?.cacheMethod ?? 'localStorage',
-            cookieExpirationDays: config?.cookieExpirationDays ?? 30,
           },
         },
       ],

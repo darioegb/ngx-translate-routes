@@ -8,10 +8,16 @@ import { NotFoundComponent } from './not-found/not-found.component'
 export const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
   {
-    path: 'about',
+    path: 'dashboard',
+    title: 'Dashboard',
+    component: DashboardComponent,
+    data: { skipTranslation: true },
+  },
+  {
+    path: 'aboutAs',
     component: AboutComponent,
     data: {
-      title: 'about',
+      title: 'aboutAs',
     },
   },
   {
@@ -22,22 +28,20 @@ export const routes: Routes = [
     },
   },
   {
-    path: 'myaccount',
+    path: 'myAccount',
     component: MyaccountComponent,
     data: {
-      title: 'myaccount',
+      title: 'myAccount',
     },
-  },
-  {
-    path: 'dashboard',
-    title: 'Dashboard',
-    component: DashboardComponent,
   },
   {
     path: 'users',
     loadChildren: () =>
       import('./users/users.routes').then((r) => r.usersRoutes),
   },
-  { path: '404', component: NotFoundComponent },
-  { path: '**', redirectTo: '/404' },
+  {
+    path: '**',
+    component: NotFoundComponent,
+    data: { skipTranslation: true },
+  },
 ]

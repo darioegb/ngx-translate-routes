@@ -11,7 +11,8 @@
 
 ## Features
 
-- This service translate title and route path.
+- This service translates titles and route paths.
+- Supports language in the path for route translations.
 
 ## Dependencies
 
@@ -56,7 +57,46 @@ You can check how these library work in the next links, on live examples:
 
 ## Setup
 
-**Step 1:** Add provideNgxTranslateRoutes to your standalone application config, make sure you have configured ngx-translate as well
+**Step 1:** Add `NgxTranslateRoutesModule` to your application configuration. This is the recommended approach as it works with all supported Angular versions. If you are using Angular 19 or later, you can alternatively use `provideNgxTranslateRoutes`.
+
+### Using `NgxTranslateRoutesModule` (Recommended)
+
+```typescript
+import { ApplicationConfig, importProvidersFrom } from '@angular/core'
+import { provideRouter } from '@angular/router'
+import { provideClientHydration } from '@angular/platform-browser'
+import { provideHttpClient, HttpClient, withFetch } from '@angular/common/http'
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core'
+import { NgxTranslateRoutesModule } from 'ngx-translate-routes'
+import { TranslateHttpLoader } from '@ngx-translate/http-loader'
+
+import { routes } from './app.routes'
+
+export const httpLoaderFactory = (http: HttpClient) =>
+  new TranslateHttpLoader(http)
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideHttpClient(withFetch()),
+    provideRouter(routes),
+    provideClientHydration(),
+    importProvidersFrom(
+      TranslateModule.forRoot({
+        defaultLanguage: 'en',
+        useDefaultLang: true,
+        loader: {
+          provide: TranslateLoader,
+          useFactory: httpLoaderFactory,
+          deps: [HttpClient],
+        },
+      }),
+      NgxTranslateRoutesModule.forRoot() // NgxTranslateRoutesModule added
+    ),
+  ],
+}
+```
+
+### Using `provideNgxTranslateRoutes` (Angular 19+ Only)
 
 ```typescript
 import { ApplicationConfig, importProvidersFrom } from '@angular/core'
@@ -89,43 +129,6 @@ export const appConfig: ApplicationConfig = {
       }),
     ),
     provideNgxTranslateRoutes(), // provideNgxTranslateRoutes added
-  ],
-}
-```
-
-If you use version 2.1.4 or above to use module instead of importing the provider, you can import `NgxTranslateRoutesModule` instead of `provideNgxTranslateRoutes` inside `importProvidersFrom`:
-
-```typescript
-import { ApplicationConfig, importProvidersFrom } from '@angular/core'
-import { provideRouter } from '@angular/router'
-import { provideClientHydration } from '@angular/platform-browser'
-import { provideHttpClient, HttpClient, withFetch } from '@angular/common/http'
-import { TranslateModule, TranslateLoader } from '@ngx-translate/core'
-import { NgxTranslateRoutesModule } from 'ngx-translate-routes'
-import { TranslateHttpLoader } from '@ngx-translate/http-loader'
-
-import { routes } from './app.routes'
-
-export const httpLoaderFactory = (http: HttpClient) =>
-  new TranslateHttpLoader(http)
-
-export const appConfig: ApplicationConfig = {
-  providers: [
-    provideHttpClient(withFetch()),
-    provideRouter(routes),
-    provideClientHydration(),
-    importProvidersFrom(
-      TranslateModule.forRoot({
-        defaultLanguage: 'en',
-        useDefaultLang: true,
-        loader: {
-          provide: TranslateLoader,
-          useFactory: httpLoaderFactory,
-          deps: [HttpClient],
-        },
-      }),
-      NgxTranslateRoutesModule.forRoot() //NgxTranslateRoutesModule added
-    ),
   ],
 }
 ```
@@ -188,6 +191,8 @@ By default the configuration object is:
   routePrefix: 'routes',
   titlePrefix: 'titles',
   enableQueryParamsTranslate: false,
+  enableLanguageInPath: false,
+  includeDefaultLanguageInPath: false,
   routeSuffixesWithQueryParams: {
     route: 'root',
     params: 'params',
@@ -204,6 +209,8 @@ export interface NgxTranslateRoutesConfig {
   enableTitleTranslate?: boolean
   enableRouteTranslate?: boolean
   enableQueryParamsTranslate?: boolean
+  enableLanguageInPath?: boolean
+  includeDefaultLanguageInPath?: boolean
   routePrefix?: string
   routeSuffixesWithQueryParams?: RouteSuffixesWithQueryParams
   routesUsingStrategy?: string[]
@@ -414,6 +421,46 @@ export class AppModule {}
 ```
 
 In this example, the library will use cookies to cache the translations, and the cookies will expire in 30 days.
+
+## Language in Path
+
+The library now supports adding the language as part of the route path. To enable this feature, configure the `NgxTranslateRoutesModule` as follows:
+
+```typescript
+@NgModule({
+  imports: [
+    NgxTranslateRoutesModule.forRoot({
+      enableLanguageInPath: true, // Enable language in the path
+      includeDefaultLanguageInPath: true, // Include default language in the path
+    }),
+  ],
+})
+export class AppModule {}
+```
+
+### Example JSON Configuration
+
+```javascript
+// assets/i18n/en.json
+{
+  "routes": {
+    "about": "aboutUs",
+    "contact": "contactUs"
+  }
+}
+
+// assets/i18n/es.json
+{
+  "routes": {
+    "about": "sobreNosotros",
+    "contact": "contacto"
+  }
+}
+```
+
+With this configuration:
+- Routes will include the language in the path, e.g., `/en/aboutUs` or `/es/sobreNosotros`.
+- If `includeDefaultLanguageInPath` is set to `true`, the default language (e.g., `en`) will also appear in the path, such as `/en/aboutUs`. If this flag is not set, the default language will not be included in the path (e.g., `/aboutUs`).
 
 ## Test
 

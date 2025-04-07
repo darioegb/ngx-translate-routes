@@ -31,15 +31,15 @@ export class AppComponent implements OnInit {
     if (this.isBrowser) {
       const lang = localStorage.getItem('lang')
       this.language = lang ? lang : this.translate.defaultLang
-      this.translate.setDefaultLang(this.language)
+      this.translate.use(this.language)
     } else {
-      this.translate.setDefaultLang(this.translate.defaultLang)
+      this.translate.use(this.translate.defaultLang)
     }
   }
 
-  changeLanguage() {
-    this.translate.setDefaultLang(this.language)
-    if (!this.isBrowser) {
+  changeLanguage(): void {
+    this.translate.use(this.language)
+    if (this.isBrowser) {
       localStorage.setItem('lang', this.language)
     }
   }

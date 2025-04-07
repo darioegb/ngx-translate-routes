@@ -1,18 +1,27 @@
-import { Provider } from '@angular/core'
+import {
+  EnvironmentProviders,
+  inject,
+  makeEnvironmentProviders,
+  provideAppInitializer,
+} from '@angular/core'
 import { TitleCasePipe } from '@angular/common'
 import { NGX_TRANSLATE_ROUTES_CONFIG } from './ngx-translate-routes.token'
 import { NgxTranslateRoutesConfig } from './ngx-translate-routes.interfaces'
+import { NgxTranslateRoutesService } from './ngx-translate-routes.service'
 
 export function provideNgxTranslateRoutes(
   config?: NgxTranslateRoutesConfig,
-): Provider[] {
-  return [
+): EnvironmentProviders {
+  return makeEnvironmentProviders([
     {
       provide: NGX_TRANSLATE_ROUTES_CONFIG,
       useValue: {
         enableRouteTranslate: config?.enableRouteTranslate ?? true,
         enableTitleTranslate: config?.enableTitleTranslate ?? true,
-        enableQueryParamsTranslate: config?.enableQueryParamsTranslate,
+        enableQueryParamsTranslate: config?.enableQueryParamsTranslate ?? false,
+        enableLanguageInPath: config?.enableLanguageInPath ?? false,
+        includeDefaultLanguageInPath:
+          config?.includeDefaultLanguageInPath ?? false,
         routePrefix: config?.routePrefix ?? 'routes',
         routeSuffixesWithQueryParams: config?.routeSuffixesWithQueryParams ?? {
           route: 'root',
@@ -27,5 +36,9 @@ export function provideNgxTranslateRoutes(
       },
     },
     TitleCasePipe,
-  ]
+    provideAppInitializer(() => {
+      const translateRoutesService = inject(NgxTranslateRoutesService)
+      translateRoutesService.init()
+    }),
+  ])
 }

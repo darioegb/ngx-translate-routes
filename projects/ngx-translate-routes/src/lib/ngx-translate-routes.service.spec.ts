@@ -288,8 +288,8 @@ describe('NgxTranslateRoutesService', () => {
     const eventSubject = new ReplaySubject<DefaultLangChangeEvent>(1)
 
     const fakeTranslate = {
-      onDefaultLangChange: eventSubject.asObservable(),
-      setDefaultLang: jasmine.createSpy('setDefaultLang'),
+      onLangChange: eventSubject.asObservable(),
+      use: jasmine.createSpy('use'),
       instant: (_: string) => {},
       defaultLang: 'en',
     }
@@ -343,7 +343,7 @@ describe('NgxTranslateRoutesService', () => {
       spyOn(service, 'checkConfigValueAndMakeTranslations')
       eventSubject.next({ lang: 'en', translations: [] })
       eventSubject.next({ lang: 'es', translations: [] })
-      fakeTranslate.onDefaultLangChange.subscribe((newLang) => {
+      fakeTranslate.onLangChange.subscribe((newLang) => {
         expect(newLang.lang).toEqual('es')
         expect(service.checkConfigValueAndMakeTranslations).toHaveBeenCalled()
       })
@@ -356,8 +356,8 @@ describe('NgxTranslateRoutesService', () => {
     const eventSubject = new ReplaySubject<DefaultLangChangeEvent>(1)
 
     const fakeTranslate = {
-      onDefaultLangChange: eventSubject.asObservable(),
-      setDefaultLang: jasmine.createSpy('setDefaultLang'),
+      onLangChange: eventSubject.asObservable(),
+      use: jasmine.createSpy('use'),
       defaultLang: 'en',
       get: jasmine
         .createSpy('translate.get')
@@ -416,7 +416,7 @@ describe('NgxTranslateRoutesService', () => {
     it('should call config.onLanguageChange when default language changes', () => {
       eventSubject.next({ lang: 'en', translations: [] })
       eventSubject.next({ lang: 'es', translations: [] })
-      fakeTranslate.onDefaultLangChange.subscribe(() => {
+      fakeTranslate.onLangChange.subscribe(() => {
         expect(config.onLanguageChange).toHaveBeenCalled()
       })
     })
@@ -547,6 +547,223 @@ describe('NgxTranslateRoutesService', () => {
       service.checkConfigValueAndMakeTranslations()
       tick()
       expect(title.getTitle()).toEqual('Default Title')
+    }))
+  })
+
+  describe('enableLanguageInPath', () => {
+    let service: NgxTranslateRoutesService
+    let location: Location
+    const config = {
+      enableLanguageInPath: true,
+    }
+
+    beforeEach(() => {
+      TestBed.configureTestingModule({
+        imports: [
+          TranslateTestingModule.withTranslations(TRANSLATIONS).withDefaultLanguage('en'),
+          NgxTranslateRoutesModule.forRoot(config),
+        ],
+        providers: [
+          {
+            provide: Router,
+            useValue: {
+              events: of('/'),
+              createUrlTree: (_: any) => '/es/test',
+              navigateByUrl: (_: any) => {},
+              parseUrl: (_: any) => ({
+                root: {
+                  children: {
+                    primary: {
+                      segments: [{ path: 'es' }, { path: 'test' }],
+                    },
+                  },
+                },
+              }),
+              url: '/es/test',
+            },
+          },
+          {
+            provide: ActivatedRoute,
+            useValue: {
+              firstChild: {
+                snapshot: {
+                  data: {},
+                },
+              },
+            },
+          },
+          provideHttpClient(withInterceptorsFromDi()),
+          provideHttpClientTesting(),
+        ],
+      })
+      service = TestBed.inject(NgxTranslateRoutesService)
+      location = TestBed.inject(Location)
+      localStorage.clear()
+      service.init()
+    })
+
+    it('should include non-default language in the path when enabled', fakeAsync(() => {
+      service.checkConfigValueAndMakeTranslations()
+      tick()
+      expect(location.path()).toEqual('/es/test')
+    }))
+
+    it('should not include default language in the path', fakeAsync(() => {
+      TestBed.resetTestingModule()
+      TestBed.configureTestingModule({
+        imports: [
+          TranslateTestingModule.withTranslations(TRANSLATIONS).withDefaultLanguage('en'),
+          NgxTranslateRoutesModule.forRoot(config),
+        ],
+        providers: [
+          {
+            provide: Router,
+            useValue: {
+              events: of('/'),
+              createUrlTree: (_: any) => '/test',
+              navigateByUrl: (_: any) => {},
+              parseUrl: (_: any) => ({
+                root: {
+                  children: {
+                    primary: {
+                      segments: [{ path: 'test' }],
+                    },
+                  },
+                },
+              }),
+              url: '/test',
+            },
+          },
+          {
+            provide: ActivatedRoute,
+            useValue: {
+              firstChild: {
+                snapshot: {
+                  data: {},
+                },
+              },
+            },
+          },
+          provideHttpClient(withInterceptorsFromDi()),
+          provideHttpClientTesting(),
+        ],
+      })
+      service = TestBed.inject(NgxTranslateRoutesService)
+      location = TestBed.inject(Location)
+      localStorage.clear()
+      service.init()
+      service.checkConfigValueAndMakeTranslations()
+      tick()
+      expect(location.path()).toEqual('/test')
+    }))
+  })
+
+  describe('includeDefaultLanguageInPath', () => {
+    let service: NgxTranslateRoutesService
+    let location: Location
+    const config = {
+      includeDefaultLanguageInPath: true,
+    }
+
+    beforeEach(() => {
+      TestBed.configureTestingModule({
+        imports: [
+          TranslateTestingModule.withTranslations(TRANSLATIONS).withDefaultLanguage('en'),
+          NgxTranslateRoutesModule.forRoot(config),
+        ],
+        providers: [
+          {
+            provide: Router,
+            useValue: {
+              events: of('/'),
+              createUrlTree: (_: any) => '/en/test',
+              navigateByUrl: (_: any) => {},
+              parseUrl: (_: any) => ({
+                root: {
+                  children: {
+                    primary: {
+                      segments: [{ path: 'en' }, { path: 'test' }],
+                    },
+                  },
+                },
+              }),
+              url: '/en/test',
+            },
+          },
+          {
+            provide: ActivatedRoute,
+            useValue: {
+              firstChild: {
+                snapshot: {
+                  data: {},
+                },
+              },
+            },
+          },
+          provideHttpClient(withInterceptorsFromDi()),
+          provideHttpClientTesting(),
+        ],
+      })
+      service = TestBed.inject(NgxTranslateRoutesService)
+      location = TestBed.inject(Location)
+      localStorage.clear()
+      service.init()
+    })
+
+    it('should include default language in the path when enabled', fakeAsync(() => {
+      service.checkConfigValueAndMakeTranslations()
+      tick()
+      expect(location.path()).toEqual('/en/test')
+    }))
+
+    it('should not include default language in the path when disabled', fakeAsync(() => {
+      const updatedConfig = { includeDefaultLanguageInPath: false }
+      TestBed.resetTestingModule()
+      TestBed.configureTestingModule({
+        imports: [
+          TranslateTestingModule.withTranslations(TRANSLATIONS).withDefaultLanguage('en'),
+          NgxTranslateRoutesModule.forRoot(updatedConfig),
+        ],
+        providers: [
+          {
+            provide: Router,
+            useValue: {
+              events: of('/'),
+              createUrlTree: (_: any) => '/test',
+              navigateByUrl: (_: any) => {},
+              parseUrl: (_: any) => ({
+                root: {
+                  children: {
+                    primary: {
+                      segments: [{ path: 'test' }],
+                    },
+                  },
+                },
+              }),
+              url: '/test',
+            },
+          },
+          {
+            provide: ActivatedRoute,
+            useValue: {
+              firstChild: {
+                snapshot: {
+                  data: {},
+                },
+              },
+            },
+          },
+          provideHttpClient(withInterceptorsFromDi()),
+          provideHttpClientTesting(),
+        ],
+      })
+      service = TestBed.inject(NgxTranslateRoutesService)
+      location = TestBed.inject(Location)
+      localStorage.clear()
+      service.init()
+      service.checkConfigValueAndMakeTranslations()
+      tick()
+      expect(location.path()).toEqual('/test')
     }))
   })
 })
