@@ -135,44 +135,6 @@ export const appConfig: ApplicationConfig = {
 }
 ```
 
-If you are using modules, you can configure it as follows:
-
-```typescript
-import { BrowserModule } from '@angular/platform-browser'
-import { HttpClientModule, HttpClient } from '@angular/common/http'
-import { TranslateModule, TranslateLoader } from '@ngx-translate/core'
-import { TranslateHttpLoader } from '@ngx-translate/http-loader'
-
-import { NgxTranslateRoutesModule } from 'ngx-translate-routes'
-
-// part of configuration ngx translate loader function
-export function HttpLoaderFactory(http: HttpClient) {
-  return new TranslateHttpLoader(http) // make sure your assets files are in default assets/i18n/*
-}
-
-@NgModule({
-  declarations: [AppComponent],
-  imports: [
-    BrowserModule,
-    HttpClientModule, // required module for ngx-translate
-    // required ngx-translate module
-    TranslateModule.forRoot({
-      defaultLanguage: 'en',
-      useDefaultLang: true,
-      loader: {
-        provide: TranslateLoader,
-        useFactory: HttpLoaderFactory,
-        deps: [HttpClient],
-      },
-    }),
-    NgxTranslateRoutesModule.forRoot(), //NgxTranslateRoutesModule added
-  ],
-  providers: [],
-  bootstrap: [AppComponent],
-})
-class MainModule {}
-```
-
 In app module when import the module can configure if we don want to to translate routes or title for default the service will translate both features.
 We can pass to forRoot the following object if dont want to translate titles.
 
