@@ -4,7 +4,7 @@ import { provideRouter } from '@angular/router'
 import { provideClientHydration } from '@angular/platform-browser'
 import { provideHttpClient, HttpClient, withFetch } from '@angular/common/http'
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core'
-import { NgxTranslateRoutesModule } from 'projects/ngx-translate-routes/src/public-api'
+import { provideNgxTranslateRoutes } from 'projects/ngx-translate-routes/src/public-api'
 import { TranslateHttpLoader } from '@ngx-translate/http-loader'
 
 import { routes } from './app.routes'
@@ -27,7 +27,7 @@ export const appConfig: ApplicationConfig = {
           deps: [HttpClient],
         },
       }),
-      NgxTranslateRoutesModule.forRoot(),
     ),
+    provideNgxTranslateRoutes(),
   ],
 }
