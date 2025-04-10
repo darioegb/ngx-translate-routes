@@ -1,8 +1,8 @@
 import {
+  APP_INITIALIZER,
   EnvironmentProviders,
   inject,
   makeEnvironmentProviders,
-  provideAppInitializer,
 } from '@angular/core'
 import { TitleCasePipe } from '@angular/common'
 import { NGX_TRANSLATE_ROUTES_CONFIG } from './ngx-translate-routes.token'
@@ -36,9 +36,13 @@ export function provideNgxTranslateRoutes(
       },
     },
     TitleCasePipe,
-    provideAppInitializer(() => {
-      const translateRoutesService = inject(NgxTranslateRoutesService)
-      translateRoutesService.init()
-    }),
+    {
+      provide: APP_INITIALIZER,
+      useFactory: () => () => {
+        const translateRoutesService = inject(NgxTranslateRoutesService)
+        translateRoutesService.init()
+      },
+      multi: true,
+    },
   ])
 }

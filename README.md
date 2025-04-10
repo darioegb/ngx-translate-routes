@@ -59,46 +59,9 @@ You can check how these library work in the next links, on live examples:
 
 ## Setup
 
-**Step 1:** Add `NgxTranslateRoutesModule` to your application configuration. This is the recommended approach as it works with all supported Angular versions. If you are using Angular 19 or later, you can alternatively use `provideNgxTranslateRoutes`.
+**Step 1:** Add `provideNgxTranslateRoutes` to your standalone application config. Make sure you have configured `ngx-translate` as well.
 
-### Using `NgxTranslateRoutesModule` (Recommended)
-
-```typescript
-import { ApplicationConfig, importProvidersFrom } from '@angular/core'
-import { provideRouter } from '@angular/router'
-import { provideClientHydration } from '@angular/platform-browser'
-import { provideHttpClient, HttpClient, withFetch } from '@angular/common/http'
-import { TranslateModule, TranslateLoader } from '@ngx-translate/core'
-import { NgxTranslateRoutesModule } from 'ngx-translate-routes'
-import { TranslateHttpLoader } from '@ngx-translate/http-loader'
-
-import { routes } from './app.routes'
-
-export const httpLoaderFactory = (http: HttpClient) =>
-  new TranslateHttpLoader(http)
-
-export const appConfig: ApplicationConfig = {
-  providers: [
-    provideHttpClient(withFetch()),
-    provideRouter(routes),
-    provideClientHydration(),
-    importProvidersFrom(
-      TranslateModule.forRoot({
-        defaultLanguage: 'en',
-        useDefaultLang: true,
-        loader: {
-          provide: TranslateLoader,
-          useFactory: httpLoaderFactory,
-          deps: [HttpClient],
-        },
-      }),
-      NgxTranslateRoutesModule.forRoot() // NgxTranslateRoutesModule added
-    ),
-  ],
-}
-```
-
-### Using `provideNgxTranslateRoutes` (Angular 19+ Only)
+For applications that are not standalone, you can use `NgxTranslateRoutesModule` instead. Import it into your module and configure it as needed.
 
 ```typescript
 import { ApplicationConfig, importProvidersFrom } from '@angular/core'
@@ -131,6 +94,43 @@ export const appConfig: ApplicationConfig = {
       }),
     ),
     provideNgxTranslateRoutes(), // provideNgxTranslateRoutes added
+  ],
+}
+```
+
+If you use version 2.1.4 or above to use module instead of importing the provider, you can import `NgxTranslateRoutesModule` instead of `provideNgxTranslateRoutes` inside `importProvidersFrom`:
+
+```typescript
+import { ApplicationConfig, importProvidersFrom } from '@angular/core'
+import { provideRouter } from '@angular/router'
+import { provideClientHydration } from '@angular/platform-browser'
+import { provideHttpClient, HttpClient, withFetch } from '@angular/common/http'
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core'
+import { NgxTranslateRoutesModule } from 'ngx-translate-routes'
+import { TranslateHttpLoader } from '@ngx-translate/http-loader'
+
+import { routes } from './app.routes'
+
+export const httpLoaderFactory = (http: HttpClient) =>
+  new TranslateHttpLoader(http)
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideHttpClient(withFetch()),
+    provideRouter(routes),
+    provideClientHydration(),
+    importProvidersFrom(
+      TranslateModule.forRoot({
+        defaultLanguage: 'en',
+        useDefaultLang: true,
+        loader: {
+          provide: TranslateLoader,
+          useFactory: httpLoaderFactory,
+          deps: [HttpClient],
+        },
+      }),
+      NgxTranslateRoutesModule.forRoot() //NgxTranslateRoutesModule added
+    ),
   ],
 }
 ```
