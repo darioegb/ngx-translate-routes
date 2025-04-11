@@ -1,3 +1,9 @@
+<p align="center">
+  <a href="https://res.cloudinary.com/dyjeeqbka/image/upload/f_auto,q_auto/szhkufmiepgenndxgwzb">
+    <img src="https://res.cloudinary.com/dyjeeqbka/image/upload/f_auto,q_auto/szhkufmiepgenndxgwzb" alt="Plume UI logo" width="300" />
+  </a>
+</p>
+
 # NgxTranslateRoutes
 
 ![pipeline status](https://github.com/darioegb/ngx-translate-routes/actions/workflows/ci.yml/badge.svg)
