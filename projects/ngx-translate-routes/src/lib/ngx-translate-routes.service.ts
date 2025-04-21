@@ -35,6 +35,9 @@ export class NgxTranslateRoutesService {
   }
 
   init(): void {
+    const lastRoute =
+      this.router.config.findIndex((route) => route.path === '**') !== -1 &&
+      this.router.config.pop()
     this.router.events
       .pipe(
         filter((event) => event instanceof NavigationStart),
@@ -57,6 +60,10 @@ export class NgxTranslateRoutesService {
               this.router.navigateByUrl(lastTranslatedPath.originalPath, {
                 skipLocationChange: true,
               })
+            }
+
+            if (lastRoute) {
+              this.router.config.push(lastRoute)
             }
           }
         },
