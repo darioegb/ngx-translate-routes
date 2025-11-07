@@ -5,8 +5,11 @@ import {
   makeEnvironmentProviders,
   PLATFORM_ID,
 } from '@angular/core'
-import { isPlatformBrowser, isPlatformServer } from '@angular/common'
-import { TitleCasePipe } from '@angular/common'
+import {
+  isPlatformBrowser,
+  isPlatformServer,
+  TitleCasePipe,
+} from '@angular/common'
 import { NGX_TRANSLATE_ROUTES_CONFIG } from './ngx-translate-routes.token'
 import { NgxTranslateRoutesConfig } from './ngx-translate-routes.interfaces'
 import { NgxTranslateRoutesService } from './ngx-translate-routes.service'
@@ -53,7 +56,7 @@ export function provideNgxTranslateRoutes(
           translateRoutesService.init()
         }
 
-        return Promise.resolve()
+        return
       },
       deps: [PLATFORM_ID],
       multi: true,

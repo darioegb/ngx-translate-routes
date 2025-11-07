@@ -142,7 +142,11 @@ export class NgxTranslateRoutesService {
     baseRoute: Route,
   ): Promise<Route> {
     try {
-      const lazyRoutes = await this.loadLazyRoutes(baseRoute.loadChildren!)
+      const loadChildren = baseRoute.loadChildren
+      if (!loadChildren) {
+        return { path: dynamicPath, loadChildren: baseRoute.loadChildren }
+      }
+      const lazyRoutes = await this.loadLazyRoutes(loadChildren)
       return lazyRoutes?.length
         ? {
             path: dynamicPath,

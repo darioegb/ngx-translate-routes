@@ -100,7 +100,7 @@ export class NgxTranslateRoutesHelperService {
   private async ensureCorrectLanguage(): Promise<void> {
     const currentUrl = this.stateService.isServerSide()
       ? this.document.location?.pathname || ''
-      : window.location.pathname
+      : globalThis.location.pathname
     const langMatch = currentUrl.match(this._langRegex)
 
     let detectedLang: string | undefined
@@ -141,6 +141,30 @@ export class NgxTranslateRoutesHelperService {
     )
     const [firstSegment, secondSegment] = urlSegments
 
+    await this.loadMissingTranslations(languages, routePrefix)
+
+    for (const lang of languages) {
+      const translations =
+        this.translate.store.translations[lang]?.[routePrefix]
+      if (!translations) continue
+
+      const matchedLang = this.findLanguageMatch(
+        translations,
+        firstSegment,
+        secondSegment,
+        urlSegments.length,
+      )
+      if (matchedLang) return lang
+    }
+
+    return undefined
+  }
+
+  /* istanbul ignore next */
+  private async loadMissingTranslations(
+    languages: string[],
+    routePrefix: string,
+  ): Promise<void> {
     const missingLangs = languages.filter(
       (lang) => !this.translate.store.translations[lang]?.[routePrefix],
     )
@@ -151,38 +175,39 @@ export class NgxTranslateRoutesHelperService {
         ),
       )
     }
+  }
 
-    for (const lang of languages) {
-      const translations =
-        this.translate.store.translations[lang]?.[routePrefix]
-      if (!translations) continue
+  /* istanbul ignore next */
+  private findLanguageMatch(
+    translations: Record<string, unknown>,
+    firstSegment: string,
+    secondSegment: string,
+    urlSegmentCount: number,
+  ): boolean {
+    for (const key in translations) {
+      const value = translations[key]
 
-      for (const key in translations) {
-        const value = translations[key]
+      if (value === firstSegment) return true
 
-        if (value === firstSegment) return lang
+      if (value && typeof value === 'object') {
+        const obj = value as Record<string, unknown>
 
-        if (value && typeof value === 'object') {
-          const obj = value as Record<string, unknown>
+        if (obj['root'] === firstSegment) {
+          if (urlSegmentCount === 1 || !secondSegment) return true
 
-          if (obj['root'] === firstSegment) {
-            if (urlSegments.length === 1 || !secondSegment) return lang
-
-            for (const childKey in obj) {
-              if (
-                childKey !== 'root' &&
-                childKey !== 'params' &&
-                obj[childKey] === secondSegment
-              ) {
-                return lang
-              }
+          for (const childKey in obj) {
+            if (
+              childKey !== 'root' &&
+              childKey !== 'params' &&
+              obj[childKey] === secondSegment
+            ) {
+              return true
             }
           }
         }
       }
     }
-
-    return undefined
+    return false
   }
 
   /* istanbul ignore next - Complex SSR translation detection - difficult to test all branches in browser environment */
@@ -198,6 +223,23 @@ export class NgxTranslateRoutesHelperService {
       this.translate.store.translations[lang]?.[routePrefix] || {}
     const [firstSegment, secondSegment] = urlSegments
 
+    return this.findOriginalPath(
+      translations,
+      urlSegments,
+      firstSegment,
+      secondSegment,
+      lang,
+    )
+  }
+
+  /* istanbul ignore next */
+  private findOriginalPath(
+    translations: Record<string, unknown>,
+    urlSegments: string[],
+    firstSegment: string,
+    secondSegment: string,
+    lang: string,
+  ): { originalPath: string; language: string } | null {
     for (const key in translations) {
       const value = translations[key]
 
@@ -206,28 +248,48 @@ export class NgxTranslateRoutesHelperService {
       }
 
       if (value && typeof value === 'object') {
-        const obj = value as Record<string, unknown>
+        const result = this.findNestedOriginalPath(
+          value as Record<string, unknown>,
+          key,
+          urlSegments,
+          firstSegment,
+          secondSegment,
+          lang,
+        )
+        if (result) return result
+      }
+    }
 
-        if (obj['root'] === firstSegment) {
-          if (urlSegments.length === 1) {
-            return { originalPath: key, language: lang }
-          }
+    return null
+  }
 
-          for (const childKey in obj) {
-            if (
-              childKey !== 'root' &&
-              childKey !== 'params' &&
-              obj[childKey] === secondSegment
-            ) {
-              const remainingPath = urlSegments.slice(2).join('/')
-              return {
-                originalPath: remainingPath
-                  ? `${key}/${childKey}/${remainingPath}`
-                  : `${key}/${childKey}`,
-                language: lang,
-              }
-            }
-          }
+  /* istanbul ignore next */
+  private findNestedOriginalPath(
+    obj: Record<string, unknown>,
+    key: string,
+    urlSegments: string[],
+    firstSegment: string,
+    secondSegment: string,
+    lang: string,
+  ): { originalPath: string; language: string } | null {
+    if (obj['root'] !== firstSegment) return null
+
+    if (urlSegments.length === 1) {
+      return { originalPath: key, language: lang }
+    }
+
+    for (const childKey in obj) {
+      if (
+        childKey !== 'root' &&
+        childKey !== 'params' &&
+        obj[childKey] === secondSegment
+      ) {
+        const remainingPath = urlSegments.slice(2).join('/')
+        return {
+          originalPath: remainingPath
+            ? `${key}/${childKey}/${remainingPath}`
+            : `${key}/${childKey}`,
+          language: lang,
         }
       }
     }
@@ -503,7 +565,7 @@ export class NgxTranslateRoutesHelperService {
     )
 
     /* istanbul ignore next */
-    if (index !== -1) {
+    if (index >= 0) {
       translatedPaths[index].translatedPath = newPathWithParams
     } else {
       translatedPaths.push({

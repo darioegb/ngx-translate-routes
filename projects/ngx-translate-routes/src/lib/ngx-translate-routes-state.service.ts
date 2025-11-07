@@ -106,7 +106,9 @@ export class NgxTranslateRoutesStateService {
     if (this.config.cacheMethod === 'cookies') {
       const matches = this.document.cookie.match(
         new RegExp(
-          '(?:^|; )' + key.replace(/([.$?*|{}()[]\/+^])/g, '\\$1') + '=([^;]*)',
+          '(?:^|; )' +
+            key.replaceAll(/([.$?*|{}()[]\/+^])/g, String.raw`\$1`) +
+            '=([^;]*)',
         ),
       )
       return matches ? (JSON.parse(decodeURIComponent(matches[1])) as T) : null
