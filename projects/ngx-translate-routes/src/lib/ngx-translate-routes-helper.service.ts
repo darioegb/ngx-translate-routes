@@ -190,21 +190,36 @@ export class NgxTranslateRoutesHelperService {
       if (value === firstSegment) return true
 
       if (value && typeof value === 'object') {
-        const obj = value as Record<string, unknown>
+        const matchFound = this.checkNestedTranslation(
+          value as Record<string, unknown>,
+          firstSegment,
+          secondSegment,
+          urlSegmentCount,
+        )
+        if (matchFound) return true
+      }
+    }
+    return false
+  }
 
-        if (obj['root'] === firstSegment) {
-          if (urlSegmentCount === 1 || !secondSegment) return true
+  /* istanbul ignore next */
+  private checkNestedTranslation(
+    obj: Record<string, unknown>,
+    firstSegment: string,
+    secondSegment: string,
+    urlSegmentCount: number,
+  ): boolean {
+    if (obj['root'] !== firstSegment) return false
 
-          for (const childKey in obj) {
-            if (
-              childKey !== 'root' &&
-              childKey !== 'params' &&
-              obj[childKey] === secondSegment
-            ) {
-              return true
-            }
-          }
-        }
+    if (urlSegmentCount === 1 || !secondSegment) return true
+
+    for (const childKey in obj) {
+      if (
+        childKey !== 'root' &&
+        childKey !== 'params' &&
+        obj[childKey] === secondSegment
+      ) {
+        return true
       }
     }
     return false

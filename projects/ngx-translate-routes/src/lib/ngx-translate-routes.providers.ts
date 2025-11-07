@@ -55,8 +55,6 @@ export function provideNgxTranslateRoutes(
           await translateRoutesService.initForSsr()
           translateRoutesService.init()
         }
-
-        return
       },
       deps: [PLATFORM_ID],
       multi: true,
