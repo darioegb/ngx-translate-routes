@@ -43,7 +43,7 @@ export class NgxTranslateRoutesStateService {
       const expiry = new Date()
       expiry.setTime(
         expiry.getTime() +
-          (this.config.cookieExpirationDays || 30) * millisecondsInADay,
+          (this.config.cookieExpirationDays ?? 30) * millisecondsInADay,
       )
       this.document.cookie = `${key}=${JSON.stringify(value)}; expires=${expiry.toUTCString()}; path=/`
     } else {
