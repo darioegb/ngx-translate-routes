@@ -152,6 +152,25 @@ NgxTranslateRoutesModule.forRoot({
 })
 ```
 
+### Server-Side Rendering (SSR) Configuration
+
+If you're using Angular SSR, you need to add additional configuration to enable route translation on the server:
+
+```typescript
+provideNgxTranslateRoutes({
+  enableLanguageInPath: true,
+  includeDefaultLanguageInPath: true,
+  enableSsrRouteTranslation: true,  // Enable SSR route translation
+  availableLanguages: ['en', 'es'], // List of available languages
+})
+```
+
+**Required SSR parameters:**
+- `enableSsrRouteTranslation`: Set to `true` to enable route translation in SSR context
+- `availableLanguages`: Array of language codes that your application supports (e.g., `['en', 'es', 'fr']`)
+
+These parameters are **required** for SSR applications to properly translate routes and titles during server-side rendering.
+
 ### Default configuration
 
 By default the configuration object is:
@@ -165,6 +184,8 @@ By default the configuration object is:
   enableQueryParamsTranslate: false,
   enableLanguageInPath: false,
   includeDefaultLanguageInPath: false,
+  enableSsrRouteTranslation: false,
+  availableLanguages: [],
   routeSuffixesWithQueryParams: {
     route: 'root',
     params: 'params',
@@ -183,6 +204,8 @@ export interface NgxTranslateRoutesConfig {
   enableQueryParamsTranslate?: boolean
   enableLanguageInPath?: boolean
   includeDefaultLanguageInPath?: boolean
+  enableSsrRouteTranslation?: boolean
+  availableLanguages?: string[]
   routePrefix?: string
   routeSuffixesWithQueryParams?: RouteSuffixesWithQueryParams
   routesUsingStrategy?: string[]
