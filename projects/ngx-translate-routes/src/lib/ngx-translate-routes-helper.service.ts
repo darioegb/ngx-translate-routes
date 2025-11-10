@@ -235,7 +235,7 @@ export class NgxTranslateRoutesHelperService {
     const urlSegments = this.parseUrlSegments(url)
     const routePrefix = this.config.routePrefix || 'routes'
     const translations =
-      this.translate.store.translations[lang]?.[routePrefix] ?? {}
+      this.translate.store.translations[lang]?.[routePrefix] || {}
     const [firstSegment, secondSegment] = urlSegments
 
     return this.findOriginalPath(
@@ -456,7 +456,7 @@ export class NgxTranslateRoutesHelperService {
     /* istanbul ignore next */
     if (
       this.stateService.isServerSide() &&
-      Object.keys(params ?? {}).length === 0
+      Object.keys(params || {}).length === 0
     ) {
       params = this.extractParamsFromUrl(routeTitle)
     }

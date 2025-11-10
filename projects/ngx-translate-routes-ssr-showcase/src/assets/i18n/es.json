@@ -19,6 +19,10 @@
       }
     },
     "myAccount": "miCuenta",
-    "users": "usuarios"
+    "users": {
+      "root": "usuarios",
+      "profile": "perfil",
+      "myAccount": "miCuenta"
+    }
   }
 }
