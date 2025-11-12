@@ -159,8 +159,6 @@ If you're using Angular SSR, you need to add additional configuration to enable 
 
 ```typescript
 provideNgxTranslateRoutes({
-  enableLanguageInPath: true,
-  includeDefaultLanguageInPath: true,
   enableSsrRouteTranslation: true,  // Enable SSR route translation
   availableLanguages: ['en', 'es'], // List of available languages
 })
