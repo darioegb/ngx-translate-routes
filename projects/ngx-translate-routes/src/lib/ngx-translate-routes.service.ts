@@ -235,7 +235,6 @@ export class NgxTranslateRoutesService {
     this.restoreWildcardRoute(lastRoute)
   }
 
-  /* istanbul ignore next - Wildcard route restoration */
   private restoreWildcardRoute(lastRoute: Route | false): void {
     if (lastRoute && !this.router.config.includes(lastRoute)) {
       this.router.config.push(lastRoute)
