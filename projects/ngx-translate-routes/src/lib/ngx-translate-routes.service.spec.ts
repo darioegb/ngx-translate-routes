@@ -1178,4 +1178,53 @@ describe('NgxTranslateRoutesService', () => {
       expect(service['translate']).toBeDefined()
     })
   })
+
+  describe('Wildcard route restoration on direct navigation', () => {
+    let service: NgxTranslateRoutesService
+    let router: Router
+    const eventSubject = new ReplaySubject<RouterEvent>(1)
+    const wildcardRoute = { path: '**', redirectTo: '' }
+
+    beforeEach(() => {
+      const routerMock = createRouterMock(
+        [{ path: 'myAccount', component: {} }, wildcardRoute],
+        '/miCuenta',
+        eventSubject.asObservable(),
+      )
+
+      TestBed.configureTestingModule({
+        imports: [
+          TranslateTestingModule.withTranslations(TRANSLATIONS).withDefaultLanguage('en'),
+          NgxTranslateRoutesModule.forRoot(),
+        ],
+        providers: [
+          { provide: Router, useValue: routerMock },
+          { provide: ActivatedRoute, useValue: createActivatedRouteMock() },
+          provideHttpClient(withInterceptorsFromDi()),
+          provideHttpClientTesting(),
+        ],
+      })
+
+      service = TestBed.inject(NgxTranslateRoutesService)
+      router = TestBed.inject(Router)
+      localStorage.clear()
+    })
+
+    it('should restore the wildcard route on a fresh session direct navigation', fakeAsync(() => {
+      service.init()
+
+      // init() removes the wildcard route from the config
+      expect(router.config.some((route) => route.path === '**')).toBeFalse()
+
+      // Fresh session (no stored item), first navigation to a translated route
+      eventSubject.next(new NavigationStart(1, '/miCuenta', 'imperative'))
+      tick()
+
+      // Wildcard route must be restored so the router does not throw NG04002
+      expect(router.config.some((route) => route.path === '**')).toBeTrue()
+      expect(
+        router.config.filter((route) => route.path === '**').length,
+      ).toBe(1)
+    }))
+  })
 })
