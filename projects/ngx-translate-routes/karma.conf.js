@@ -1,8 +1,14 @@
 // Karma configuration file, see link for more information
 // https://karma-runner.github.io/1.0/config/configuration-file.html
-var puppeteer = require('puppeteer');
-process.env.CHROME_BIN = puppeteer.executablePath();
-process.env.CHROME_PATH = puppeteer.executablePath();
+try {
+  var puppeteer = require('puppeteer');
+  var chromePath = puppeteer.executablePath();
+  process.env.CHROME_BIN = chromePath;
+  process.env.CHROME_PATH = chromePath;
+} catch (e) {
+  // Puppeteer-managed Chrome not available (e.g. CI container with system Chrome).
+  // CHROME_BIN will be resolved by karma-chrome-launcher from the environment.
+}
 module.exports = function (config) {
   config.set({
     basePath: '',
