@@ -43,6 +43,8 @@ jobs:
           run_install: false
       - name: Install dependencies
         run: pnpm install
+      - name: Install Chrome for Karma
+        run: pnpm exec puppeteer browsers install chrome
       - name: Run Karma tests
         run: pnpm test:prod
       - name: Upload coverage
