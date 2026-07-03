@@ -43,6 +43,13 @@ jobs:
           run_install: false
       - name: Install dependencies
         run: pnpm install
+      - name: Cache Puppeteer browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/puppeteer
+          key: puppeteer-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            puppeteer-${{ runner.os }}-
       - name: Install Chrome for Karma
         run: pnpm exec puppeteer browsers install chrome
       - name: Run Karma tests

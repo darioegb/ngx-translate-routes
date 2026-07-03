@@ -1182,10 +1182,11 @@ describe('NgxTranslateRoutesService', () => {
   describe('Wildcard route restoration on direct navigation', () => {
     let service: NgxTranslateRoutesService
     let router: Router
-    const eventSubject = new ReplaySubject<RouterEvent>(1)
+    let eventSubject: ReplaySubject<RouterEvent>
     const wildcardRoute = { path: '**', redirectTo: '' }
 
     beforeEach(() => {
+      eventSubject = new ReplaySubject<RouterEvent>(1)
       const routerMock = createRouterMock(
         [{ path: 'myAccount', component: {} }, wildcardRoute],
         '/miCuenta',

@@ -236,7 +236,11 @@ export class NgxTranslateRoutesService {
   }
 
   private restoreWildcardRoute(lastRoute: Route | false): void {
-    if (lastRoute && !this.router.config.includes(lastRoute)) {
+    if (
+      lastRoute &&
+      lastRoute.path === '**' &&
+      !this.router.config.some((r) => r.path === '**')
+    ) {
       this.router.config.push(lastRoute)
     }
   }
