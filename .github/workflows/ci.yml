@@ -79,6 +79,11 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: test_karma
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
       - name: SonarCloud Scan
         uses: SonarSource/sonarqube-scan-action@v6
         env:
