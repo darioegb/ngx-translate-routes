@@ -65,9 +65,9 @@ jobs:
     name: SonarCloud
     runs-on: ubuntu-latest
     needs: [test_lint, test_karma]
-    # PRs from bots (e.g. Copilot coding agent) don't get repo secrets, so SONAR_TOKEN
-    # is unavailable there. Only run on push to main/develop, where secrets work.
-    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
+    if: github.event_name == 'pull_request' || github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
+    env:
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -82,16 +82,19 @@ jobs:
         with:
           name: test_karma
       - name: Set up Java
+        # PRs from bots (e.g. Copilot coding agent) don't get repo secrets, so this
+        # and the scan step below are skipped there; SONAR_TOKEN resolves to empty.
+        if: env.SONAR_TOKEN != ''
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '21'
       - name: SonarCloud Scan
+        if: env.SONAR_TOKEN != ''
         uses: SonarSource/sonarqube-scan-action@v6
         with:
           args: -Dsonar.scanner.skipJreProvisioning=true
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: https://sonarcloud.io
 
   update_version:

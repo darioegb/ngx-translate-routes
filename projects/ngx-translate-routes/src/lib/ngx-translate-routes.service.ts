@@ -193,7 +193,8 @@ export class NgxTranslateRoutesService {
     const wildcardIndex = this.router.config.findIndex(
       (route) => route.path === '**',
     )
-    const lastRoute = wildcardIndex !== -1 && this.router.config.pop()
+    const lastRoute =
+      wildcardIndex !== -1 && this.router.config.splice(wildcardIndex, 1)[0]
 
     this.router.events
       .pipe(
