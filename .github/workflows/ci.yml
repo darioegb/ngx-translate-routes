@@ -125,14 +125,7 @@ jobs:
           body: 'This PR updates the package version.'
       - name: Merge Pull Request
         if: steps.cpr.outputs.pull-request-operation == 'created'
-        run: gh pr merge "${{ steps.cpr.outputs.pull-request-number }}" --merge --auto
-        env:
-          GH_TOKEN: ${{ github.token }}
-      - name: Delete Remote Branch
-        if: steps.cpr.outputs.pull-request-operation == 'created'
-        run: |
-          BRANCH_NAME=$(gh pr view "${{ steps.cpr.outputs.pull-request-number }}" --json headRefName --jq '.headRefName')
-          git push origin --delete "$BRANCH_NAME" --no-verify
+        run: gh pr merge "${{ steps.cpr.outputs.pull-request-number }}" --merge --delete-branch
         env:
           GH_TOKEN: ${{ github.token }}
 
@@ -204,13 +197,6 @@ jobs:
           body: 'This PR updates the changelog and README.'
       - name: Merge Pull Request
         if: steps.cpr.outputs.pull-request-operation == 'created'
-        run: gh pr merge "${{ steps.cpr.outputs.pull-request-number }}" --merge --auto
-        env:
-          GH_TOKEN: ${{ github.token }}
-      - name: Delete Remote Branch
-        if: steps.cpr.outputs.pull-request-operation == 'created'
-        run: |
-          BRANCH_NAME=$(gh pr view "${{ steps.cpr.outputs.pull-request-number }}" --json headRefName --jq '.headRefName')
-          git push origin --delete "$BRANCH_NAME" --no-verify
+        run: gh pr merge "${{ steps.cpr.outputs.pull-request-number }}" --merge --delete-branch
         env:
           GH_TOKEN: ${{ github.token }}
