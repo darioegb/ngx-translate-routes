@@ -10,6 +10,8 @@ export interface NgxTranslateRoutesConfig {
   titlePrefix?: string
   cacheMethod?: 'localStorage' | 'cookies'
   cookieExpirationDays?: number
+  enableSsrRouteTranslation?: boolean
+  availableLanguages?: string[]
   onLanguageChange?: () => void
   routeTranslationStrategy?: (originalRoute: string) => string
 }
@@ -22,4 +24,12 @@ export interface RoutePath {
 export interface RouteSuffixesWithQueryParams {
   route: string
   params: string
+}
+
+export interface PreloadedRoute {
+  originalPath: string
+  translatedPaths: Record<string, string>
+  component: unknown
+  data?: Record<string, unknown>
+  children?: PreloadedRoute[]
 }

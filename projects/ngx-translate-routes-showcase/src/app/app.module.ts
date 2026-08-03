@@ -44,7 +44,10 @@ export const httpLoaderFactory = (http: HttpClient) =>
         deps: [HttpClient],
       },
     }),
-    NgxTranslateRoutesModule.forRoot(),
+    NgxTranslateRoutesModule.forRoot({
+      enableLanguageInPath: true,
+      includeDefaultLanguageInPath: true,
+    }),
   ],
   providers: [provideHttpClient(withInterceptorsFromDi())],
 })

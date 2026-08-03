@@ -43,6 +43,15 @@ jobs:
           run_install: false
       - name: Install dependencies
         run: pnpm install
+      - name: Cache Puppeteer browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/puppeteer
+          key: puppeteer-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            puppeteer-${{ runner.os }}-
+      - name: Install Chrome for Karma
+        run: pnpm exec puppeteer browsers install chrome
       - name: Run Karma tests
         run: pnpm test:prod
       - name: Upload coverage
@@ -57,6 +66,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: [test_lint, test_karma]
     if: github.event_name == 'pull_request' || github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
+    env:
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -71,14 +82,20 @@ jobs:
         with:
           name: test_karma
       - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
+        # PRs from bots (e.g. Copilot coding agent) don't get repo secrets, so this
+        # step is skipped there; SONAR_TOKEN resolves to empty.
+        if: env.SONAR_TOKEN != ''
+        uses: SonarSource/sonarqube-scan-action@22918119ff8e1ca75a623e15c8296b6ea4fbe28f # v8.2.1
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: https://sonarcloud.io
 
   update_version:
     runs-on: ubuntu-latest
     needs: [test_lint, test_karma]
     if: github.event_name == 'release' # Only update version on tag creation
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
       - uses: actions/checkout@v4
         with:
@@ -106,23 +123,11 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           title: 'Update package version'
           body: 'This PR updates the package version.'
-      - name: Approve Pull Request
-        if: steps.cpr.outputs.pull-request-operation == 'created'
-        run: gh pr review --approve "${{ steps.cpr.outputs.pull-request-number }}"
-        env:
-          GH_TOKEN: ${{ secrets.PAT_TOKEN }}
       - name: Merge Pull Request
         if: steps.cpr.outputs.pull-request-operation == 'created'
-        run: gh pr merge "${{ steps.cpr.outputs.pull-request-number }}" --merge --auto
+        run: gh pr merge "${{ steps.cpr.outputs.pull-request-number }}" --auto --merge --delete-branch
         env:
-          GH_TOKEN: ${{ secrets.PAT_TOKEN }}
-      - name: Delete Remote Branch
-        if: steps.cpr.outputs.pull-request-operation == 'created'
-        run: |
-          BRANCH_NAME=$(gh pr view "${{ steps.cpr.outputs.pull-request-number }}" --json headRefName --jq '.headRefName')
-          git push origin --delete "$BRANCH_NAME" --no-verify
-        env:
-          GH_TOKEN: ${{ secrets.PAT_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
 
   deploy:
     runs-on: ubuntu-latest
@@ -159,6 +164,9 @@ jobs:
   update_docs:
     runs-on: ubuntu-latest
     needs: [deploy]
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
       - uses: actions/checkout@v4
         with:
@@ -187,20 +195,8 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           title: 'Update changelog and README'
           body: 'This PR updates the changelog and README.'
-      - name: Approve Pull Request
-        if: steps.cpr.outputs.pull-request-operation == 'created'
-        run: gh pr review --approve "${{ steps.cpr.outputs.pull-request-number }}"
-        env:
-          GH_TOKEN: ${{ secrets.PAT_TOKEN }}
       - name: Merge Pull Request
         if: steps.cpr.outputs.pull-request-operation == 'created'
-        run: gh pr merge "${{ steps.cpr.outputs.pull-request-number }}" --merge --auto
+        run: gh pr merge "${{ steps.cpr.outputs.pull-request-number }}" --merge --delete-branch
         env:
-          GH_TOKEN: ${{ secrets.PAT_TOKEN }}
-      - name: Delete Remote Branch
-        if: steps.cpr.outputs.pull-request-operation == 'created'
-        run: |
-          BRANCH_NAME=$(gh pr view "${{ steps.cpr.outputs.pull-request-number }}" --json headRefName --jq '.headRefName')
-          git push origin --delete "$BRANCH_NAME" --no-verify
-        env:
-          GH_TOKEN: ${{ secrets.PAT_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
