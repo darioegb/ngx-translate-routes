@@ -193,7 +193,8 @@ export class NgxTranslateRoutesService {
     const wildcardIndex = this.router.config.findIndex(
       (route) => route.path === '**',
     )
-    const lastRoute = wildcardIndex !== -1 && this.router.config.pop()
+    const lastRoute =
+      wildcardIndex !== -1 && this.router.config.splice(wildcardIndex, 1)[0]
 
     this.router.events
       .pipe(
@@ -230,10 +231,18 @@ export class NgxTranslateRoutesService {
           skipLocationChange: true,
         })
       }
+    }
 
-      if (lastRoute) {
-        this.router.config.push(lastRoute)
-      }
+    this.restoreWildcardRoute(lastRoute)
+  }
+
+  private restoreWildcardRoute(lastRoute: Route | false): void {
+    if (
+      lastRoute &&
+      lastRoute.path === '**' &&
+      !this.router.config.some((r) => r.path === '**')
+    ) {
+      this.router.config.push(lastRoute)
     }
   }
 
