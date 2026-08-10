@@ -33,6 +33,7 @@ const routes: Routes = [
     path: 'dashboard',
     title: 'Dashboard',
     component: DashboardComponent,
+    data: { skipTranslation: true },
   },
   {
     path: 'users',
