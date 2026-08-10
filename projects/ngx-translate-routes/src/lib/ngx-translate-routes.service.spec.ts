@@ -1212,9 +1212,7 @@ describe('NgxTranslateRoutesService', () => {
     })
 
     it('should restore the wildcard route on a fresh session direct navigation', fakeAsync(() => {
-      service.init()
-
-      // init() removes the wildcard route from the config
+      // NgxTranslateRoutesModule constructor already calls init() and removes the wildcard route from the config
       expect(router.config.some((route) => route.path === '**')).toBeFalse()
 
       // Fresh session (no stored item), first navigation to a translated route
