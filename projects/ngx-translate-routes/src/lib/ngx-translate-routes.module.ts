@@ -6,13 +6,12 @@ import {
   inject,
 } from '@angular/core'
 import { CommonModule, TitleCasePipe } from '@angular/common'
-import { TranslateModule } from '@ngx-translate/core'
 import { NgxTranslateRoutesService } from './ngx-translate-routes.service'
 import { NGX_TRANSLATE_ROUTES_CONFIG } from './ngx-translate-routes.token'
 import { NgxTranslateRoutesConfig } from './ngx-translate-routes.interfaces'
 
 @NgModule({
-  imports: [CommonModule, TranslateModule.forChild()],
+  imports: [CommonModule],
   providers: [TitleCasePipe],
 })
 export class NgxTranslateRoutesModule {
