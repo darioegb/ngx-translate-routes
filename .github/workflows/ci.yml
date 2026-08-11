@@ -130,7 +130,7 @@ jobs:
           GH_TOKEN: ${{ secrets.PAT_TOKEN }}
       - name: Merge Pull Request
         if: steps.cpr.outputs.pull-request-operation == 'created'
-        run: gh pr merge "${{ steps.cpr.outputs.pull-request-number }}" --merge --delete-branch
+        run: gh pr merge "${{ steps.cpr.outputs.pull-request-number }}" --merge --delete-branch --admin
         env:
           GH_TOKEN: ${{ secrets.PAT_TOKEN }}
 
