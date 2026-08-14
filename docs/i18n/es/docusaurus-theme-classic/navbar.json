@@ -1,0 +1,29 @@
+{
+  "title": {
+    "message": "NgxTranslateRoutes"
+  },
+  "tagline": {
+    "message": "Traduce automáticamente las rutas y títulos de tu aplicación Angular"
+  },
+  "navbar.item.label.docs": {
+    "message": "Documentación"
+  },
+  "navbar.item.label.npm": {
+    "message": "npm"
+  },
+  "navbar.item.label.github": {
+    "message": "GitHub"
+  },
+  "footer.title.documentation": {
+    "message": "Documentación"
+  },
+  "footer.title.guides": {
+    "message": "Guías"
+  },
+  "footer.title.links": {
+    "message": "Enlaces"
+  },
+  "footer.copyright": {
+    "message": "Copyright © {year} NgxTranslateRoutes. Construido con Docusaurus."
+  }
+}
