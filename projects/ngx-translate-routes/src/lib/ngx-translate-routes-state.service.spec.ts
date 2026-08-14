@@ -597,4 +597,51 @@ describe('NgxTranslateRoutesStateService - SSR Test', () => {
       expect(result).toBeNull()
     })
   })
+
+  describe('setItem with correct lastRouteKey on server', () => {
+    it('should store route array in TransferState when key is lastLocationPath', () => {
+      TestBed.configureTestingModule({
+        providers: [
+          { provide: PLATFORM_ID, useValue: 'server' },
+          { provide: NGX_TRANSLATE_ROUTES_CONFIG, useValue: {} },
+          NgxTranslateRoutesStateService
+        ]
+      })
+
+      const service = TestBed.inject(NgxTranslateRoutesStateService)
+      const routes = [{ originalPath: '/about', translatedPath: '/acerca' }]
+
+      service.setItem('lastLocationPath', routes)
+      expect(service.isServerSide()).toBe(true)
+    })
+
+    it('should not store in TransferState when value is not an array', () => {
+      TestBed.configureTestingModule({
+        providers: [
+          { provide: PLATFORM_ID, useValue: 'server' },
+          { provide: NGX_TRANSLATE_ROUTES_CONFIG, useValue: {} },
+          NgxTranslateRoutesStateService
+        ]
+      })
+
+      const service = TestBed.inject(NgxTranslateRoutesStateService)
+
+      service.setItem('lastLocationPath', 'not-an-array')
+      expect(service.isServerSide()).toBe(true)
+    })
+
+    it('should not set preloaded routes on browser', () => {
+      TestBed.configureTestingModule({
+        providers: [
+          { provide: PLATFORM_ID, useValue: 'browser' },
+          { provide: NGX_TRANSLATE_ROUTES_CONFIG, useValue: {} },
+          NgxTranslateRoutesStateService
+        ]
+      })
+
+      const service = TestBed.inject(NgxTranslateRoutesStateService)
+      service.setPreloadedRoutes({ about: 'acerca' })
+      expect(service.isClientSide()).toBe(true)
+    })
+  })
 })

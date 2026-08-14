@@ -2320,5 +2320,28 @@ describe('NgxTranslateRoutesHelperService', () => {
 
       expect(translate.get).not.toHaveBeenCalled() // No debería llamar porque está en cache
     }))
+
+    it('should filter out routes with empty path and wildcards in routesWithoutWildcard', fakeAsync(() => {
+      const router = TestBed.inject(Router) as any
+      router.config = [
+        { path: '', component: {} },
+        { path: 'about', component: {} },
+        { path: '**', component: {} },
+        { path: undefined, component: {} },
+      ]
+
+      const result = service['routesWithoutWildcard']
+      expect(result.length).toBe(1)
+      expect(result[0].path).toBe('about')
+    }))
+
+    it('should use config availableLanguages when translate.langs is empty', fakeAsync(() => {
+      const translate = TestBed.inject(TranslateService) as any
+      translate.langs = []
+      translate.store = { translations: {} }
+
+      const result = service['getAvailableLanguages']()
+      expect(result).toContain('en')
+    }))
   })
 })
