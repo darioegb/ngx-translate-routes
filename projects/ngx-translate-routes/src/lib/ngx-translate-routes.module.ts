@@ -5,15 +5,12 @@ import {
   Optional,
   inject,
 } from '@angular/core'
-import { CommonModule, TitleCasePipe } from '@angular/common'
 import { NgxTranslateRoutesService } from './ngx-translate-routes.service'
 import { NGX_TRANSLATE_ROUTES_CONFIG } from './ngx-translate-routes.token'
 import { NgxTranslateRoutesConfig } from './ngx-translate-routes.interfaces'
+import { DEFAULT_CONFIG } from './ngx-translate-routes.constants'
 
-@NgModule({
-  imports: [CommonModule],
-  providers: [TitleCasePipe],
-})
+@NgModule()
 export class NgxTranslateRoutesModule {
   private readonly translateRoutesService = inject(NgxTranslateRoutesService)
 
@@ -34,28 +31,7 @@ export class NgxTranslateRoutesModule {
       providers: [
         {
           provide: NGX_TRANSLATE_ROUTES_CONFIG,
-          useValue: {
-            enableRouteTranslate: config?.enableRouteTranslate ?? true,
-            enableTitleTranslate: config?.enableTitleTranslate ?? true,
-            enableQueryParamsTranslate:
-              config?.enableQueryParamsTranslate ?? false,
-            enableLanguageInPath: config?.enableLanguageInPath ?? false,
-            includeDefaultLanguageInPath:
-              config?.includeDefaultLanguageInPath ?? false,
-            routePrefix: config?.routePrefix ?? 'routes',
-            routeSuffixesWithQueryParams:
-              config?.routeSuffixesWithQueryParams ?? {
-                route: 'root',
-                params: 'params',
-              },
-            routesUsingStrategy: config?.routesUsingStrategy ?? [],
-            titlePrefix: config?.titlePrefix ?? 'titles',
-            cacheMethod: config?.cacheMethod ?? 'localStorage',
-            cookieExpirationDays: config?.cookieExpirationDays ?? 30,
-            onLanguageChange: config?.onLanguageChange ?? undefined,
-            routeTranslationStrategy:
-              config?.routeTranslationStrategy ?? undefined,
-          },
+          useValue: { ...DEFAULT_CONFIG, ...config },
         },
       ],
     }
