@@ -9,6 +9,7 @@
     "test:prod": "ng test ngx-translate-routes --code-coverage --watch=false --browsers=ChromeHeadlessNoSandbox",
     "lint": "ng lint ngx-translate-routes",
     "lint:prod": "ng lint ngx-translate-routes --fix",
+    "lint:showcases": "ng lint ngx-translate-routes-showcase && ng lint ngx-translate-routes-ssr-showcase",
     "prepare": "husky",
     "update:changelog": "node scripts/update-changelog.js",
     "update:package-version": "node scripts/update-package-version.js",
