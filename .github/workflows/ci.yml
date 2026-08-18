@@ -108,28 +108,35 @@ jobs:
           run_install: false
       - run: pnpm install
       - name: Create commit
+        id: commit
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           pnpm update:package-version
           git add .
-          git commit -m "chore: update package version" --no-verify
+          if git diff --staged --quiet; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+          else
+            git commit -m "chore: update package version" --no-verify
+            echo "changed=true" >> $GITHUB_OUTPUT
+          fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Create Pull Request
         id: cpr
+        if: steps.commit.outputs.changed == 'true'
         uses: peter-evans/create-pull-request@v8
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           title: 'Update package version'
           body: 'This PR updates the package version.'
       - name: Approve Pull Request
-        if: steps.cpr.outputs.pull-request-operation == 'created'
+        if: steps.commit.outputs.changed == 'true' && steps.cpr.outputs.pull-request-operation == 'created'
         run: gh pr review --approve "${{ steps.cpr.outputs.pull-request-number }}"
         env:
           GH_TOKEN: ${{ secrets.PAT_TOKEN }}
       - name: Merge Pull Request
-        if: steps.cpr.outputs.pull-request-operation == 'created'
+        if: steps.commit.outputs.changed == 'true' && steps.cpr.outputs.pull-request-operation == 'created'
         run: gh pr merge "${{ steps.cpr.outputs.pull-request-number }}" --merge --delete-branch --admin
         env:
           GH_TOKEN: ${{ secrets.PAT_TOKEN }}
@@ -137,6 +144,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     needs: [update_version]
+    if: always() && needs.update_version.result != 'skipped'
     container: trion/ng-cli-karma
     permissions:
       id-token: write
