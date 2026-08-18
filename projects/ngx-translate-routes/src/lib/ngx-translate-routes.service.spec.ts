@@ -435,7 +435,7 @@ describe('NgxTranslateRoutesService', () => {
     it('should use custom translation strategy for routes', fakeAsync(() => {
       service.checkConfigValueAndMakeTranslations()
       tick()
-      
+
       expect(location.path()).toEqual('/custom-test')
     }))
   })

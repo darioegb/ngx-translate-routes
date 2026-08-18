@@ -22,7 +22,6 @@ export class NgxTranslateRoutesHelperService {
   private readonly stateService = inject(NgxTranslateRoutesStateService)
   private readonly document = inject(DOCUMENT)
 
-  private _cachedRoutes: typeof this.router.config | null = null
   private readonly _translationCache = new Map<string, Promise<string>>()
   private readonly _computedConfig = {
     routePrefixDot: `${this.config.routePrefix}.`,
@@ -31,13 +30,9 @@ export class NgxTranslateRoutesHelperService {
   private readonly _langRegex = /^\/([a-z]{2})(-[A-Z]{2})?(\/|$)/
 
   private get routesWithoutWildcard() {
-    /* istanbul ignore next */
-    if (!this._cachedRoutes) {
-      this._cachedRoutes = this.router.config.filter(
-        (route) => route.path && route.path !== '**',
-      )
-    }
-    return this._cachedRoutes
+    return this.router.config.filter(
+      (route) => route.path && route.path !== '**',
+    )
   }
 
   private getAvailableLanguages(): string[] {
