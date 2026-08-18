@@ -10,7 +10,10 @@ export default tseslint.config(
     ignores: ['dist/', 'coverage/', 'node_modules/', '**/*.spec.ts', '**/test.ts'],
   },
   eslint.configs.recommended,
-  ...tseslint.configs.recommended,
+  ...tseslint.configs.recommended.map((config) => ({
+    ...config,
+    files: ['**/*.ts'],
+  })),
   {
     files: ['projects/ngx-translate-routes/src/**/*.ts'],
     plugins: {
