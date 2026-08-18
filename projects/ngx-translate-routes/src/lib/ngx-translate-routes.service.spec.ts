@@ -18,8 +18,16 @@ import { TRANSLATIONS } from '../test'
 import { NgxTranslateRoutesModule } from './ngx-translate-routes.module'
 import { NgxTranslateRoutesService } from './ngx-translate-routes.service'
 import { NgxTranslateRoutesHelperService } from './ngx-translate-routes-helper.service'
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
-import { createRouterMock, createActivatedRouteMock, createLocationMock } from '../test/test-helpers'
+import {
+  provideHttpClient,
+  withInterceptorsFromDi,
+  withXhr,
+} from '@angular/common/http'
+import {
+  createRouterMock,
+  createActivatedRouteMock,
+  createLocationMock,
+} from '../test/test-helpers'
 
 describe('NgxTranslateRoutesService', () => {
   describe('With object config', () => {
@@ -30,31 +38,35 @@ describe('NgxTranslateRoutesService', () => {
 
     beforeEach(() => {
       TestBed.configureTestingModule({
-    imports: [TranslateTestingModule.withTranslations(TRANSLATIONS).withDefaultLanguage('en'),
-        NgxTranslateRoutesModule.forRoot()],
-    providers: [
-        {
+        imports: [
+          TranslateTestingModule.withTranslations(
+            TRANSLATIONS,
+          ).withDefaultLanguage('en'),
+          NgxTranslateRoutesModule.forRoot(),
+        ],
+        providers: [
+          {
             provide: Router,
             useValue: createRouterMock([], url),
-        },
-        {
+          },
+          {
             provide: ActivatedRoute,
             useValue: {
+              firstChild: {
                 firstChild: {
-                    firstChild: {
-                        snapshot: {
-                            data: {
-                                title: 'users.profile',
-                            },
-                        },
+                  snapshot: {
+                    data: {
+                      title: 'users.profile',
                     },
+                  },
                 },
+              },
             },
-        },
-        provideHttpClient(withInterceptorsFromDi()),
-        provideHttpClientTesting(),
-    ]
-})
+          },
+          provideHttpClient(withXhr(), withInterceptorsFromDi()),
+          provideHttpClientTesting(),
+        ],
+      })
       title = TestBed.inject(Title)
       service = TestBed.inject(NgxTranslateRoutesService)
       location = TestBed.inject(Location)
@@ -79,34 +91,38 @@ describe('NgxTranslateRoutesService', () => {
 
     beforeEach(() => {
       TestBed.configureTestingModule({
-    imports: [TranslateTestingModule.withTranslations(TRANSLATIONS).withDefaultLanguage('en'),
-        NgxTranslateRoutesModule.forRoot()],
-    providers: [
-        {
+        imports: [
+          TranslateTestingModule.withTranslations(
+            TRANSLATIONS,
+          ).withDefaultLanguage('en'),
+          NgxTranslateRoutesModule.forRoot(),
+        ],
+        providers: [
+          {
             provide: Router,
             useValue: {
-                config: [],
-                events: of('/'),
-                navigateByUrl: (_: any) => { },
-                url: '/404',
+              config: [],
+              events: of('/'),
+              navigateByUrl: (_: any) => {},
+              url: '/404',
             },
-        },
-        {
+          },
+          {
             provide: ActivatedRoute,
             useValue: {
+              firstChild: {
                 firstChild: {
-                    firstChild: {
-                        snapshot: {
-                            data: {},
-                        },
-                    },
+                  snapshot: {
+                    data: {},
+                  },
                 },
+              },
             },
-        },
-        provideHttpClient(withInterceptorsFromDi()),
-        provideHttpClientTesting(),
-    ]
-})
+          },
+          provideHttpClient(withXhr(), withInterceptorsFromDi()),
+          provideHttpClientTesting(),
+        ],
+      })
       service = TestBed.inject(NgxTranslateRoutesService)
       location = TestBed.inject(Location)
       localStorage.clear()
@@ -146,23 +162,27 @@ describe('NgxTranslateRoutesService', () => {
 
     beforeEach(() => {
       TestBed.configureTestingModule({
-    imports: [TranslateTestingModule.withTranslations(TRANSLATIONS).withDefaultLanguage('es'),
-        NgxTranslateRoutesModule.forRoot({
+        imports: [
+          TranslateTestingModule.withTranslations(
+            TRANSLATIONS,
+          ).withDefaultLanguage('es'),
+          NgxTranslateRoutesModule.forRoot({
             enableQueryParamsTranslate: true,
-        })],
-    providers: [
-        {
+          }),
+        ],
+        providers: [
+          {
             provide: Router,
             useValue: routerStub,
-        },
-        {
+          },
+          {
             provide: ActivatedRoute,
             useValue: activatedRouteStub,
-        },
-        provideHttpClient(withInterceptorsFromDi()),
-        provideHttpClientTesting(),
-    ]
-})
+          },
+          provideHttpClient(withXhr(), withInterceptorsFromDi()),
+          provideHttpClientTesting(),
+        ],
+      })
       title = TestBed.inject(Title)
       service = TestBed.inject(NgxTranslateRoutesService)
       location = TestBed.inject(Location)
@@ -177,7 +197,7 @@ describe('NgxTranslateRoutesService', () => {
     })
 
     it('checkConfigValueAndMakeTranslations should set title and url', fakeAsync(() => {
-      (router.parseUrl as jasmine.Spy).and.returnValue({
+      ;(router.parseUrl as jasmine.Spy).and.returnValue({
         root: {
           children: {
             primary: {
@@ -208,32 +228,36 @@ describe('NgxTranslateRoutesService', () => {
 
     beforeEach(() => {
       TestBed.configureTestingModule({
-    imports: [TranslateTestingModule.withTranslations(TRANSLATIONS).withDefaultLanguage('en'),
-        NgxTranslateRoutesModule.forRoot({
+        imports: [
+          TranslateTestingModule.withTranslations(
+            TRANSLATIONS,
+          ).withDefaultLanguage('en'),
+          NgxTranslateRoutesModule.forRoot({
             enableRouteTranslate: false,
             enableTitleTranslate: false,
-        })],
-    providers: [
-        {
+          }),
+        ],
+        providers: [
+          {
             provide: Router,
             useValue: createRouterMock([], '/'),
-        },
-        {
+          },
+          {
             provide: ActivatedRoute,
             useValue: {
+              firstChild: {
                 firstChild: {
-                    firstChild: {
-                        snapshot: {
-                            data: {},
-                        },
-                    },
+                  snapshot: {
+                    data: {},
+                  },
                 },
+              },
             },
-        },
-        provideHttpClient(withInterceptorsFromDi()),
-        provideHttpClientTesting(),
-    ]
-})
+          },
+          provideHttpClient(withXhr(), withInterceptorsFromDi()),
+          provideHttpClientTesting(),
+        ],
+      })
       service = TestBed.inject(NgxTranslateRoutesService)
       title = TestBed.inject(Title)
       localStorage.clear()
@@ -265,41 +289,45 @@ describe('NgxTranslateRoutesService', () => {
 
     beforeEach(() => {
       TestBed.configureTestingModule({
-    imports: [TranslateTestingModule.withTranslations(TRANSLATIONS).withDefaultLanguage('en'),
-        NgxTranslateRoutesModule.forRoot({
+        imports: [
+          TranslateTestingModule.withTranslations(
+            TRANSLATIONS,
+          ).withDefaultLanguage('en'),
+          NgxTranslateRoutesModule.forRoot({
             enableRouteTranslate: false,
             enableTitleTranslate: false,
-        })],
-    providers: [
-        {
+          }),
+        ],
+        providers: [
+          {
             provide: Router,
             useValue: {
-                config: [],
-                events: of('/'),
-                navigateByUrl: (_: any) => { },
-                url: '/',
+              config: [],
+              events: of('/'),
+              navigateByUrl: (_: any) => {},
+              url: '/',
             },
-        },
-        {
+          },
+          {
             provide: ActivatedRoute,
             useValue: {
+              firstChild: {
                 firstChild: {
-                    firstChild: {
-                        snapshot: {
-                            data: {},
-                        },
-                    },
+                  snapshot: {
+                    data: {},
+                  },
                 },
+              },
             },
-        },
-        {
+          },
+          {
             provide: TranslateService,
             useValue: fakeTranslate,
-        },
-        provideHttpClient(withInterceptorsFromDi()),
-        provideHttpClientTesting(),
-    ]
-})
+          },
+          provideHttpClient(withXhr(), withInterceptorsFromDi()),
+          provideHttpClientTesting(),
+        ],
+      })
       service = TestBed.inject(NgxTranslateRoutesService)
       localStorage.clear()
     })
@@ -330,7 +358,7 @@ describe('NgxTranslateRoutesService', () => {
       defaultLang: 'en',
       currentLang: 'en',
       store: {
-        translations: {}
+        translations: {},
       },
       get: jasmine
         .createSpy('translate.get')
@@ -342,31 +370,35 @@ describe('NgxTranslateRoutesService', () => {
 
     beforeEach(() => {
       TestBed.configureTestingModule({
-    imports: [TranslateTestingModule.withTranslations(TRANSLATIONS).withDefaultLanguage('en'),
-        NgxTranslateRoutesModule.forRoot(config)],
-    providers: [
-        {
+        imports: [
+          TranslateTestingModule.withTranslations(
+            TRANSLATIONS,
+          ).withDefaultLanguage('en'),
+          NgxTranslateRoutesModule.forRoot(config),
+        ],
+        providers: [
+          {
             provide: Router,
             useValue: createRouterMock([], '/'),
-        },
-        {
+          },
+          {
             provide: ActivatedRoute,
             useValue: {
+              firstChild: {
                 firstChild: {
-                    firstChild: {
-                        snapshot: {
-                            data: {},
-                        },
-                    },
+                  snapshot: {
+                    data: {},
+                  },
                 },
+              },
             },
-        },
-        { provide: TranslateService, useValue: fakeTranslate },
-        NgxTranslateRoutesService,
-        provideHttpClient(withInterceptorsFromDi()),
-        provideHttpClientTesting(),
-    ]
-})
+          },
+          { provide: TranslateService, useValue: fakeTranslate },
+          NgxTranslateRoutesService,
+          provideHttpClient(withXhr(), withInterceptorsFromDi()),
+          provideHttpClientTesting(),
+        ],
+      })
 
       service = TestBed.inject(NgxTranslateRoutesService)
       service.init()
@@ -399,33 +431,37 @@ describe('NgxTranslateRoutesService', () => {
     beforeEach(() => {
       const locationMock = createLocationMock('/test')
       TestBed.configureTestingModule({
-    imports: [TranslateTestingModule.withTranslations(TRANSLATIONS).withDefaultLanguage('en'),
-        NgxTranslateRoutesModule.forRoot(config)],
-    providers: [
-        {
+        imports: [
+          TranslateTestingModule.withTranslations(
+            TRANSLATIONS,
+          ).withDefaultLanguage('en'),
+          NgxTranslateRoutesModule.forRoot(config),
+        ],
+        providers: [
+          {
             provide: Router,
             useValue: createRouterMock([], '/test'),
-        },
-        {
+          },
+          {
             provide: Location,
             useValue: locationMock,
-        },
-        {
+          },
+          {
             provide: ActivatedRoute,
             useValue: {
+              firstChild: {
                 firstChild: {
-                    firstChild: {
-                        snapshot: {
-                            data: {},
-                        },
-                    },
+                  snapshot: {
+                    data: {},
+                  },
                 },
+              },
             },
-        },
-        provideHttpClient(withInterceptorsFromDi()),
-        provideHttpClientTesting(),
-    ]
-})
+          },
+          provideHttpClient(withXhr(), withInterceptorsFromDi()),
+          provideHttpClientTesting(),
+        ],
+      })
       service = TestBed.inject(NgxTranslateRoutesService)
       location = TestBed.inject(Location)
       localStorage.clear()
@@ -447,29 +483,33 @@ describe('NgxTranslateRoutesService', () => {
 
     beforeEach(() => {
       TestBed.configureTestingModule({
-    imports: [TranslateTestingModule.withTranslations(TRANSLATIONS).withDefaultLanguage('en'),
-        NgxTranslateRoutesModule.forRoot()],
-    providers: [
-        {
+        imports: [
+          TranslateTestingModule.withTranslations(
+            TRANSLATIONS,
+          ).withDefaultLanguage('en'),
+          NgxTranslateRoutesModule.forRoot(),
+        ],
+        providers: [
+          {
             provide: Router,
             useValue: createRouterMock([], url),
-        },
-        {
+          },
+          {
             provide: ActivatedRoute,
             useValue: {
+              firstChild: {
                 firstChild: {
-                    firstChild: {
-                        snapshot: {
-                            data: {},
-                        },
-                    },
+                  snapshot: {
+                    data: {},
+                  },
                 },
+              },
             },
-        },
-        provideHttpClient(withInterceptorsFromDi()),
-        provideHttpClientTesting(),
-    ]
-})
+          },
+          provideHttpClient(withXhr(), withInterceptorsFromDi()),
+          provideHttpClientTesting(),
+        ],
+      })
       title = TestBed.inject(Title)
       spyOn(title, 'getTitle').and.returnValue('Default Title')
       service = TestBed.inject(NgxTranslateRoutesService)
@@ -494,7 +534,9 @@ describe('NgxTranslateRoutesService', () => {
     beforeEach(() => {
       TestBed.configureTestingModule({
         imports: [
-          TranslateTestingModule.withTranslations(TRANSLATIONS).withDefaultLanguage('en'),
+          TranslateTestingModule.withTranslations(
+            TRANSLATIONS,
+          ).withDefaultLanguage('en'),
           NgxTranslateRoutesModule.forRoot(config),
         ],
         providers: [
@@ -512,7 +554,7 @@ describe('NgxTranslateRoutesService', () => {
               },
             },
           },
-          provideHttpClient(withInterceptorsFromDi()),
+          provideHttpClient(withXhr(), withInterceptorsFromDi()),
           provideHttpClientTesting(),
         ],
       })
@@ -532,7 +574,9 @@ describe('NgxTranslateRoutesService', () => {
       TestBed.resetTestingModule()
       TestBed.configureTestingModule({
         imports: [
-          TranslateTestingModule.withTranslations(TRANSLATIONS).withDefaultLanguage('en'),
+          TranslateTestingModule.withTranslations(
+            TRANSLATIONS,
+          ).withDefaultLanguage('en'),
           NgxTranslateRoutesModule.forRoot(config),
         ],
         providers: [
@@ -550,7 +594,7 @@ describe('NgxTranslateRoutesService', () => {
               },
             },
           },
-          provideHttpClient(withInterceptorsFromDi()),
+          provideHttpClient(withXhr(), withInterceptorsFromDi()),
           provideHttpClientTesting(),
         ],
       })
@@ -574,7 +618,9 @@ describe('NgxTranslateRoutesService', () => {
     beforeEach(() => {
       TestBed.configureTestingModule({
         imports: [
-          TranslateTestingModule.withTranslations(TRANSLATIONS).withDefaultLanguage('en'),
+          TranslateTestingModule.withTranslations(
+            TRANSLATIONS,
+          ).withDefaultLanguage('en'),
           NgxTranslateRoutesModule.forRoot(config),
         ],
         providers: [
@@ -592,7 +638,7 @@ describe('NgxTranslateRoutesService', () => {
               },
             },
           },
-          provideHttpClient(withInterceptorsFromDi()),
+          provideHttpClient(withXhr(), withInterceptorsFromDi()),
           provideHttpClientTesting(),
         ],
       })
@@ -613,7 +659,9 @@ describe('NgxTranslateRoutesService', () => {
       TestBed.resetTestingModule()
       TestBed.configureTestingModule({
         imports: [
-          TranslateTestingModule.withTranslations(TRANSLATIONS).withDefaultLanguage('en'),
+          TranslateTestingModule.withTranslations(
+            TRANSLATIONS,
+          ).withDefaultLanguage('en'),
           NgxTranslateRoutesModule.forRoot(updatedConfig),
         ],
         providers: [
@@ -631,7 +679,7 @@ describe('NgxTranslateRoutesService', () => {
               },
             },
           },
-          provideHttpClient(withInterceptorsFromDi()),
+          provideHttpClient(withXhr(), withInterceptorsFromDi()),
           provideHttpClientTesting(),
         ],
       })
@@ -652,7 +700,9 @@ describe('NgxTranslateRoutesService', () => {
     beforeEach(() => {
       TestBed.configureTestingModule({
         imports: [
-          TranslateTestingModule.withTranslations(TRANSLATIONS).withDefaultLanguage('en'),
+          TranslateTestingModule.withTranslations(
+            TRANSLATIONS,
+          ).withDefaultLanguage('en'),
           NgxTranslateRoutesModule.forRoot({
             enableSsrRouteTranslation: true,
             availableLanguages: ['en', 'es'],
@@ -682,7 +732,7 @@ describe('NgxTranslateRoutesService', () => {
               },
             },
           },
-          provideHttpClient(withInterceptorsFromDi()),
+          provideHttpClient(withXhr(), withInterceptorsFromDi()),
           provideHttpClientTesting(),
         ],
       })
@@ -691,8 +741,12 @@ describe('NgxTranslateRoutesService', () => {
     })
 
     it('initForSsr should call handleServerSideRouteTranslation', fakeAsync(() => {
-      spyOn(service, 'handleServerSideRouteTranslation').and.returnValue(Promise.resolve())
-      spyOn(service, 'checkConfigValueAndMakeTranslations').and.returnValue(Promise.resolve())
+      spyOn(service, 'handleServerSideRouteTranslation').and.returnValue(
+        Promise.resolve(),
+      )
+      spyOn(service, 'checkConfigValueAndMakeTranslations').and.returnValue(
+        Promise.resolve(),
+      )
 
       service.initForSsr()
       tick()
@@ -702,8 +756,14 @@ describe('NgxTranslateRoutesService', () => {
     }))
 
     it('initForSsr should execute translations in parallel', fakeAsync(() => {
-      const handleSsrSpy = spyOn(service, 'handleServerSideRouteTranslation').and.returnValue(Promise.resolve())
-      const checkConfigSpy = spyOn(service, 'checkConfigValueAndMakeTranslations').and.returnValue(Promise.resolve())
+      const handleSsrSpy = spyOn(
+        service,
+        'handleServerSideRouteTranslation',
+      ).and.returnValue(Promise.resolve())
+      const checkConfigSpy = spyOn(
+        service,
+        'checkConfigValueAndMakeTranslations',
+      ).and.returnValue(Promise.resolve())
 
       service.initForSsr()
       tick()
@@ -714,7 +774,7 @@ describe('NgxTranslateRoutesService', () => {
 
     it('handleServerSideRouteTranslation should process URL', fakeAsync(() => {
       spyOn(helperService, 'detectLanguageFromTranslatedUrl').and.returnValue(
-        Promise.resolve({ originalPath: 'about', language: 'en' })
+        Promise.resolve({ originalPath: 'about', language: 'en' }),
       )
 
       service.handleServerSideRouteTranslation()
@@ -731,7 +791,9 @@ describe('NgxTranslateRoutesService', () => {
     beforeEach(() => {
       TestBed.configureTestingModule({
         imports: [
-          TranslateTestingModule.withTranslations(TRANSLATIONS).withDefaultLanguage('en'),
+          TranslateTestingModule.withTranslations(
+            TRANSLATIONS,
+          ).withDefaultLanguage('en'),
           NgxTranslateRoutesModule.forRoot({
             enableRouteTranslate: true,
             enableTitleTranslate: true,
@@ -741,7 +803,10 @@ describe('NgxTranslateRoutesService', () => {
         providers: [
           {
             provide: Router,
-            useValue: createRouterMock([{ path: 'about', component: {} }], '/about'),
+            useValue: createRouterMock(
+              [{ path: 'about', component: {} }],
+              '/about',
+            ),
           },
           {
             provide: ActivatedRoute,
@@ -754,7 +819,7 @@ describe('NgxTranslateRoutesService', () => {
               },
             },
           },
-          provideHttpClient(withInterceptorsFromDi()),
+          provideHttpClient(withXhr(), withInterceptorsFromDi()),
           provideHttpClientTesting(),
         ],
       })
@@ -763,8 +828,12 @@ describe('NgxTranslateRoutesService', () => {
     })
 
     it('checkConfigValueAndMakeTranslations should call helper methods', fakeAsync(() => {
-      const titleSpy = spyOn(helperService, 'translateTitle').and.returnValue(Promise.resolve())
-      const routeSpy = spyOn(helperService, 'translateRoute').and.returnValue(Promise.resolve())
+      const titleSpy = spyOn(helperService, 'translateTitle').and.returnValue(
+        Promise.resolve(),
+      )
+      const routeSpy = spyOn(helperService, 'translateRoute').and.returnValue(
+        Promise.resolve(),
+      )
 
       service.checkConfigValueAndMakeTranslations()
       tick()
@@ -786,8 +855,12 @@ describe('NgxTranslateRoutesService', () => {
     }))
 
     it('should call both title and route translation', fakeAsync(() => {
-      const titleSpy = spyOn(helperService, 'translateTitle').and.returnValue(Promise.resolve())
-      const routeSpy = spyOn(helperService, 'translateRoute').and.returnValue(Promise.resolve())
+      const titleSpy = spyOn(helperService, 'translateTitle').and.returnValue(
+        Promise.resolve(),
+      )
+      const routeSpy = spyOn(helperService, 'translateRoute').and.returnValue(
+        Promise.resolve(),
+      )
 
       service.checkConfigValueAndMakeTranslations()
       tick()
@@ -813,12 +886,14 @@ describe('NgxTranslateRoutesService', () => {
       const routerMock = createRouterMock(
         [{ path: 'about', component: {} }],
         '/about',
-        of(new NavigationEnd(1, '/about', '/about'))
+        of(new NavigationEnd(1, '/about', '/about')),
       )
 
       TestBed.configureTestingModule({
         imports: [
-          TranslateTestingModule.withTranslations(TRANSLATIONS).withDefaultLanguage('en'),
+          TranslateTestingModule.withTranslations(
+            TRANSLATIONS,
+          ).withDefaultLanguage('en'),
           NgxTranslateRoutesModule.forRoot({
             enableRouteTranslate: true,
             enableTitleTranslate: true,
@@ -840,7 +915,7 @@ describe('NgxTranslateRoutesService', () => {
               },
             },
           },
-          provideHttpClient(withInterceptorsFromDi()),
+          provideHttpClient(withXhr(), withInterceptorsFromDi()),
           provideHttpClientTesting(),
         ],
       })
@@ -909,7 +984,9 @@ describe('NgxTranslateRoutesService', () => {
     beforeEach(() => {
       TestBed.configureTestingModule({
         imports: [
-          TranslateTestingModule.withTranslations(TRANSLATIONS).withDefaultLanguage('en'),
+          TranslateTestingModule.withTranslations(
+            TRANSLATIONS,
+          ).withDefaultLanguage('en'),
           NgxTranslateRoutesModule.forRoot({
             enableRouteTranslate: true,
             enableTitleTranslate: true,
@@ -931,7 +1008,7 @@ describe('NgxTranslateRoutesService', () => {
                 },
               ],
               '/en/about',
-              of(new NavigationEnd(1, '/en/about', '/en/about'))
+              of(new NavigationEnd(1, '/en/about', '/en/about')),
             ),
           },
           {
@@ -946,7 +1023,7 @@ describe('NgxTranslateRoutesService', () => {
               },
             },
           },
-          provideHttpClient(withInterceptorsFromDi()),
+          provideHttpClient(withXhr(), withInterceptorsFromDi()),
           provideHttpClientTesting(),
         ],
       })
@@ -980,7 +1057,9 @@ describe('NgxTranslateRoutesService', () => {
     beforeEach(() => {
       TestBed.configureTestingModule({
         imports: [
-          TranslateTestingModule.withTranslations(TRANSLATIONS).withDefaultLanguage('en'),
+          TranslateTestingModule.withTranslations(
+            TRANSLATIONS,
+          ).withDefaultLanguage('en'),
           NgxTranslateRoutesModule.forRoot({
             enableRouteTranslate: true,
             enableTitleTranslate: true,
@@ -996,11 +1075,17 @@ describe('NgxTranslateRoutesService', () => {
             useValue: {
               config: [
                 { path: 'about', component: {}, data: { title: 'about' } },
-                { path: ':lang/about', component: {}, data: { title: 'about' } },
+                {
+                  path: ':lang/about',
+                  component: {},
+                  data: { title: 'about' },
+                },
               ],
               events: of(new NavigationEnd(1, '/about', '/about')),
               url: '/about',
-              parseUrl: (url: string) => ({ root: { children: { primary: { segments: [] } } } }),
+              parseUrl: (url: string) => ({
+                root: { children: { primary: { segments: [] } } },
+              }),
               createUrlTree: () => ({}),
               navigateByUrl: () => Promise.resolve(true),
             },
@@ -1012,12 +1097,12 @@ describe('NgxTranslateRoutesService', () => {
                 snapshot: {
                   data: { title: 'about' },
                   params: { lang: 'en' },
-                  queryParams: { page: '1' }
+                  queryParams: { page: '1' },
                 },
               },
             },
           },
-          provideHttpClient(withInterceptorsFromDi()),
+          provideHttpClient(withXhr(), withInterceptorsFromDi()),
           provideHttpClientTesting(),
         ],
       })
@@ -1094,7 +1179,7 @@ describe('NgxTranslateRoutesService', () => {
 
       // Trigger multiple language change events
       const languages = ['en', 'es', 'fr', 'en', 'es']
-      languages.forEach(lang => {
+      languages.forEach((lang) => {
         translate.use(lang)
         tick()
       })
@@ -1104,12 +1189,19 @@ describe('NgxTranslateRoutesService', () => {
 
     it('should test internal method calls for coverage', fakeAsync(() => {
       // Test all the service methods that might exist
-      const methods = ['init', 'initForSsr', 'checkConfigValueAndMakeTranslations']
+      const methods = [
+        'init',
+        'initForSsr',
+        'checkConfigValueAndMakeTranslations',
+      ]
 
-      methods.forEach(methodName => {
-        if (typeof service[methodName as keyof NgxTranslateRoutesService] === 'function') {
+      methods.forEach((methodName) => {
+        if (
+          typeof service[methodName as keyof NgxTranslateRoutesService] ===
+          'function'
+        ) {
           try {
-            (service[methodName as keyof NgxTranslateRoutesService] as any)()
+            ;(service[methodName as keyof NgxTranslateRoutesService] as any)()
             tick()
           } catch (e) {
             // Ignore errors, focus on coverage
@@ -1148,19 +1240,19 @@ describe('NgxTranslateRoutesService', () => {
               'routes.home': 'home',
               'routes.about': 'about',
               'titles.home': 'Home Page',
-              'titles.about': 'About Us'
-            }
+              'titles.about': 'About Us',
+            },
           }).withDefaultLanguage('en'),
           NgxTranslateRoutesModule.forRoot({
             enableRouteTranslate: true,
             enableTitleTranslate: true,
-          })
+          }),
         ],
         providers: [
           { provide: Router, useValue: createRouterMock() },
           { provide: Location, useValue: createLocationMock() },
-          { provide: ActivatedRoute, useValue: createActivatedRouteMock() }
-        ]
+          { provide: ActivatedRoute, useValue: createActivatedRouteMock() },
+        ],
       })
 
       service = TestBed.inject(NgxTranslateRoutesService)
@@ -1195,13 +1287,15 @@ describe('NgxTranslateRoutesService', () => {
 
       TestBed.configureTestingModule({
         imports: [
-          TranslateTestingModule.withTranslations(TRANSLATIONS).withDefaultLanguage('en'),
+          TranslateTestingModule.withTranslations(
+            TRANSLATIONS,
+          ).withDefaultLanguage('en'),
           NgxTranslateRoutesModule.forRoot(),
         ],
         providers: [
           { provide: Router, useValue: routerMock },
           { provide: ActivatedRoute, useValue: createActivatedRouteMock() },
-          provideHttpClient(withInterceptorsFromDi()),
+          provideHttpClient(withXhr(), withInterceptorsFromDi()),
           provideHttpClientTesting(),
         ],
       })
@@ -1223,9 +1317,9 @@ describe('NgxTranslateRoutesService', () => {
 
       // Wildcard route must be restored so the router does not throw NG04002
       expect(router.config.some((route) => route.path === '**')).toBeTrue()
-      expect(
-        router.config.filter((route) => route.path === '**').length,
-      ).toBe(1)
+      expect(router.config.filter((route) => route.path === '**').length).toBe(
+        1,
+      )
     }))
   })
 })

@@ -24,9 +24,11 @@
       [(ngModel)]="language"
       (change)="changeLanguage()"
     >
-      <option [value]="item.value" *ngFor="let item of languages">
-        {{ item.key }}
-      </option>
+      @for (item of languages; track item) {
+        <option [value]="item.value">
+          {{ item.key }}
+        </option>
+      }
     </select>
   </div>
 </main>

@@ -3,16 +3,24 @@ import { Title } from '@angular/platform-browser'
 import { ActivatedRoute, Router } from '@angular/router'
 import { TranslateService } from '@ngx-translate/core'
 import { TranslateTestingModule } from 'ngx-translate-testing'
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
+import {
+  provideHttpClient,
+  withInterceptorsFromDi,
+  withXhr,
+} from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
-import { DOCUMENT, Location } from '@angular/common'
+import { Location } from '@angular/common'
 import { of, throwError } from 'rxjs'
-import { Component } from '@angular/core'
+import { Component, DOCUMENT } from '@angular/core'
 
 import { NgxTranslateRoutesHelperService } from './ngx-translate-routes-helper.service'
 import { NgxTranslateRoutesModule } from './ngx-translate-routes.module'
 import { TRANSLATIONS } from '../test'
-import { createRouterMock, createActivatedRouteMock, createLocationMock } from '../test/test-helpers'
+import {
+  createRouterMock,
+  createActivatedRouteMock,
+  createLocationMock,
+} from '../test/test-helpers'
 
 describe('NgxTranslateRoutesHelperService', () => {
   describe('Cache Management', () => {
@@ -21,7 +29,9 @@ describe('NgxTranslateRoutesHelperService', () => {
     beforeEach(() => {
       TestBed.configureTestingModule({
         imports: [
-          TranslateTestingModule.withTranslations(TRANSLATIONS).withDefaultLanguage('en'),
+          TranslateTestingModule.withTranslations(
+            TRANSLATIONS,
+          ).withDefaultLanguage('en'),
           NgxTranslateRoutesModule.forRoot(),
         ],
         providers: [
@@ -40,7 +50,7 @@ describe('NgxTranslateRoutesHelperService', () => {
               },
             },
           },
-          provideHttpClient(withInterceptorsFromDi()),
+          provideHttpClient(withXhr(), withInterceptorsFromDi()),
           provideHttpClientTesting(),
         ],
       })
@@ -65,7 +75,9 @@ describe('NgxTranslateRoutesHelperService', () => {
     beforeEach(() => {
       TestBed.configureTestingModule({
         imports: [
-          TranslateTestingModule.withTranslations(TRANSLATIONS).withDefaultLanguage('en'),
+          TranslateTestingModule.withTranslations(
+            TRANSLATIONS,
+          ).withDefaultLanguage('en'),
           NgxTranslateRoutesModule.forRoot({
             enableLanguageInPath: true,
             availableLanguages: ['en', 'es'],
@@ -87,7 +99,7 @@ describe('NgxTranslateRoutesHelperService', () => {
               },
             },
           },
-          provideHttpClient(withInterceptorsFromDi()),
+          provideHttpClient(withXhr(), withInterceptorsFromDi()),
           provideHttpClientTesting(),
         ],
       })
@@ -110,7 +122,9 @@ describe('NgxTranslateRoutesHelperService', () => {
     beforeEach(() => {
       TestBed.configureTestingModule({
         imports: [
-          TranslateTestingModule.withTranslations(TRANSLATIONS).withDefaultLanguage('en'),
+          TranslateTestingModule.withTranslations(
+            TRANSLATIONS,
+          ).withDefaultLanguage('en'),
           NgxTranslateRoutesModule.forRoot({
             enableTitleTranslate: true,
           }),
@@ -133,7 +147,7 @@ describe('NgxTranslateRoutesHelperService', () => {
               },
             },
           },
-          provideHttpClient(withInterceptorsFromDi()),
+          provideHttpClient(withXhr(), withInterceptorsFromDi()),
           provideHttpClientTesting(),
         ],
       })
@@ -171,7 +185,9 @@ describe('NgxTranslateRoutesHelperService', () => {
     beforeEach(() => {
       TestBed.configureTestingModule({
         imports: [
-          TranslateTestingModule.withTranslations(TRANSLATIONS).withDefaultLanguage('en'),
+          TranslateTestingModule.withTranslations(
+            TRANSLATIONS,
+          ).withDefaultLanguage('en'),
           NgxTranslateRoutesModule.forRoot(),
         ],
         providers: [
@@ -190,7 +206,7 @@ describe('NgxTranslateRoutesHelperService', () => {
               },
             },
           },
-          provideHttpClient(withInterceptorsFromDi()),
+          provideHttpClient(withXhr(), withInterceptorsFromDi()),
           provideHttpClientTesting(),
         ],
       })
@@ -232,7 +248,9 @@ describe('NgxTranslateRoutesHelperService', () => {
     beforeEach(() => {
       TestBed.configureTestingModule({
         imports: [
-          TranslateTestingModule.withTranslations(TRANSLATIONS).withDefaultLanguage('en'),
+          TranslateTestingModule.withTranslations(
+            TRANSLATIONS,
+          ).withDefaultLanguage('en'),
           NgxTranslateRoutesModule.forRoot({
             enableRouteTranslate: true,
             enableLanguageInPath: true,
@@ -258,7 +276,7 @@ describe('NgxTranslateRoutesHelperService', () => {
               },
             },
           },
-          provideHttpClient(withInterceptorsFromDi()),
+          provideHttpClient(withXhr(), withInterceptorsFromDi()),
           provideHttpClientTesting(),
         ],
       })
@@ -282,7 +300,9 @@ describe('NgxTranslateRoutesHelperService', () => {
     beforeEach(() => {
       TestBed.configureTestingModule({
         imports: [
-          TranslateTestingModule.withTranslations(TRANSLATIONS).withDefaultLanguage('en'),
+          TranslateTestingModule.withTranslations(
+            TRANSLATIONS,
+          ).withDefaultLanguage('en'),
           NgxTranslateRoutesModule.forRoot({
             enableQueryParamsTranslate: true,
             enableLanguageInPath: true,
@@ -305,7 +325,7 @@ describe('NgxTranslateRoutesHelperService', () => {
               },
             },
           },
-          provideHttpClient(withInterceptorsFromDi()),
+          provideHttpClient(withXhr(), withInterceptorsFromDi()),
           provideHttpClientTesting(),
         ],
       })
@@ -329,7 +349,9 @@ describe('NgxTranslateRoutesHelperService', () => {
     beforeEach(() => {
       TestBed.configureTestingModule({
         imports: [
-          TranslateTestingModule.withTranslations(TRANSLATIONS).withDefaultLanguage('en'),
+          TranslateTestingModule.withTranslations(
+            TRANSLATIONS,
+          ).withDefaultLanguage('en'),
           NgxTranslateRoutesModule.forRoot({
             enableTitleTranslate: true,
             titlePrefix: 'titles',
@@ -353,7 +375,7 @@ describe('NgxTranslateRoutesHelperService', () => {
               },
             },
           },
-          provideHttpClient(withInterceptorsFromDi()),
+          provideHttpClient(withXhr(), withInterceptorsFromDi()),
           provideHttpClientTesting(),
         ],
       })
@@ -429,7 +451,9 @@ describe('NgxTranslateRoutesHelperService', () => {
     beforeEach(() => {
       TestBed.configureTestingModule({
         imports: [
-          TranslateTestingModule.withTranslations(TRANSLATIONS).withDefaultLanguage('en'),
+          TranslateTestingModule.withTranslations(
+            TRANSLATIONS,
+          ).withDefaultLanguage('en'),
           NgxTranslateRoutesModule.forRoot({
             enableRouteTranslate: true,
             routePrefix: 'routes',
@@ -439,7 +463,10 @@ describe('NgxTranslateRoutesHelperService', () => {
         providers: [
           {
             provide: Router,
-            useValue: createRouterMock([{ path: 'about', component: {} }], '/about'),
+            useValue: createRouterMock(
+              [{ path: 'about', component: {} }],
+              '/about',
+            ),
           },
           {
             provide: ActivatedRoute,
@@ -453,7 +480,7 @@ describe('NgxTranslateRoutesHelperService', () => {
               },
             },
           },
-          provideHttpClient(withInterceptorsFromDi()),
+          provideHttpClient(withXhr(), withInterceptorsFromDi()),
           provideHttpClientTesting(),
         ],
       })
@@ -462,7 +489,7 @@ describe('NgxTranslateRoutesHelperService', () => {
     })
 
     it('should detect language from translated URL', fakeAsync(() => {
-      service.detectLanguageFromTranslatedUrl('/es/acerca').then(result => {
+      service.detectLanguageFromTranslatedUrl('/es/acerca').then((result) => {
         expect(result).toBeDefined()
         if (result) {
           expect(result.language).toBeDefined()
@@ -473,16 +500,18 @@ describe('NgxTranslateRoutesHelperService', () => {
     }))
 
     it('should detect language from URL without translation', fakeAsync(() => {
-      service.detectLanguageFromTranslatedUrl('/en/about').then(result => {
+      service.detectLanguageFromTranslatedUrl('/en/about').then((result) => {
         expect(result).toBeDefined()
       })
       tick()
     }))
 
     it('should handle URLs with query params', fakeAsync(() => {
-      service.detectLanguageFromTranslatedUrl('/es/acerca?page=1').then(result => {
-        expect(result).toBeDefined()
-      })
+      service
+        .detectLanguageFromTranslatedUrl('/es/acerca?page=1')
+        .then((result) => {
+          expect(result).toBeDefined()
+        })
       tick()
     }))
 
@@ -503,18 +532,37 @@ describe('NgxTranslateRoutesHelperService', () => {
       }
 
       if (service.detectLanguageFromTranslatedUrl) {
-        service.detectLanguageFromTranslatedUrl('/').then(() => done()).catch(() => done())
-        service.detectLanguageFromTranslatedUrl('/en/test').then(() => {}).catch(() => {})
-        service.detectLanguageFromTranslatedUrl('/es/prueba').then(() => {}).catch(() => {})
+        service
+          .detectLanguageFromTranslatedUrl('/')
+          .then(() => done())
+          .catch(() => done())
+        service
+          .detectLanguageFromTranslatedUrl('/en/test')
+          .then(() => {})
+          .catch(() => {})
+        service
+          .detectLanguageFromTranslatedUrl('/es/prueba')
+          .then(() => {})
+          .catch(() => {})
       } else {
         done()
       }
     })
 
     it('should handle URL parsing edge cases for coverage', fakeAsync(() => {
-      const testUrls = ['/', '/single', '/multi/path', '', '/en/test', '/es/prueba', '/invalid', null, undefined]
+      const testUrls = [
+        '/',
+        '/single',
+        '/multi/path',
+        '',
+        '/en/test',
+        '/es/prueba',
+        '/invalid',
+        null,
+        undefined,
+      ]
 
-      testUrls.forEach(url => {
+      testUrls.forEach((url) => {
         try {
           if (url !== null && url !== undefined) {
             service.detectLanguageFromTranslatedUrl(url)
@@ -545,7 +593,7 @@ describe('NgxTranslateRoutesHelperService', () => {
       // Test detectLanguageFromTranslatedUrl with various inputs
       const testCases = ['/', '/en/home', '/es/inicio', '/invalid', '']
 
-      testCases.forEach(testCase => {
+      testCases.forEach((testCase) => {
         try {
           service.detectLanguageFromTranslatedUrl(testCase)
           tick()
@@ -574,7 +622,9 @@ describe('NgxTranslateRoutesHelperService', () => {
     beforeEach(() => {
       TestBed.configureTestingModule({
         imports: [
-          TranslateTestingModule.withTranslations(TRANSLATIONS).withDefaultLanguage('en'),
+          TranslateTestingModule.withTranslations(
+            TRANSLATIONS,
+          ).withDefaultLanguage('en'),
           NgxTranslateRoutesModule.forRoot({
             enableTitleTranslate: true,
             enableRouteTranslate: true,
@@ -589,12 +639,23 @@ describe('NgxTranslateRoutesHelperService', () => {
         providers: [
           {
             provide: Router,
-            useValue: createRouterMock([
-              { path: 'about', component: {}, data: { title: 'about' } },
-              { path: 'contact', component: {}, data: { title: 'contact' } },
-              { path: ':lang/about', component: {}, data: { title: 'about' } },
-              { path: ':lang/contact', component: {}, data: { title: 'contact' } }
-            ], '/about'),
+            useValue: createRouterMock(
+              [
+                { path: 'about', component: {}, data: { title: 'about' } },
+                { path: 'contact', component: {}, data: { title: 'contact' } },
+                {
+                  path: ':lang/about',
+                  component: {},
+                  data: { title: 'about' },
+                },
+                {
+                  path: ':lang/contact',
+                  component: {},
+                  data: { title: 'contact' },
+                },
+              ],
+              '/about',
+            ),
           },
           {
             provide: ActivatedRoute,
@@ -604,7 +665,7 @@ describe('NgxTranslateRoutesHelperService', () => {
                   snapshot: {
                     data: { title: 'about' },
                     params: { id: '123', lang: 'en' },
-                    queryParams: { page: '1', filter: 'active' }
+                    queryParams: { page: '1', filter: 'active' },
                   },
                 },
               },
@@ -614,7 +675,7 @@ describe('NgxTranslateRoutesHelperService', () => {
             provide: Location,
             useValue: createLocationMock(),
           },
-          provideHttpClient(withInterceptorsFromDi()),
+          provideHttpClient(withXhr(), withInterceptorsFromDi()),
           provideHttpClientTesting(),
         ],
       })
@@ -639,7 +700,7 @@ describe('NgxTranslateRoutesHelperService', () => {
     }))
 
     it('should handle detectLanguageFromTranslatedUrl for simple cases', fakeAsync(() => {
-      service.detectLanguageFromTranslatedUrl('/en/about').then(result => {
+      service.detectLanguageFromTranslatedUrl('/en/about').then((result) => {
         expect(result).toBeDefined()
       })
       tick()
@@ -658,7 +719,9 @@ describe('NgxTranslateRoutesHelperService', () => {
     beforeEach(() => {
       TestBed.configureTestingModule({
         imports: [
-          TranslateTestingModule.withTranslations(TRANSLATIONS).withDefaultLanguage('en'),
+          TranslateTestingModule.withTranslations(
+            TRANSLATIONS,
+          ).withDefaultLanguage('en'),
           NgxTranslateRoutesModule.forRoot({
             enableTitleTranslate: true,
             enableRouteTranslate: true,
@@ -676,7 +739,7 @@ describe('NgxTranslateRoutesHelperService', () => {
               firstChild: null,
             },
           },
-          provideHttpClient(withInterceptorsFromDi()),
+          provideHttpClient(withXhr(), withInterceptorsFromDi()),
           provideHttpClientTesting(),
         ],
       })
@@ -712,7 +775,9 @@ describe('NgxTranslateRoutesHelperService', () => {
     beforeEach(() => {
       TestBed.configureTestingModule({
         imports: [
-          TranslateTestingModule.withTranslations(TRANSLATIONS).withDefaultLanguage('en'),
+          TranslateTestingModule.withTranslations(
+            TRANSLATIONS,
+          ).withDefaultLanguage('en'),
           NgxTranslateRoutesModule.forRoot({
             enableTitleTranslate: true,
             enableRouteTranslate: true,
@@ -727,15 +792,25 @@ describe('NgxTranslateRoutesHelperService', () => {
         providers: [
           {
             provide: Router,
-            useValue: createRouterMock([
-              { path: '', loadChildren: () => Promise.resolve({}) },
-              { path: 'about', component: Component },
-              { path: 'users/:id', component: Component, data: { title: 'user' } },
-              { path: 'products/:productId/reviews/:id', component: Component },
-              { path: ':lang/dashboard', component: Component },
-              { path: 'api/v1/:resource/:id', component: Component },
-              { path: '**', redirectTo: '/404' }
-            ], '/about'),
+            useValue: createRouterMock(
+              [
+                { path: '', loadChildren: () => Promise.resolve({}) },
+                { path: 'about', component: Component },
+                {
+                  path: 'users/:id',
+                  component: Component,
+                  data: { title: 'user' },
+                },
+                {
+                  path: 'products/:productId/reviews/:id',
+                  component: Component,
+                },
+                { path: ':lang/dashboard', component: Component },
+                { path: 'api/v1/:resource/:id', component: Component },
+                { path: '**', redirectTo: '/404' },
+              ],
+              '/about',
+            ),
           },
           {
             provide: ActivatedRoute,
@@ -743,9 +818,9 @@ describe('NgxTranslateRoutesHelperService', () => {
               snapshot: {
                 data: { title: 'about', skipTranslation: false },
                 params: { id: '123' },
-                queryParams: { tab: 'details' }
+                queryParams: { tab: 'details' },
               },
-              firstChild: null
+              firstChild: null,
             },
           },
           {
@@ -756,11 +831,11 @@ describe('NgxTranslateRoutesHelperService', () => {
             provide: DOCUMENT,
             useValue: {
               defaultView: {
-                location: { href: 'http://localhost:4200/about?tab=details' }
-              }
+                location: { href: 'http://localhost:4200/about?tab=details' },
+              },
             },
           },
-          provideHttpClient(withInterceptorsFromDi()),
+          provideHttpClient(withXhr(), withInterceptorsFromDi()),
           provideHttpClientTesting(),
         ],
       })
@@ -794,10 +869,10 @@ describe('NgxTranslateRoutesHelperService', () => {
         '/api/v1/resource/456',
         '',
         '/',
-        '/invalid-lang/test'
+        '/invalid-lang/test',
       ]
 
-      testUrls.forEach(url => {
+      testUrls.forEach((url) => {
         expect(() => {
           const result = service.detectLanguageFromTranslatedUrl(url)
           tick()
@@ -850,10 +925,10 @@ describe('NgxTranslateRoutesHelperService', () => {
         '/invalid/test',
         '/es/users/123',
         '/fr/products',
-        'malformed-url'
+        'malformed-url',
       ]
 
-      edgeCases.forEach(url => {
+      edgeCases.forEach((url) => {
         expect(() => {
           service.detectLanguageFromTranslatedUrl(url)
           tick(100)
@@ -923,7 +998,7 @@ describe('NgxTranslateRoutesHelperService', () => {
               'routes.dashboard': 'dashboard',
               'titles.about': 'About Us',
               'titles.users': 'Users',
-              'error.translation': 'Translation Error'
+              'error.translation': 'Translation Error',
             },
             es: {
               'routes.about': 'acerca-de',
@@ -931,8 +1006,8 @@ describe('NgxTranslateRoutesHelperService', () => {
               'routes.profile': 'perfil',
               'routes.dashboard': 'tablero',
               'titles.about': 'Acerca de Nosotros',
-              'titles.users': 'Usuarios'
-            }
+              'titles.users': 'Usuarios',
+            },
           }).withDefaultLanguage('en'),
           NgxTranslateRoutesModule.forRoot({
             enableRouteTranslate: true,
@@ -949,16 +1024,39 @@ describe('NgxTranslateRoutesHelperService', () => {
         providers: [
           {
             provide: Router,
-            useValue: createRouterMock([
-              { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
-              { path: 'about', component: Component, data: { title: 'about' } },
-              { path: 'users', component: Component, data: { title: 'users' } },
-              { path: 'users/:id', component: Component, data: { title: 'user-detail' } },
-              { path: 'profile/:userId', component: Component, data: { title: 'profile' } },
-              { path: 'dashboard', component: Component, data: { title: 'dashboard' } },
-              { path: 'admin/settings', component: Component },
-              { path: '**', component: Component }
-            ], '/en/dashboard'),
+            useValue: createRouterMock(
+              [
+                { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
+                {
+                  path: 'about',
+                  component: Component,
+                  data: { title: 'about' },
+                },
+                {
+                  path: 'users',
+                  component: Component,
+                  data: { title: 'users' },
+                },
+                {
+                  path: 'users/:id',
+                  component: Component,
+                  data: { title: 'user-detail' },
+                },
+                {
+                  path: 'profile/:userId',
+                  component: Component,
+                  data: { title: 'profile' },
+                },
+                {
+                  path: 'dashboard',
+                  component: Component,
+                  data: { title: 'dashboard' },
+                },
+                { path: 'admin/settings', component: Component },
+                { path: '**', component: Component },
+              ],
+              '/en/dashboard',
+            ),
           },
           {
             provide: ActivatedRoute,
@@ -970,8 +1068,13 @@ describe('NgxTranslateRoutesHelperService', () => {
                     params: { userId: '123', id: 'test-id' },
                     queryParams: { filter: 'active', sort: 'name' },
                     paramMap: {
-                      get: (key: string) => key === 'userId' ? '123' : key === 'id' ? 'test-id' : null
-                    }
+                      get: (key: string) =>
+                        key === 'userId'
+                          ? '123'
+                          : key === 'id'
+                            ? 'test-id'
+                            : null,
+                    },
                   },
                 },
               },
@@ -979,9 +1082,11 @@ describe('NgxTranslateRoutesHelperService', () => {
           },
           {
             provide: Location,
-            useValue: createLocationMock('/en/dashboard?filter=active&sort=name')
+            useValue: createLocationMock(
+              '/en/dashboard?filter=active&sort=name',
+            ),
           },
-          provideHttpClient(withInterceptorsFromDi()),
+          provideHttpClient(withXhr(), withInterceptorsFromDi()),
           provideHttpClientTesting(),
         ],
       })
@@ -1007,10 +1112,10 @@ describe('NgxTranslateRoutesHelperService', () => {
         '/',
         '/invalid-route',
         '/admin/settings',
-        '/users/profile/123/edit'
+        '/users/profile/123/edit',
       ]
 
-      urls.forEach(url => {
+      urls.forEach((url) => {
         const result = service.detectLanguageFromTranslatedUrl(url)
         expect(result).toBeDefined()
       })
@@ -1023,9 +1128,15 @@ describe('NgxTranslateRoutesHelperService', () => {
       tick(50)
 
       // Test various route translations
-      const routes = ['about', 'users', 'profile', 'dashboard', 'admin/settings']
+      const routes = [
+        'about',
+        'users',
+        'profile',
+        'dashboard',
+        'admin/settings',
+      ]
 
-      routes.forEach(route => {
+      routes.forEach((route) => {
         service.translateRoute()
         tick(50)
       })
@@ -1049,7 +1160,7 @@ describe('NgxTranslateRoutesHelperService', () => {
         filter: 'active',
         sort: 'name',
         page: '1',
-        limit: '10'
+        limit: '10',
       }
 
       // Test query param processing through route translation
@@ -1073,7 +1184,7 @@ describe('NgxTranslateRoutesHelperService', () => {
     it('should validate language codes correctly', () => {
       const languages = ['en', 'es', 'fr']
 
-      languages.forEach(lang => {
+      languages.forEach((lang) => {
         service.detectLanguageFromTranslatedUrl(`/${lang}/test`)
         expect(true).toBe(true)
       })
@@ -1102,7 +1213,7 @@ describe('NgxTranslateRoutesHelperService', () => {
     it('should process language changes with state updates', fakeAsync(() => {
       const languages = ['en', 'es', 'fr']
 
-      languages.forEach(lang => {
+      languages.forEach((lang) => {
         translate.use(lang)
         tick(100)
 
@@ -1131,10 +1242,10 @@ describe('NgxTranslateRoutesHelperService', () => {
         'admin/settings',
         'users/profile/edit',
         'dashboard/analytics',
-        'profile/settings/security'
+        'profile/settings/security',
       ]
 
-      nestedRoutes.forEach(route => {
+      nestedRoutes.forEach((route) => {
         service.translateRoute()
         tick(50)
       })
@@ -1149,10 +1260,10 @@ describe('NgxTranslateRoutesHelperService', () => {
         'profile_settings',
         'test.route',
         'route+with+plus',
-        'route with spaces'
+        'route with spaces',
       ]
 
-      specialRoutes.forEach(route => {
+      specialRoutes.forEach((route) => {
         service.detectLanguageFromTranslatedUrl(`/en/${route}`)
         tick(30)
       })
@@ -1190,10 +1301,10 @@ describe('NgxTranslateRoutesHelperService', () => {
         '/profile/test-user',
         '/dashboard',
         '/admin/settings',
-        '/invalid/route'
+        '/invalid/route',
       ]
 
-      urls.forEach(url => {
+      urls.forEach((url) => {
         service.detectLanguageFromTranslatedUrl(url)
         tick(30)
       })
@@ -1229,7 +1340,7 @@ describe('NgxTranslateRoutesHelperService', () => {
               'titles.profile': 'User Profile',
               'params.category': 'electronics',
               'params.item': 'laptop',
-              'params.search': 'searchTerm'
+              'params.search': 'searchTerm',
             },
             es: {
               'routes.home': 'inicio',
@@ -1247,14 +1358,14 @@ describe('NgxTranslateRoutesHelperService', () => {
               'titles.products': 'Nuestros Productos',
               'titles.profile': 'Perfil Usuario',
               'params.category': 'electronica',
-              'params.item': 'portatil'
+              'params.item': 'portatil',
             },
             fr: {
               'routes.home': 'accueil',
               'routes.about': 'a-propos',
               'routes.products': 'produits',
-              'titles.home': 'Page Accueil'
-            }
+              'titles.home': 'Page Accueil',
+            },
           }).withDefaultLanguage('en'),
           NgxTranslateRoutesModule.forRoot({
             enableRouteTranslate: true,
@@ -1272,22 +1383,65 @@ describe('NgxTranslateRoutesHelperService', () => {
         providers: [
           {
             provide: Router,
-            useValue: createRouterMock([
-              { path: '', redirectTo: '/home', pathMatch: 'full' },
-              { path: 'home', component: Component, data: { title: 'home' } },
-              { path: 'about', component: Component, data: { title: 'about' } },
-              { path: 'products', component: Component, data: { title: 'products' } },
-              { path: 'products/:category', component: Component, data: { title: 'category' } },
-              { path: 'products/:category/:item', component: Component, data: { title: 'item' } },
-              { path: 'search', component: Component, data: { title: 'search' } },
-              { path: 'profile/:userId', component: Component, data: { title: 'profile' } },
-              { path: 'settings', component: Component, data: { title: 'settings' } },
-              { path: 'admin', component: Component, data: { title: 'admin' } },
-              { path: 'admin/dashboard', component: Component, data: { title: 'dashboard' } },
-              { path: 'admin/users/:id', component: Component, data: { title: 'user' } },
-              { path: 'lazy', loadChildren: () => Promise.resolve({}) },
-              { path: '**', redirectTo: '/home' }
-            ], '/products/electronics/laptop'),
+            useValue: createRouterMock(
+              [
+                { path: '', redirectTo: '/home', pathMatch: 'full' },
+                { path: 'home', component: Component, data: { title: 'home' } },
+                {
+                  path: 'about',
+                  component: Component,
+                  data: { title: 'about' },
+                },
+                {
+                  path: 'products',
+                  component: Component,
+                  data: { title: 'products' },
+                },
+                {
+                  path: 'products/:category',
+                  component: Component,
+                  data: { title: 'category' },
+                },
+                {
+                  path: 'products/:category/:item',
+                  component: Component,
+                  data: { title: 'item' },
+                },
+                {
+                  path: 'search',
+                  component: Component,
+                  data: { title: 'search' },
+                },
+                {
+                  path: 'profile/:userId',
+                  component: Component,
+                  data: { title: 'profile' },
+                },
+                {
+                  path: 'settings',
+                  component: Component,
+                  data: { title: 'settings' },
+                },
+                {
+                  path: 'admin',
+                  component: Component,
+                  data: { title: 'admin' },
+                },
+                {
+                  path: 'admin/dashboard',
+                  component: Component,
+                  data: { title: 'dashboard' },
+                },
+                {
+                  path: 'admin/users/:id',
+                  component: Component,
+                  data: { title: 'user' },
+                },
+                { path: 'lazy', loadChildren: () => Promise.resolve({}) },
+                { path: '**', redirectTo: '/home' },
+              ],
+              '/products/electronics/laptop',
+            ),
           },
           {
             provide: ActivatedRoute,
@@ -1297,13 +1451,18 @@ describe('NgxTranslateRoutesHelperService', () => {
                   firstChild: {
                     snapshot: {
                       data: { title: 'item' },
-                      params: { category: 'electronics', item: 'laptop', userId: 'john123', id: '456' },
+                      params: {
+                        category: 'electronics',
+                        item: 'laptop',
+                        userId: 'john123',
+                        id: '456',
+                      },
                       queryParams: {
                         search: 'gaming laptop',
                         filter: 'price',
                         sort: 'rating',
                         page: '2',
-                        limit: '20'
+                        limit: '20',
                       },
                       paramMap: {
                         get: (key: string) => {
@@ -1311,22 +1470,24 @@ describe('NgxTranslateRoutesHelperService', () => {
                             category: 'electronics',
                             item: 'laptop',
                             userId: 'john123',
-                            id: '456'
+                            id: '456',
                           }
                           return params[key] || null
-                        }
-                      }
-                    }
-                  }
-                }
+                        },
+                      },
+                    },
+                  },
+                },
               },
             },
           },
           {
             provide: Location,
-            useValue: createLocationMock('/es/productos/electronica/portatil?search=portatil&filter=precio'),
+            useValue: createLocationMock(
+              '/es/productos/electronica/portatil?search=portatil&filter=precio',
+            ),
           },
-          provideHttpClient(withInterceptorsFromDi()),
+          provideHttpClient(withXhr(), withInterceptorsFromDi()),
           provideHttpClientTesting(),
         ],
       })
@@ -1340,7 +1501,7 @@ describe('NgxTranslateRoutesHelperService', () => {
     it('should cycle through all languages and execute all main methods', fakeAsync(() => {
       const languages = ['en', 'es', 'fr', 'de']
 
-      languages.forEach(lang => {
+      languages.forEach((lang) => {
         translate.use(lang)
         tick(100)
 
@@ -1409,10 +1570,10 @@ describe('NgxTranslateRoutesHelperService', () => {
 
         // Mixed parameters
         '/en/user/john/settings/privacy',
-        '/es/usuario/john/configuracion/privacidad'
+        '/es/usuario/john/configuracion/privacidad',
       ]
 
-      urlPatterns.forEach(url => {
+      urlPatterns.forEach((url) => {
         const result = service.detectLanguageFromTranslatedUrl(url)
         expect(result).toBeDefined()
         tick(10)
@@ -1427,10 +1588,10 @@ describe('NgxTranslateRoutesHelperService', () => {
         { lang: 'en', iterations: 5 },
         { lang: 'es', iterations: 5 },
         { lang: 'fr', iterations: 3 },
-        { lang: 'de', iterations: 2 }
+        { lang: 'de', iterations: 2 },
       ]
 
-      scenarios.forEach(scenario => {
+      scenarios.forEach((scenario) => {
         translate.use(scenario.lang)
         tick(100)
 
@@ -1455,11 +1616,19 @@ describe('NgxTranslateRoutesHelperService', () => {
     // Test 4: Title translation with complex nested routes
     it('should handle title translations for complex nested routes', fakeAsync(() => {
       const titleScenarios = [
-        'home', 'about', 'products', 'category', 'item',
-        'search', 'profile', 'settings', 'admin', 'dashboard'
+        'home',
+        'about',
+        'products',
+        'category',
+        'item',
+        'search',
+        'profile',
+        'settings',
+        'admin',
+        'dashboard',
       ]
 
-      titleScenarios.forEach(titleKey => {
+      titleScenarios.forEach((titleKey) => {
         translate.use('en')
         tick(50)
         service.translateTitle()
@@ -1512,7 +1681,7 @@ describe('NgxTranslateRoutesHelperService', () => {
       try {
         // Slower language switching to avoid null store errors
         for (let cycle = 0; cycle < 2; cycle++) {
-          languages.forEach(lang => {
+          languages.forEach((lang) => {
             translate.use(lang)
             tick(300) // Even longer wait for translation to fully settle
 
@@ -1576,10 +1745,10 @@ describe('NgxTranslateRoutesHelperService', () => {
         decodeURIComponent('/test%20with%20spaces'),
         '/test/with-dashes_and_underscores',
         '/TEST/UPPERCASE',
-        '/test/MiXeDcAsE'
+        '/test/MiXeDcAsE',
       ]
 
-      edgeCaseUrls.forEach(url => {
+      edgeCaseUrls.forEach((url) => {
         try {
           service.detectLanguageFromTranslatedUrl(url)
           tick(20)
@@ -1620,7 +1789,7 @@ describe('NgxTranslateRoutesHelperService', () => {
               'titles.admin': 'Admin Dashboard',
               'params.search': 'searchQuery',
               'params.filter': 'categoryFilter',
-              'params.sort': 'sortBy'
+              'params.sort': 'sortBy',
             },
             es: {
               'routes.home': 'inicio',
@@ -1638,8 +1807,8 @@ describe('NgxTranslateRoutesHelperService', () => {
               'titles.admin': 'Panel de Administración',
               'params.search': 'consulta',
               'params.filter': 'filtroCategoria',
-              'params.sort': 'ordenarPor'
-            }
+              'params.sort': 'ordenarPor',
+            },
           }).withDefaultLanguage('en'),
           NgxTranslateRoutesModule.forRoot({
             enableRouteTranslate: true,
@@ -1655,34 +1824,69 @@ describe('NgxTranslateRoutesHelperService', () => {
         providers: [
           {
             provide: Router,
-            useValue: createRouterMock([
-              { path: '', redirectTo: '/home', pathMatch: 'full' },
-              { path: 'home', component: Component, data: { title: 'home' } },
-              { path: 'about', component: Component, data: { title: 'about' } },
-              { path: 'products', component: Component, data: { title: 'products' } },
-              { path: 'products/:category', component: Component, data: { title: 'category' } },
-              { path: 'products/:category/:item', component: Component, data: { title: 'item' } },
-              { path: 'search', component: Component, data: { title: 'search' } },
-              { path: 'profile/:userId', component: Component, data: { title: 'profile' } },
-              { path: 'admin', component: Component, data: { title: 'admin' } },
-              { path: 'admin/dashboard', component: Component, data: { title: 'admin' } },
-              { path: 'lazy', loadChildren: () => Promise.resolve({}) },
-              { path: '**', redirectTo: '/home' }
-            ], '/en/products/electronics/laptop'),
+            useValue: createRouterMock(
+              [
+                { path: '', redirectTo: '/home', pathMatch: 'full' },
+                { path: 'home', component: Component, data: { title: 'home' } },
+                {
+                  path: 'about',
+                  component: Component,
+                  data: { title: 'about' },
+                },
+                {
+                  path: 'products',
+                  component: Component,
+                  data: { title: 'products' },
+                },
+                {
+                  path: 'products/:category',
+                  component: Component,
+                  data: { title: 'category' },
+                },
+                {
+                  path: 'products/:category/:item',
+                  component: Component,
+                  data: { title: 'item' },
+                },
+                {
+                  path: 'search',
+                  component: Component,
+                  data: { title: 'search' },
+                },
+                {
+                  path: 'profile/:userId',
+                  component: Component,
+                  data: { title: 'profile' },
+                },
+                {
+                  path: 'admin',
+                  component: Component,
+                  data: { title: 'admin' },
+                },
+                {
+                  path: 'admin/dashboard',
+                  component: Component,
+                  data: { title: 'admin' },
+                },
+                { path: 'lazy', loadChildren: () => Promise.resolve({}) },
+                { path: '**', redirectTo: '/home' },
+              ],
+              '/en/products/electronics/laptop',
+            ),
           },
           {
             provide: ActivatedRoute,
             useValue: createActivatedRouteMock(
               { title: 'profile' },
               { userId: 'john123', category: 'electronics', item: 'laptop' },
-              { search: 'gaming', filter: 'price', sort: 'rating', page: '1' }
+              { search: 'gaming', filter: 'price', sort: 'rating', page: '1' },
             ),
           },
           {
             provide: Location,
-            useValue: createLocationMock()
+            useValue: createLocationMock(),
           },
-          provideHttpClient(withInterceptorsFromDi()),
+          provideHttpClient(withXhr(), withInterceptorsFromDi()),
           provideHttpClientTesting(),
         ],
       })
@@ -1704,10 +1908,10 @@ describe('NgxTranslateRoutesHelperService', () => {
         { url: '/search?query=test', lang: null },
         { url: '/profile/123', lang: null },
         { url: '/en/products/456/reviews', lang: 'en' },
-        { url: '/es/perfil-usuario/789', lang: 'es' }
+        { url: '/es/perfil-usuario/789', lang: 'es' },
       ]
 
-      testScenarios.forEach(scenario => {
+      testScenarios.forEach((scenario) => {
         try {
           service.detectLanguageFromTranslatedUrl(scenario.url)
           tick(50)
@@ -1725,7 +1929,7 @@ describe('NgxTranslateRoutesHelperService', () => {
         const languages = ['en', 'es']
 
         // Safe translation cycles to exercise different code paths
-        languages.forEach(lang => {
+        languages.forEach((lang) => {
           translate.use(lang)
           tick(200) // Longer wait to ensure stability
 
@@ -1772,10 +1976,10 @@ describe('NgxTranslateRoutesHelperService', () => {
         { title: 'nonexistent' },
         { skipTranslation: true },
         {},
-        { title: null }
+        { title: null },
       ]
 
-      configs.forEach(config => {
+      configs.forEach((config) => {
         activatedRoute.firstChild.firstChild.firstChild.snapshot.data = config
 
         try {
@@ -1798,11 +2002,12 @@ describe('NgxTranslateRoutesHelperService', () => {
         { search: 'test', filter: 'category' },
         {},
         { page: '1', sort: 'name' },
-        { invalid: null, empty: '' }
+        { invalid: null, empty: '' },
       ]
 
-      queryParams.forEach(params => {
-        activatedRoute.firstChild.firstChild.firstChild.snapshot.queryParams = params
+      queryParams.forEach((params) => {
+        activatedRoute.firstChild.firstChild.firstChild.snapshot.queryParams =
+          params
 
         try {
           service.translateRoute()
@@ -1825,10 +2030,10 @@ describe('NgxTranslateRoutesHelperService', () => {
         'UPPERCASE',
         'camelCase',
         'path.with.dots',
-        'path_with_underscores'
+        'path_with_underscores',
       ]
 
-      testPaths.forEach(path => {
+      testPaths.forEach((path) => {
         try {
           service.detectLanguageFromTranslatedUrl(`/en/${path}`)
           tick(30)
@@ -1865,10 +2070,10 @@ describe('NgxTranslateRoutesHelperService', () => {
         '/en/path',
         '/es/ruta',
         '/products/123',
-        '/category/456/item/789'
+        '/category/456/item/789',
       ]
 
-      urlPatterns.forEach(url => {
+      urlPatterns.forEach((url) => {
         try {
           service.detectLanguageFromTranslatedUrl(url)
           tick(30)
@@ -1889,8 +2094,9 @@ describe('NgxTranslateRoutesHelperService', () => {
 
       // Test title translation with different configurations
       const titleConfigs = ['home', 'about', 'products']
-      titleConfigs.forEach(title => {
-        activatedRoute.firstChild.firstChild.firstChild.snapshot.data.title = title
+      titleConfigs.forEach((title) => {
+        activatedRoute.firstChild.firstChild.firstChild.snapshot.data.title =
+          title
 
         try {
           service.translateTitle()
@@ -1952,23 +2158,24 @@ describe('NgxTranslateRoutesHelperService', () => {
           TranslateTestingModule.withTranslations({
             en: {
               'routes.test': 'test',
-              'titles.test': 'Test Title'
-            }
+              'titles.test': 'Test Title',
+            },
           }).withDefaultLanguage('en'),
           NgxTranslateRoutesModule.forRoot({
             routePrefix: 'routes',
             titlePrefix: 'titles',
             availableLanguages: ['en'],
             enableRouteTranslate: true,
-            enableTitleTranslate: true
+            enableTitleTranslate: true,
           }),
         ],
         providers: [
           {
             provide: Router,
-            useValue: createRouterMock([
-              { path: 'test', component: Component, data: { title: 'test' } }
-            ], '/test'),
+            useValue: createRouterMock(
+              [{ path: 'test', component: Component, data: { title: 'test' } }],
+              '/test',
+            ),
           },
           {
             provide: ActivatedRoute,
@@ -1979,18 +2186,18 @@ describe('NgxTranslateRoutesHelperService', () => {
                     snapshot: {
                       data: { title: 'test' },
                       params: {},
-                      queryParams: {}
-                    }
-                  }
-                }
-              }
+                      queryParams: {},
+                    },
+                  },
+                },
+              },
             },
           },
           {
             provide: Location,
-            useValue: createLocationMock('/test')
+            useValue: createLocationMock('/test'),
           },
-          provideHttpClient(withInterceptorsFromDi()),
+          provideHttpClient(withXhr(), withInterceptorsFromDi()),
           provideHttpClientTesting(),
         ],
       })
@@ -2021,7 +2228,7 @@ describe('NgxTranslateRoutesHelperService', () => {
 
     it('should call detectLanguageFromTranslatedUrl with simple paths', fakeAsync(() => {
       const paths = ['/test', '/simple', '/path']
-      paths.forEach(path => {
+      paths.forEach((path) => {
         try {
           service.detectLanguageFromTranslatedUrl(path)
           tick(20)
@@ -2050,7 +2257,9 @@ describe('NgxTranslateRoutesHelperService', () => {
       const activatedRoute = TestBed.inject(ActivatedRoute) as any
 
       // Test with null title
-      activatedRoute.firstChild.firstChild.firstChild.snapshot.data = { title: null }
+      activatedRoute.firstChild.firstChild.firstChild.snapshot.data = {
+        title: null,
+      }
       service.translateTitle()
       tick(50)
 
@@ -2060,7 +2269,9 @@ describe('NgxTranslateRoutesHelperService', () => {
       tick(50)
 
       // Test with skipTranslation
-      activatedRoute.firstChild.firstChild.firstChild.snapshot.data = { skipTranslation: true }
+      activatedRoute.firstChild.firstChild.firstChild.snapshot.data = {
+        skipTranslation: true,
+      }
       service.translateTitle()
       tick(50)
 
@@ -2076,7 +2287,7 @@ describe('NgxTranslateRoutesHelperService', () => {
 
       // Test language detection with various patterns
       const patterns = ['test', '123', 'path-with-dashes']
-      patterns.forEach(pattern => {
+      patterns.forEach((pattern) => {
         try {
           service.detectLanguageFromTranslatedUrl(`/${pattern}`)
           tick(20)
@@ -2137,10 +2348,10 @@ describe('NgxTranslateRoutesHelperService', () => {
         '/en/',
         '/en/test',
         '/test/123/nested',
-        '/path?query=value'
+        '/path?query=value',
       ]
 
-      edgeCases.forEach(url => {
+      edgeCases.forEach((url) => {
         try {
           service.detectLanguageFromTranslatedUrl(url)
           tick(10)
@@ -2155,15 +2366,15 @@ describe('NgxTranslateRoutesHelperService', () => {
     it('should exercise regex patterns and validation', fakeAsync(() => {
       // Test patterns that exercise internal regex
       const testValues = [
-        '123',           // numeric pattern
-        'abc',           // text pattern
-        'test-path',     // dash pattern
-        'camelCase',     // camelCase pattern
-        'UPPERCASE',     // uppercase pattern
-        '00000000-0000-0000-0000-000000000000' // UUID pattern
+        '123', // numeric pattern
+        'abc', // text pattern
+        'test-path', // dash pattern
+        'camelCase', // camelCase pattern
+        'UPPERCASE', // uppercase pattern
+        '00000000-0000-0000-0000-000000000000', // UUID pattern
       ]
 
-      testValues.forEach(value => {
+      testValues.forEach((value) => {
         try {
           service.detectLanguageFromTranslatedUrl(`/${value}`)
           tick(10)
@@ -2215,7 +2426,7 @@ describe('NgxTranslateRoutesHelperService', () => {
             provide: ActivatedRoute,
             useValue: createActivatedRouteMock(),
           },
-          provideHttpClient(withInterceptorsFromDi()),
+          provideHttpClient(withXhr(), withInterceptorsFromDi()),
           provideHttpClientTesting(),
         ],
       })
@@ -2230,7 +2441,10 @@ describe('NgxTranslateRoutesHelperService', () => {
       translate.use('es')
       tick(10)
 
-      const result = service['shouldTranslateQueryParams']({ page: '1', sort: 'desc' })
+      const result = service['shouldTranslateQueryParams']({
+        page: '1',
+        sort: 'desc',
+      })
       expect(result).toBe(true)
     }))
 

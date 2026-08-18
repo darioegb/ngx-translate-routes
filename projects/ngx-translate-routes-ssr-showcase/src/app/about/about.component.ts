@@ -1,10 +1,16 @@
-import { Component, inject, OnInit } from '@angular/core'
+import {
+  Component,
+  inject,
+  OnInit,
+  ChangeDetectionStrategy,
+} from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 
 @Component({
   selector: 'app-about',
   standalone: true,
   templateUrl: './about.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./about.component.scss'],
 })
 export class AboutComponent implements OnInit {
