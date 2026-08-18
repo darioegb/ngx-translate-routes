@@ -14,10 +14,10 @@ import { DEFAULT_CONFIG } from './ngx-translate-routes.constants'
 export function provideNgxTranslateRoutes(
   config?: NgxTranslateRoutesConfig,
 ): EnvironmentProviders {
-  if (config?.enableSsrRouteTranslation !== undefined || config?.availableLanguages !== undefined) {
+  if (config?.enableSsrRouteTranslation !== undefined) {
     throw new Error(
-      '[ngx-translate-routes] The `enableSsrRouteTranslation` and `availableLanguages` options ' +
-      'have been removed in v3. Use the `ngx-translate-routes/ssr` secondary entry point instead.',
+      '[ngx-translate-routes] The `enableSsrRouteTranslation` option has been removed in v3. ' +
+      'Use the `ngx-translate-routes/ssr` secondary entry point instead.',
     )
   }
 
