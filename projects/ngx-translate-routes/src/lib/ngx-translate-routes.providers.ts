@@ -1,9 +1,9 @@
 import {
-  APP_INITIALIZER,
   EnvironmentProviders,
   inject,
   makeEnvironmentProviders,
   PLATFORM_ID,
+  provideAppInitializer,
 } from '@angular/core'
 import { isPlatformBrowser, isPlatformServer } from '@angular/common'
 import { NGX_TRANSLATE_ROUTES_CONFIG } from './ngx-translate-routes.token'
@@ -14,26 +14,29 @@ import { DEFAULT_CONFIG } from './ngx-translate-routes.constants'
 export function provideNgxTranslateRoutes(
   config?: NgxTranslateRoutesConfig,
 ): EnvironmentProviders {
+  if (config?.enableSsrRouteTranslation !== undefined || config?.availableLanguages !== undefined) {
+    throw new Error(
+      '[ngx-translate-routes] The `enableSsrRouteTranslation` and `availableLanguages` options ' +
+      'have been removed in v3. Use the `ngx-translate-routes/ssr` secondary entry point instead.',
+    )
+  }
+
   const providers = [
     {
       provide: NGX_TRANSLATE_ROUTES_CONFIG,
       useValue: { ...DEFAULT_CONFIG, ...config },
     },
-    {
-      provide: APP_INITIALIZER,
-      useFactory: () => async () => {
-        const platformId = inject(PLATFORM_ID)
-        const translateRoutesService = inject(NgxTranslateRoutesService)
+    provideAppInitializer(async () => {
+      const platformId = inject(PLATFORM_ID)
+      const translateRoutesService = inject(NgxTranslateRoutesService)
 
-        if (isPlatformBrowser(platformId)) {
-          translateRoutesService.init()
-        } else if (isPlatformServer(platformId)) {
-          await translateRoutesService.initForSsr()
-          translateRoutesService.init()
-        }
-      },
-      multi: true,
-    },
+      if (isPlatformBrowser(platformId)) {
+        translateRoutesService.init()
+      } else if (isPlatformServer(platformId)) {
+        await translateRoutesService.initForSsr()
+        translateRoutesService.init()
+      }
+    }),
   ]
 
   return makeEnvironmentProviders(providers)
