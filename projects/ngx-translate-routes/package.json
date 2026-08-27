@@ -1,6 +1,6 @@
 {
   "name": "ngx-translate-routes",
-  "version": "3.0.0",
+  "version": "2.4.0",
   "author": {
     "name": "Dario E Gonzalez B",
     "email": "darioegb@gmail.com"
@@ -29,7 +29,7 @@
   "bugs": {
     "url": "https://github.com/darioegb/ngx-translate-routes/issues"
   },
-  "homepage": "https://github.com/darioegb/ngx-translate-routes#readme",
+  "homepage": "https://darioegb.github.io/ngx-translate-routes/",
   "peerDependencies": {
     "@angular/common": ">=18.0.0",
     "@angular/core": ">=18.0.0",
