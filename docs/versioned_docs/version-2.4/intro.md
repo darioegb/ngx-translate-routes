@@ -18,11 +18,11 @@ sidebar_position: 1
 - ✅ **Route translation** — automatically replaces URL segments with translated values
 - ✅ **Title translation** — sets `document.title` from your translation files
 - ✅ **Language in path** — prepends the active locale to URLs (`/es/mi-ruta`)
-- ✅ **SSR support** — works with `@angular/ssr`
+- ✅ **SSR support** — works with Angular Universal / `@angular/ssr`
 - ✅ **Query param translation** — optionally translates query parameter names
 - ✅ **Custom strategies** — override translation logic per route
 - ✅ **Multiple cache strategies** — localStorage or cookies
-- ✅ **Standalone** — first-class support; NgModule API is deprecated in v3
+- ✅ **Standalone & NgModule** — works with both app styles
 
 ## Live Examples
 
@@ -47,7 +47,6 @@ User navigates to /about
 
 | ngx-translate-routes | Angular |
 |---|---|
-| 3.0.x | 18.x – 22.x |
 | 2.4.x | 16.x – 21.x |
 | 2.3.x | 16.x – 21.x |
 | 2.0.x – 2.2.x | 16.x – 19.x |

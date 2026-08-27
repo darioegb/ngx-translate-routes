@@ -1,18 +1,14 @@
 ---
 id: module
-title: NgModule App (deprecated)
+title: Aplicación NgModule
 sidebar_position: 2
 ---
 
-# Setup: NgModule App
+# Configuración: Aplicación NgModule
 
-:::warning Deprecated
-`NgxTranslateRoutesModule` is deprecated in v3. Migrate to [`provideNgxTranslateRoutes()`](standalone) — see the [migration guide](../migration/v2-to-v3).
-:::
+Para aplicaciones Angular que usan la arquitectura clásica de `NgModule`.
 
-For Angular apps still using the classic `NgModule` architecture.
-
-## Basic Setup
+## Configuración Básica
 
 ```typescript title="app.module.ts"
 import { NgModule } from '@angular/core'
@@ -51,7 +47,7 @@ export const httpLoaderFactory = (http: HttpClient) =>
 export class AppModule {}
 ```
 
-## With Custom Configuration
+## Con Configuración Personalizada
 
 ```typescript
 NgxTranslateRoutesModule.forRoot({
@@ -62,7 +58,7 @@ NgxTranslateRoutesModule.forRoot({
 ```
 
 :::caution
-Import `NgxTranslateRoutesModule` only once in your root `AppModule`. Importing it in feature modules will throw an error.
+Importa `NgxTranslateRoutesModule` solo una vez en el `AppModule` raíz. Importarlo en módulos de funcionalidad lanzará un error.
 :::
 
-See [Configuration](../configuration) for all available options.
+Consulta la [Configuración](../configuration) para ver todas las opciones disponibles.
