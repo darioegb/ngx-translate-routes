@@ -34,8 +34,6 @@ export const appConfig: ApplicationConfig = {
     provideNgxTranslateRoutes({
       enableLanguageInPath: true,
       includeDefaultLanguageInPath: true,
-      enableSsrRouteTranslation: true,
-      availableLanguages: ['en', 'es'],
     }),
   ],
 }
