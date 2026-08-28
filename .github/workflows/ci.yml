@@ -29,9 +29,8 @@ jobs:
       - name: Run linting
         run: pnpm lint
 
-  test_karma:
+  test_vitest:
     runs-on: ubuntu-latest
-    container: trion/ng-cli-karma
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -46,16 +45,7 @@ jobs:
           cache: pnpm
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-      - name: Cache Puppeteer browsers
-        uses: actions/cache@v5
-        with:
-          path: ~/.cache/puppeteer
-          key: puppeteer-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            puppeteer-${{ runner.os }}-
-      - name: Install Chrome for Karma
-        run: pnpm exec puppeteer browsers install chrome
-      - name: Run Karma tests
+      - name: Run Vitest tests
         run: pnpm test:prod
       - name: Upload coverage
         uses: actions/upload-artifact@v4
@@ -67,7 +57,7 @@ jobs:
   sonarcloud_check:
     name: SonarCloud
     runs-on: ubuntu-latest
-    needs: [test_lint, test_karma]
+    needs: [test_lint, test_vitest]
     if: github.event_name == 'pull_request' || github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
     env:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -83,7 +73,7 @@ jobs:
           key: '${{ github.job }}'
       - uses: actions/download-artifact@v4
         with:
-          name: test_karma
+          name: test_vitest
       - name: SonarCloud Scan
         # PRs from bots (e.g. Copilot coding agent) don't get repo secrets, so this
         # step is skipped there; SONAR_TOKEN resolves to empty.
@@ -94,7 +84,7 @@ jobs:
 
   release:
     runs-on: ubuntu-latest
-    needs: [test_lint, test_karma]
+    needs: [test_lint, test_vitest]
     if: (github.event_name == 'push' && github.ref == 'refs/heads/main') || github.event_name == 'workflow_dispatch'
     permissions:
       contents: write
