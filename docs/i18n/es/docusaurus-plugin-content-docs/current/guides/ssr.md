@@ -9,12 +9,12 @@ sidebar_position: 2
 NgxTranslateRoutes es compatible con `@angular/ssr` mediante el entry point dedicado `ngx-translate-routes/ssr`.
 
 :::info Cambio en v3
-`enableSsrRouteTranslation` y `availableLanguages` se han movido fuera de `provideNgxTranslateRoutes()`. Usa `provideNgxTranslateRoutesSsr()` en tu configuración de servidor. Consulta la [guía de migración](../migration/v2-to-v3).
+`enableSsrRouteTranslation` y `availableLanguages` se han movido fuera de `provideNgxTranslateRoutes()`. Usa `provideNgxTranslateRoutesSsr()` en tu **shared** `app.config.ts`. Consulta la [guía de migración](../migration/v2-to-v3).
 :::
 
-## app.config.ts (navegador)
+## app.config.ts (shared)
 
-Sin opciones SSR — la configuración del browser se mantiene liviana:
+`provideNgxTranslateRoutesSsr()` maneja browser y servidor internamente vía `PLATFORM_ID` — va en el config compartido, no en `app.config.server.ts`:
 
 ```typescript title="app.config.ts"
 import { ApplicationConfig } from '@angular/core'
@@ -24,7 +24,8 @@ import { provideClientHydration } from '@angular/platform-browser'
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core'
 import { TranslateHttpLoader } from '@ngx-translate/http-loader'
 import { importProvidersFrom } from '@angular/core'
-import { provideNgxTranslateRoutes } from 'ngx-translate-routes'
+// highlight-next-line
+import { provideNgxTranslateRoutesSsr } from 'ngx-translate-routes/ssr'
 import { routes } from './app.routes'
 
 export const httpLoaderFactory = (http: HttpClient) =>
@@ -45,32 +46,27 @@ export const appConfig: ApplicationConfig = {
         },
       }),
     ),
-    // highlight-next-line
-    provideNgxTranslateRoutes({ enableLanguageInPath: true }),
+    // highlight-start
+    provideNgxTranslateRoutesSsr({
+      enableLanguageInPath: true,
+      availableLanguages: ['en', 'es'],
+    }),
+    // highlight-end
   ],
 }
 ```
 
 ## app.config.server.ts
 
-Importa desde `ngx-translate-routes/ssr` y pasa la lista de idiomas:
+No se necesitan cambios aquí — `provideNgxTranslateRoutesSsr` en el config compartido ya gestiona el contexto servidor:
 
 ```typescript title="app.config.server.ts"
 import { mergeApplicationConfig, ApplicationConfig } from '@angular/core'
 import { provideServerRendering } from '@angular/platform-server'
-// highlight-next-line
-import { provideNgxTranslateRoutesSsr } from 'ngx-translate-routes/ssr'
 import { appConfig } from './app.config'
 
 const serverConfig: ApplicationConfig = {
-  providers: [
-    provideServerRendering(),
-    // highlight-start
-    provideNgxTranslateRoutesSsr({
-      availableLanguages: ['en', 'es'],
-    }),
-    // highlight-end
-  ],
+  providers: [provideServerRendering()],
 }
 
 export const config = mergeApplicationConfig(appConfig, serverConfig)

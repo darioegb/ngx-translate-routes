@@ -7,7 +7,7 @@ import {
 } from '@angular/platform-browser'
 import { provideHttpClient, HttpClient, withFetch } from '@angular/common/http'
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core'
-import { provideNgxTranslateRoutes } from 'projects/ngx-translate-routes/src/public-api'
+import { provideNgxTranslateRoutesSsr } from 'projects/ngx-translate-routes/ssr/public-api'
 import { TranslateHttpLoader } from '@ngx-translate/http-loader'
 
 import { routes } from './app.routes'
@@ -31,9 +31,10 @@ export const appConfig: ApplicationConfig = {
         },
       }),
     ),
-    provideNgxTranslateRoutes({
+    provideNgxTranslateRoutesSsr({
       enableLanguageInPath: true,
       includeDefaultLanguageInPath: true,
+      availableLanguages: ['en', 'es'],
     }),
   ],
 }

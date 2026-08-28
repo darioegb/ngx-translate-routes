@@ -18,23 +18,6 @@ export interface NgxTranslateRoutesSsrConfig extends NgxTranslateRoutesConfig {
   availableLanguages?: string[]
 }
 
-/**
- * Provides `ngx-translate-routes` for applications that use `@angular/ssr`.
- *
- * Place this in your shared `app.config.ts` (not `app.config.server.ts`).
- * It handles both browser and server contexts internally via `PLATFORM_ID`.
- *
- * @example
- * // app.config.ts
- * export const appConfig: ApplicationConfig = {
- *   providers: [
- *     provideNgxTranslateRoutesSsr({
- *       enableLanguageInPath: true,
- *       availableLanguages: ['en', 'es'],
- *     }),
- *   ],
- * }
- */
 export function provideNgxTranslateRoutesSsr(
   config?: NgxTranslateRoutesSsrConfig,
 ): EnvironmentProviders {
