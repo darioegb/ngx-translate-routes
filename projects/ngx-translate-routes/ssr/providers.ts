@@ -19,18 +19,17 @@ export interface NgxTranslateRoutesSsrConfig extends NgxTranslateRoutesConfig {
 }
 
 /**
- * Provides `ngx-translate-routes` for applications that require
- * server-side route translation (SSR / Universal).
+ * Provides `ngx-translate-routes` for applications that use `@angular/ssr`.
  *
- * Use this provider in your `app.config.server.ts` instead of
- * `provideNgxTranslateRoutes()`.
+ * Place this in your shared `app.config.ts` (not `app.config.server.ts`).
+ * It handles both browser and server contexts internally via `PLATFORM_ID`.
  *
  * @example
- * // app.config.server.ts
- * export const serverConfig: ApplicationConfig = {
+ * // app.config.ts
+ * export const appConfig: ApplicationConfig = {
  *   providers: [
  *     provideNgxTranslateRoutesSsr({
- *       enableRouteTranslate: true,
+ *       enableLanguageInPath: true,
  *       availableLanguages: ['en', 'es'],
  *     }),
  *   ],
