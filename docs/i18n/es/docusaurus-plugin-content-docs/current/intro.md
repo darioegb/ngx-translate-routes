@@ -17,11 +17,11 @@ sidebar_position: 1
 - ✅ **Traducción de rutas** — reemplaza los segmentos de URL con sus traducciones
 - ✅ **Traducción de títulos** — actualiza `document.title` desde tus archivos de traducción
 - ✅ **Idioma en la URL** — agrega el locale activo a las URLs (`/es/mi-ruta`)
-- ✅ **Soporte SSR** — compatible con Angular Universal / `@angular/ssr`
+- ✅ **Soporte SSR** — compatible con `@angular/ssr`
 - ✅ **Traducción de query params** — traduce los nombres de parámetros de consulta
 - ✅ **Estrategias personalizadas** — sobreescribe la lógica de traducción por ruta
 - ✅ **Múltiples estrategias de caché** — localStorage o cookies
-- ✅ **Standalone y NgModule** — funciona con ambos estilos de aplicación
+- ✅ **Standalone** — soporte de primera clase; la API NgModule está deprecada en v3
 
 ## Ejemplos en Vivo
 
@@ -46,6 +46,7 @@ El usuario navega a /about
 
 | ngx-translate-routes | Angular |
 |---|---|
+| 3.0.x | 18.x – 22.x |
 | 2.4.x | 16.x – 21.x |
 | 2.3.x | 16.x – 21.x |
 | 2.0.x – 2.2.x | 16.x – 19.x |
