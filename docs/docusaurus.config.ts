@@ -133,7 +133,7 @@ const config: Config = {
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} NgxTranslateRoutes. Built with Docusaurus.`,
+      copyright: `Copyright © ${new Date().getFullYear()} Dario Gonzalez. Released under the MIT License.`,
     },
     prism: {
       theme: prismThemes.github,
