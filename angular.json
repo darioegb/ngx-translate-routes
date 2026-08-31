@@ -38,6 +38,7 @@
             "tsConfig": "projects/ngx-translate-routes/tsconfig.spec.json",
             "buildTarget": "ngx-translate-routes:build-for-test",
             "setupFiles": ["projects/ngx-translate-routes/src/test-setup.ts"],
+            "include": ["**/*.spec.ts", "../ssr/**/*.spec.ts"],
             "runner": "vitest"
           }
         },
