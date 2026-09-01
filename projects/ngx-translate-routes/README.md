@@ -15,4 +15,4 @@ These examples cover both Client-Side Rendering (CSR) and Server-Side Rendering 
 
 ### Documentation
 
-[Official Documentation](https://github.com/darioegb/ngx-translate-routes)
+[Official Documentation](https://darioegb.github.io/ngx-translate-routes/)

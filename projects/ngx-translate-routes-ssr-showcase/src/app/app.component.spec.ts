@@ -4,6 +4,7 @@ import {
   HttpClient,
   provideHttpClient,
   withInterceptorsFromDi,
+  withXhr,
 } from '@angular/common/http'
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core'
 import { httpLoaderFactory } from './app.config'
@@ -37,7 +38,7 @@ describe('AppComponent', () => {
             },
           },
         },
-        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClient(withXhr(), withInterceptorsFromDi()),
       ],
     }).compileComponents()
   })

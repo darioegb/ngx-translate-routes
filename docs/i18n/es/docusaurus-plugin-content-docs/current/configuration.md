@@ -21,8 +21,8 @@ Todas las opciones pueden pasarse a `provideNgxTranslateRoutes(config)` y `NgxTr
 | `titlePrefix` | `string` | `'titles'` | Clave raíz en el archivo de traducción para títulos |
 | `cacheMethod` | `'localStorage' \| 'cookies'` | `'localStorage'` | Backend de almacenamiento |
 | `cookieExpirationDays` | `number` | `30` | TTL de la cookie cuando `cacheMethod` es `'cookies'` |
-| `enableSsrRouteTranslation` | `boolean` | `false` | Activa el registro de rutas en SSR |
-| `availableLanguages` | `string[]` | `['en']` | Idiomas disponibles (usado para detección en SSR) |
+| `enableSsrRouteTranslation` | `boolean` | `false` | ⚠️ **Eliminado en v3** — usa [`provideNgxTranslateRoutesSsr()`](guides/ssr) |
+| `availableLanguages` | `string[]` | `['en']` | Idiomas para detección de URL en SSR. También se usa como fallback en browser cuando `TranslateService.langs` está vacío |
 | `onLanguageChange` | `() => void` | `undefined` | Callback al cambiar idioma y re-traducir |
 | `routeTranslationStrategy` | `Function` | `undefined` | Función personalizada: `(route: string) => string` |
 | `routesUsingStrategy` | `string[]` | `[]` | Segmentos donde aplica la función personalizada |

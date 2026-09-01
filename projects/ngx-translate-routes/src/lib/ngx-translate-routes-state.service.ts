@@ -4,8 +4,9 @@ import {
   inject,
   TransferState,
   makeStateKey,
+  DOCUMENT
 } from '@angular/core'
-import { isPlatformBrowser, isPlatformServer, DOCUMENT } from '@angular/common'
+import { isPlatformBrowser, isPlatformServer } from '@angular/common'
 import { RoutePath } from './ngx-translate-routes.interfaces'
 import {
   lastRouteKey,

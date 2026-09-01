@@ -14,6 +14,8 @@
 ![npm bundle size](https://img.shields.io/bundlephobia/minzip/ngx-translate-routes?labelColor=%235C5C5C&color=%2320AA1B)
 ![NPM Version](https://img.shields.io/npm/v/ngx-translate-routes?label=npm%20package&labelColor=%235C5C5C&color=%2320AA1B)
 
+📖 **[Official Documentation](https://darioegb.github.io/ngx-translate-routes/)**
+
 
 ## Features
 

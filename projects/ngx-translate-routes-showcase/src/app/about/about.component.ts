@@ -1,4 +1,9 @@
-import { Component, inject, OnInit } from '@angular/core'
+import {
+  Component,
+  inject,
+  OnInit,
+  ChangeDetectionStrategy,
+} from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { firstValueFrom } from 'rxjs/internal/firstValueFrom'
 
@@ -7,6 +12,7 @@ import { firstValueFrom } from 'rxjs/internal/firstValueFrom'
   templateUrl: './about.component.html',
   styleUrls: ['./about.component.scss'],
   // eslint-disable-next-line @angular-eslint/prefer-standalone
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class AboutComponent implements OnInit {

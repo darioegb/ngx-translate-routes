@@ -5,6 +5,7 @@ import {
   HttpClient,
   provideHttpClient,
   withInterceptorsFromDi,
+  withXhr,
 } from '@angular/common/http'
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core'
 import { TranslateHttpLoader } from '@ngx-translate/http-loader'
@@ -49,6 +50,6 @@ export const httpLoaderFactory = (http: HttpClient) =>
       includeDefaultLanguageInPath: true,
     }),
   ],
-  providers: [provideHttpClient(withInterceptorsFromDi())],
+  providers: [provideHttpClient(withXhr(), withInterceptorsFromDi())],
 })
 export class AppModule {}

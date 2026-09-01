@@ -1,12 +1,16 @@
 ---
 id: module
-title: NgModule App
+title: NgModule App (deprecated)
 sidebar_position: 2
 ---
 
 # Setup: NgModule App
 
-For Angular apps using the classic `NgModule` architecture.
+:::warning Deprecated
+`NgxTranslateRoutesModule` is deprecated in v3. Migrate to [`provideNgxTranslateRoutes()`](standalone) — see the [migration guide](../migration/v2-to-v3).
+:::
+
+For Angular apps still using the classic `NgModule` architecture.
 
 ## Basic Setup
 

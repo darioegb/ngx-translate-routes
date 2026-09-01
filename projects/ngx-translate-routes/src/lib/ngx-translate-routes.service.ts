@@ -1,5 +1,5 @@
-import { Location, DOCUMENT } from '@angular/common'
-import { DestroyRef, Injectable, inject } from '@angular/core'
+import { Location } from '@angular/common'
+import { DestroyRef, Injectable, inject, DOCUMENT } from '@angular/core'
 import { TranslateService } from '@ngx-translate/core'
 import {
   Router,

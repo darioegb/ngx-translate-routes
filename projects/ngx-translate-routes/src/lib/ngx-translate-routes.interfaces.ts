@@ -10,6 +10,7 @@ export interface NgxTranslateRoutesConfig {
   titlePrefix?: string
   cacheMethod?: 'localStorage' | 'cookies'
   cookieExpirationDays?: number
+  /** @deprecated Use the `ngx-translate-routes/ssr` entry point instead. Throws at runtime in v3 when passed to `provideNgxTranslateRoutes()`. */
   enableSsrRouteTranslation?: boolean
   availableLanguages?: string[]
   onLanguageChange?: () => void
