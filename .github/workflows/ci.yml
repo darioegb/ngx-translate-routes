@@ -110,6 +110,8 @@ jobs:
           cache: pnpm
           registry-url: 'https://registry.npmjs.org'
       - run: pnpm install --frozen-lockfile
+      - name: Build package for semantic-release
+        run: pnpm ng build ngx-translate-routes
       - run: pnpm exec semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}

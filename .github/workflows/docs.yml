@@ -24,10 +24,7 @@ jobs:
           fetch-depth: 0
 
       - name: Install pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 9
-          run_install: false
+        uses: pnpm/action-setup@v6
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -45,7 +42,7 @@ jobs:
         working-directory: docs
 
       - name: Setup Pages
-        uses: actions/configure-pages@1f0c5cde4bc74cd7e1254d0cb4de8d49e9068c7a # v5
+        uses: actions/configure-pages@v5
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
