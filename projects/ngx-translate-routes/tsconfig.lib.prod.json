@@ -2,12 +2,18 @@
   "extends": "./tsconfig.lib.json",
   "compilerOptions": {
     "declarationMap": false,
-    "removeComments": true,
+    "removeComments": true
   },
   "angularCompilerOptions": {
     "compilationMode": "partial",
     "annotateForClosureCompiler": true,
     "strictMetadataEmit": true,
+    "extendedDiagnostics": {
+      "checks": {
+        "nullishCoalescingNotNullable": "suppress",
+        "optionalChainNotNullable": "suppress"
+      }
+    },
     "skipTemplateCodegen": true,
     "fullTemplateTypeCheck": true
   }

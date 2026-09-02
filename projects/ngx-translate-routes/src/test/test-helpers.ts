@@ -1,5 +1,28 @@
 import { Location } from '@angular/common'
+import { TranslateService } from '@ngx-translate/core'
+import { TranslateTestingModule, Translations } from 'ngx-translate-testing'
 import { Observable, of } from 'rxjs'
+
+/**
+ * Creates a TranslateService setup that provides the same instance in both the
+ * Angular module injector (via `importConfig`) and the environment injector
+ * (via `envProvider`). This is required in Angular 22 TestBed where
+ * `providedIn: 'root'` services can only access the environment injector.
+ */
+export function createTranslateSetup(translations: Translations, defaultLang = 'en') {
+  const testModule = TranslateTestingModule.withTranslations(translations).withDefaultLanguage(defaultLang)
+  const cachedProviders = testModule.providers
+  const translateService = (cachedProviders[0] as { useValue: TranslateService }).useValue
+  return {
+    /** Use in TestBed `imports` to get full TranslateModule support */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    importConfig: { ngModule: testModule.ngModule, providers: cachedProviders } as any,
+    /** Use in TestBed `providers` to expose TranslateService to the env injector */
+    envProvider: { provide: TranslateService, useValue: translateService },
+    /** Direct reference to the shared TranslateService instance */
+    translateService,
+  }
+}
 
 export function createRouterMock(
   config: unknown[] = [],
@@ -10,61 +33,43 @@ export function createRouterMock(
     config,
     events,
     url,
-    parseUrl: jasmine
-      .createSpy('parseUrl')
-      .and.callFake((urlToParse: string) => {
-        const segments = urlToParse
-          .split('/')
-          .filter((s) => s)
-          .map((path) => ({ path, parameters: {} }))
-        return {
-          root: {
-            children: {
-              primary: {
-                segments:
-                  segments.length > 0
-                    ? segments
-                    : [{ path: '', parameters: {} }],
-              },
+    parseUrl: vi.fn((urlToParse: string) => {
+      const segments = urlToParse
+        .split('/')
+        .filter((s) => s)
+        .map((path) => ({ path, parameters: {} }))
+      return {
+        root: {
+          children: {
+            primary: {
+              segments:
+                segments.length > 0
+                  ? segments
+                  : [{ path: '', parameters: {} }],
             },
           },
-        }
-      }),
-    createUrlTree: jasmine
-      .createSpy('createUrlTree')
-      .and.callFake((commands: unknown[]) => {
-        // Filter out falsy values (undefined, null, empty strings)
-        const filteredCommands = commands?.filter((cmd) => cmd) || []
+        },
+      }
+    }),
+    createUrlTree: vi.fn((commands: unknown[]) => {
+      const filteredCommands = commands?.filter((cmd) => cmd) || []
 
-        if (filteredCommands.length === 0) {
-          // Empty commands array - use current url
-          return { toString: () => url }
-        }
+      if (filteredCommands.length === 0) {
+        return { toString: () => url }
+      }
 
-        // Join commands and ensure proper leading slash
-        const joined = filteredCommands.join('/')
-        const newUrl = joined.startsWith('/') ? joined : '/' + joined
+      const joined = filteredCommands.join('/')
+      const newUrl = joined.startsWith('/') ? joined : '/' + joined
 
-        return {
-          toString: () => newUrl,
-        }
-      }),
-    navigateByUrl: jasmine
-      .createSpy('navigateByUrl')
-      .and.returnValue(Promise.resolve(true)),
-    navigate: jasmine
-      .createSpy('navigate')
-      .and.returnValue(Promise.resolve(true)),
+      return {
+        toString: () => newUrl,
+      }
+    }),
+    navigateByUrl: vi.fn().mockResolvedValue(true),
+    navigate: vi.fn().mockResolvedValue(true),
   }
 }
 
-/**
- * Creates an ActivatedRoute mock with nested children
- * @param data Route data
- * @param params Route params
- * @param queryParams Query params
- * @returns ActivatedRoute mock object
- */
 export function createActivatedRouteMock(
   data: Record<string, unknown> = {},
   params: Record<string, unknown> = {},
@@ -88,36 +93,19 @@ export function createActivatedRouteMock(
   }
 }
 
-/**
- * Creates a Location mock for testing
- * @param path Current path
- * @returns Location mock object
- */
-export function createLocationMock(
-  path = '/current-path',
-): jasmine.SpyObj<Location> {
+export function createLocationMock(path = '/current-path') {
   let currentPath = path
 
-  const spy = jasmine.createSpyObj('Location', [
-    'path',
-    'go',
-    'back',
-    'forward',
-    'prepareExternalUrl',
-    'replaceState',
-  ])
-
-  // Configure default return values
-  spy.path.and.callFake(() => currentPath)
-  spy.prepareExternalUrl.and.callFake((url: string) => url)
-  spy.replaceState.and.callFake((newPath: string) => {
-    currentPath = newPath
-  })
-  spy.go.and.callFake((newPath: string) => {
-    currentPath = newPath
-  })
-  spy.back.and.stub()
-  spy.forward.and.stub()
-
-  return spy
+  return {
+    path: vi.fn(() => currentPath),
+    go: vi.fn((newPath: string) => {
+      currentPath = newPath
+    }),
+    back: vi.fn(),
+    forward: vi.fn(),
+    prepareExternalUrl: vi.fn((url: string) => url),
+    replaceState: vi.fn((newPath: string) => {
+      currentPath = newPath
+    }),
+  } as unknown as ReturnType<typeof vi.fn> & Location
 }

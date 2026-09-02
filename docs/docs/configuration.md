@@ -24,8 +24,8 @@ All options can be passed to both `provideNgxTranslateRoutes(config)` and `NgxTr
 | `routesUsingStrategy` | `string[]` | `[]` | Route segments where `routeTranslationStrategy` applies |
 | `cacheMethod` | `'localStorage' \| 'cookies'` | `'localStorage'` | Storage backend for translated path history |
 | `cookieExpirationDays` | `number` | `30` | Cookie TTL when `cacheMethod` is `'cookies'` |
-| `enableSsrRouteTranslation` | `boolean` | `false` | Enable SSR-specific route registration |
-| `availableLanguages` | `string[]` | `['en']` | Languages the app supports (used for SSR detection) |
+| `enableSsrRouteTranslation` | `boolean` | `false` | ⚠️ **Removed from v3** — use [`provideNgxTranslateRoutesSsr()`](guides/ssr) |
+| `availableLanguages` | `string[]` | `['en']` | Languages for SSR URL detection. Also used as fallback in browser when `TranslateService.langs` is empty |
 | `onLanguageChange` | `() => void` | `undefined` | Callback fired after language change and re-translation |
 
 ## Defaults

@@ -6,28 +6,25 @@ sidebar_position: 1
 
 # Migrating from v2 to v3
 
-:::caution
-v3 is not yet released. This guide describes the planned breaking changes.
-:::
-
 ## Breaking Changes
 
 ### Angular 18+ required
 
-v3 drops support for Angular 16 and 17.
-
-Update your `package.json` peer dependency:
+v3 drops support for Angular 16 and 17. Update your peer dependency:
 
 ```json
-"@angular/core": "^18.0.0"
+"@angular/core": ">=18.0.0"
 ```
 
 ### SSR via secondary entry point
 
-SSR logic has been moved to a separate entry point to reduce browser bundle size.
+`enableSsrRouteTranslation` has been removed from `provideNgxTranslateRoutes()` — passing it now throws a runtime error. SSR setup has moved to a dedicated entry point to keep the browser bundle clean.
 
 **Before (v2):**
 ```typescript
+import { provideNgxTranslateRoutes } from 'ngx-translate-routes'
+
+// app.config.ts
 provideNgxTranslateRoutes({
   enableSsrRouteTranslation: true,
   availableLanguages: ['en', 'es'],
@@ -36,10 +33,10 @@ provideNgxTranslateRoutes({
 
 **After (v3):**
 ```typescript
-// app.config.ts (browser)
+// app.config.ts (browser — no SSR options here)
 import { provideNgxTranslateRoutes } from 'ngx-translate-routes'
 
-provideNgxTranslateRoutes({ /* ... */ })
+provideNgxTranslateRoutes({ /* browser options only */ })
 ```
 
 ```typescript
@@ -51,9 +48,11 @@ provideNgxTranslateRoutesSsr({
 })
 ```
 
+See the [SSR guide](../guides/ssr) for the full setup.
+
 ### `NgxTranslateRoutesModule` deprecated
 
-The NgModule-based setup continues to work in v3 but is deprecated. Migrate to the standalone provider:
+The NgModule-based API continues to work in v3 but is deprecated. Migrate to the standalone provider:
 
 ```typescript
 // Before
@@ -63,6 +62,6 @@ NgxTranslateRoutesModule.forRoot({ ... })
 provideNgxTranslateRoutes({ ... })
 ```
 
-### `provideAppInitializer` replaces `APP_INITIALIZER`
+### `provideAppInitializer` replaces `APP_INITIALIZER` (internal)
 
-This is an internal change — no action required unless you were overriding the `APP_INITIALIZER` token directly.
+This is an internal change — no action required unless you were directly overriding the `APP_INITIALIZER` token.

@@ -1,10 +1,13 @@
 import { ApplicationConfig, importProvidersFrom } from '@angular/core'
 import { provideRouter } from '@angular/router'
 
-import { provideClientHydration } from '@angular/platform-browser'
+import {
+  provideClientHydration,
+  withNoIncrementalHydration,
+} from '@angular/platform-browser'
 import { provideHttpClient, HttpClient, withFetch } from '@angular/common/http'
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core'
-import { provideNgxTranslateRoutes } from 'projects/ngx-translate-routes/src/public-api'
+import { provideNgxTranslateRoutesSsr } from 'projects/ngx-translate-routes/ssr/public-api'
 import { TranslateHttpLoader } from '@ngx-translate/http-loader'
 
 import { routes } from './app.routes'
@@ -16,7 +19,7 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideHttpClient(withFetch()),
     provideRouter(routes),
-    provideClientHydration(),
+    provideClientHydration(withNoIncrementalHydration()),
     importProvidersFrom(
       TranslateModule.forRoot({
         defaultLanguage: 'en',
@@ -28,10 +31,9 @@ export const appConfig: ApplicationConfig = {
         },
       }),
     ),
-    provideNgxTranslateRoutes({
+    provideNgxTranslateRoutesSsr({
       enableLanguageInPath: true,
       includeDefaultLanguageInPath: true,
-      enableSsrRouteTranslation: true,
       availableLanguages: ['en', 'es'],
     }),
   ],

@@ -1,12 +1,16 @@
 ---
 id: module
-title: Aplicación NgModule
+title: Aplicación NgModule (obsoleta)
 sidebar_position: 2
 ---
 
 # Configuración: Aplicación NgModule
 
-Para aplicaciones Angular que usan la arquitectura clásica de `NgModule`.
+:::warning Obsoleto
+`NgxTranslateRoutesModule` está deprecado en v3. Migra a [`provideNgxTranslateRoutes()`](standalone) — consulta la [guía de migración](../migration/v2-to-v3).
+:::
+
+Para aplicaciones Angular que aún usan la arquitectura clásica de `NgModule`.
 
 ## Configuración Básica
 

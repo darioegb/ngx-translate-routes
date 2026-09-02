@@ -10,6 +10,7 @@ import { NGX_TRANSLATE_ROUTES_CONFIG } from './ngx-translate-routes.token'
 import { NgxTranslateRoutesConfig } from './ngx-translate-routes.interfaces'
 import { DEFAULT_CONFIG } from './ngx-translate-routes.constants'
 
+/** @deprecated Use `provideNgxTranslateRoutes()` instead. Will be removed in a future major version. */
 @NgModule()
 export class NgxTranslateRoutesModule {
   private readonly translateRoutesService = inject(NgxTranslateRoutesService)

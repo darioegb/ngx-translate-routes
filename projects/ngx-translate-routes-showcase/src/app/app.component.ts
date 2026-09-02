@@ -1,4 +1,9 @@
-import { Component, OnInit, inject } from '@angular/core'
+import {
+  Component,
+  OnInit,
+  inject,
+  ChangeDetectionStrategy,
+} from '@angular/core'
 import { TranslateService } from '@ngx-translate/core'
 
 @Component({
@@ -6,6 +11,7 @@ import { TranslateService } from '@ngx-translate/core'
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
   // eslint-disable-next-line @angular-eslint/prefer-standalone
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false,
 })
 export class AppComponent implements OnInit {
