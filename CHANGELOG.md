@@ -1,3 +1,74 @@
+## 3.0.0 (2026-09-02)
+
+* fix: consolidate SSR provider pattern — provideNgxTranslateRoutesSsr in shared config ([9b169bb](https://github.com/darioegb/ngx-translate-routes/commit/9b169bb))
+* fix(ci): build package before semantic-release and fix docs actions ([23efaca](https://github.com/darioegb/ngx-translate-routes/commit/23efaca))
+* fix(ssr-showcase): migrate to v3 SSR API ([d32727a](https://github.com/darioegb/ngx-translate-routes/commit/d32727a))
+* feat!: v3.0.0 — Angular 22, provideAppInitializer, deprecate NgxTranslateRoutesModule ([05bb49f](https://github.com/darioegb/ngx-translate-routes/commit/05bb49f))
+* Merge pull request #88 from darioegb/create-pull-request/patch ([cfce456](https://github.com/darioegb/ngx-translate-routes/commit/cfce456)), closes [#88](https://github.com/darioegb/ngx-translate-routes/issues/88)
+* Merge pull request #89 from darioegb/feat/v3.0.0 ([3ec6f01](https://github.com/darioegb/ngx-translate-routes/commit/3ec6f01)), closes [#89](https://github.com/darioegb/ngx-translate-routes/issues/89)
+* Merge pull request #90 from darioegb/develop ([74eaf7a](https://github.com/darioegb/ngx-translate-routes/commit/74eaf7a)), closes [#90](https://github.com/darioegb/ngx-translate-routes/issues/90)
+* test: cover provideNgxTranslateRoutes and provideNgxTranslateRoutesSsr ([abedd62](https://github.com/darioegb/ngx-translate-routes/commit/abedd62))
+* ci: migrate test:prod and CI job to Vitest, drop Karma/Puppeteer container ([3faa302](https://github.com/darioegb/ngx-translate-routes/commit/3faa302))
+* ci: revert action SHA pinning back to version tags for now ([4b6f3c0](https://github.com/darioegb/ngx-translate-routes/commit/4b6f3c0))
+* ci: wire semantic-release into the pipeline, pin pnpm via packageManager ([0d918d6](https://github.com/darioegb/ngx-translate-routes/commit/0d918d6))
+* docs: add Docusaurus v2.4 snapshot and update current docs for v3 ([4ed0293](https://github.com/darioegb/ngx-translate-routes/commit/4ed0293))
+* docs: fix EN SSR guide — provideNgxTranslateRoutesSsr goes in shared app.config.ts ([f350867](https://github.com/darioegb/ngx-translate-routes/commit/f350867))
+* docs: fix footer copyright — author name and MIT license ([13c8a05](https://github.com/darioegb/ngx-translate-routes/commit/13c8a05))
+* docs: fix provideNgxTranslateRoutesSsr placement — shared app.config.ts not server ([9f91880](https://github.com/darioegb/ngx-translate-routes/commit/9f91880))
+* docs: point npm homepage and README to Docusaurus site ([93624e0](https://github.com/darioegb/ngx-translate-routes/commit/93624e0))
+* docs(es): sync Spanish translations with v3 changes ([10bc338](https://github.com/darioegb/ngx-translate-routes/commit/10bc338))
+* chore: migrate Karma/Jasmine to Vitest (Angular 22) ([01a9b51](https://github.com/darioegb/ngx-translate-routes/commit/01a9b51))
+* chore: migrate showcase apps to new Angular application builder ([f554572](https://github.com/darioegb/ngx-translate-routes/commit/f554572))
+* chore: revert premature v3.0.0 CHANGELOG entry ([50cd63f](https://github.com/darioegb/ngx-translate-routes/commit/50cd63f))
+* chore: update changelog and README ([7fe4a35](https://github.com/darioegb/ngx-translate-routes/commit/7fe4a35))
+* chore: upgrade Angular workspace 19 → 22 with CLI migrations ([20bb492](https://github.com/darioegb/ngx-translate-routes/commit/20bb492))
+* build: replace hand-rolled release scripts with semantic-release ([b7dec39](https://github.com/darioegb/ngx-translate-routes/commit/b7dec39))
+* feat: add ngx-translate-routes/ssr secondary entry point ([9e895be](https://github.com/darioegb/ngx-translate-routes/commit/9e895be))
+
+### BREAKING CHANGE
+
+* check now runs before the feat check, so major bumps
+are actually reachable) - but it still only reads the single latest
+commit subject for its regex fallback, not the full range since the
+last tag, and the primary path relies on a human naming the git tag
+correctly on the GitHub Release UI. semantic-release's commit-analyzer
+(conventionalcommits preset) analyzes the entire commit range and
+removes that manual step entirely, and doing version -> changelog ->
+build -> publish -> tag in one job removes the update_version/deploy
+self-approve-PR dance (and its --no-verify bot commits) by construction.
+
+.releaserc.json pipeline: commit-analyzer -> release-notes-generator
+-> changelog -> exec (writes the version into the library's *source*
+package.json via scripts/set-lib-version.mjs, regenerates the README
+compatibility table via the existing update-readme.mjs, then builds -
+all before @semantic-release/npm ever sees dist/) -> npm
+(pkgRoot: dist/ngx-translate-routes) -> git (commits CHANGELOG.md,
+README.md and the source manifest back) -> github.
+
+v3.0.0 has NOT shipped yet (no v3.0.0 tag on origin, last real
+release is v2.4.0) and its CHANGELOG.md entry was hand-edited after
+generation - verified @semantic-release/changelog's prepare step only
+ever prepends new release notes above existing file content, it does
+not regenerate the whole file the way auto-changelog did, so that
+entry is safe. IMPORTANT: v3.0.0 itself must still be cut through the
+existing manual process (or a last manual tag+publish) BEFORE this
+pipeline's first automatic run, so semantic-release sees v3.0.0 as
+already released and starts fresh from there - otherwise its first
+run would try to auto-generate v3.0.0's notes itself, duplicating the
+existing entry.
+
+Also added packageManager/engines (Node >=22.22.3, matching
+@angular/core@22's actual published engines field) and .nvmrc/.npmrc,
+matching the same fields added to ngx-error-message. Deleted
+scripts/update-package-version.mjs, scripts/update-changelog.mjs, and
+the auto-changelog/semver devDependencies they pulled in; kept
+scripts/update-readme.mjs since semantic-release has no equivalent
+and it's now invoked from the exec plugin instead of a separate CI
+job. Verified locally: `ng build ngx-translate-routes` still builds
+both the primary and `ssr` secondary entry points, `ng lint` passes,
+and --dry-run --no-ci loads the full plugin chain (25 hooks across 5
+plugins) without error.
+
 ### Changelog
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
