@@ -1,0 +1,25 @@
+name: Setup
+description: Install pnpm, Node (from .nvmrc) and project dependencies
+
+inputs:
+  registry-url:
+    description: Optional npm registry URL to configure for publishing
+    required: false
+    default: ''
+
+runs:
+  using: composite
+  steps:
+    - name: Install pnpm
+      uses: pnpm/action-setup@v6
+
+    - name: Setup Node
+      uses: actions/setup-node@v6
+      with:
+        node-version-file: .nvmrc
+        cache: pnpm
+        registry-url: ${{ inputs.registry-url }}
+
+    - name: Install dependencies
+      run: pnpm install --frozen-lockfile
+      shell: bash

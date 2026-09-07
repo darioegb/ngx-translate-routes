@@ -9,6 +9,14 @@ on:
       - develop
   workflow_dispatch:
 
+# Release runs on main and must never be cancelled mid-publish.
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+permissions:
+  contents: read
+
 jobs:
   test_lint:
     runs-on: ubuntu-latest
@@ -17,15 +25,8 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Install pnpm
-        uses: pnpm/action-setup@v6
-      - name: Setup Node
-        uses: actions/setup-node@v6
-        with:
-          node-version-file: .nvmrc
-          cache: pnpm
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+      - name: Setup
+        uses: ./.github/actions/setup
       - name: Run linting
         run: pnpm lint
 
@@ -36,15 +37,8 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Install pnpm
-        uses: pnpm/action-setup@v6
-      - name: Setup Node
-        uses: actions/setup-node@v6
-        with:
-          node-version-file: .nvmrc
-          cache: pnpm
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+      - name: Setup
+        uses: ./.github/actions/setup
       - name: Run Vitest tests
         run: pnpm test:prod
       - name: Upload coverage
@@ -101,15 +95,10 @@ jobs:
           # needed. If main has no protection rule blocking the default
           # token, secrets.GITHUB_TOKEN works too.
           token: ${{ secrets.PAT_TOKEN }}
-      - name: Install pnpm
-        uses: pnpm/action-setup@v6
-      - name: Setup Node
-        uses: actions/setup-node@v6
+      - name: Setup
+        uses: ./.github/actions/setup
         with:
-          node-version-file: .nvmrc
-          cache: pnpm
           registry-url: 'https://registry.npmjs.org'
-      - run: pnpm install --frozen-lockfile
       - name: Build package for semantic-release
         run: pnpm ng build ngx-translate-routes
       - run: pnpm exec semantic-release
