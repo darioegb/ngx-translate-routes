@@ -1,0 +1,29 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended"],
+  "labels": ["dependencies"],
+  "packageRules": [
+    {
+      "description": "The Angular ecosystem moves in lockstep - update it as one PR, not one per package.",
+      "groupName": "Angular",
+      "matchPackageNames": [
+        "@angular/**",
+        "@angular-devkit/**",
+        "@angular-eslint/**",
+        "angular-eslint",
+        "ng-packagr",
+        "zone.js"
+      ]
+    },
+    {
+      "description": "@angular/compiler-cli@22 peers on typescript >=6.0 <6.1; without this, Renovate races ahead to a TypeScript major that breaks the build before Angular itself is ready for it.",
+      "matchPackageNames": ["typescript"],
+      "allowedVersions": "<6.1.0"
+    },
+    {
+      "description": "Majors need a human to actually look at them before they land.",
+      "matchUpdateTypes": ["major"],
+      "dependencyDashboardApproval": true
+    }
+  ]
+}
