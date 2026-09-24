@@ -85,8 +85,8 @@ On the server, Angular receives an already-translated URL (e.g. `/es/sobreNosotr
 
 `provideNgxTranslateRoutesSsr` accepts all the same options as `provideNgxTranslateRoutes` plus `availableLanguages`. `enableSsrRouteTranslation` is always `true` when using this provider.
 
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
+| Option               | Type       | Default  | Description                                                     |
+| -------------------- | ---------- | -------- | --------------------------------------------------------------- |
 | `availableLanguages` | `string[]` | `['en']` | Languages the app supports (used for server-side URL detection) |
 
 All other [configuration options](../configuration) are also accepted.

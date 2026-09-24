@@ -3,7 +3,6 @@ import { Component, inject, ChangeDetectionStrategy } from '@angular/core'
 
 @Component({
   selector: 'app-myaccount',
-  standalone: true,
   templateUrl: './myaccount.component.html',
   changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./myaccount.component.scss'],

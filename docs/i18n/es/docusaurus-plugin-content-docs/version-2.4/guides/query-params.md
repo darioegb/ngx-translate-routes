@@ -52,10 +52,10 @@ Usa la convención de `routeSuffixesWithQueryParams` (por defecto: `route: 'root
 
 ## Resultado
 
-| Idioma | URL |
-|--------|-----|
-| `en` | `/search?query=angular&page=1` |
-| `es` | `/buscar?consulta=angular&pagina=1` |
+| Idioma | URL                                 |
+| ------ | ----------------------------------- |
+| `en`   | `/search?query=angular&page=1`      |
+| `es`   | `/buscar?consulta=angular&pagina=1` |
 
 ## Sufijos Personalizados
 
@@ -63,7 +63,7 @@ Usa la convención de `routeSuffixesWithQueryParams` (por defecto: `route: 'root
 provideNgxTranslateRoutes({
   enableQueryParamsTranslate: true,
   routeSuffixesWithQueryParams: {
-    route: 'path',   // por defecto: 'root'
+    route: 'path', // por defecto: 'root'
     params: 'query', // por defecto: 'params'
   },
 })

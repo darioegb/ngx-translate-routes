@@ -68,7 +68,7 @@ export const routes: Routes = [
     path: 'dashboard',
     title: 'Dashboard',
     component: DashboardComponent,
-    data: { skipTranslation: true },  // sin traducción
+    data: { skipTranslation: true }, // sin traducción
   },
 ]
 ```

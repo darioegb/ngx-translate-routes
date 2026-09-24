@@ -85,9 +85,9 @@ En el servidor, Angular recibe una URL ya traducida (p.ej. `/es/sobreNosotros`).
 
 `provideNgxTranslateRoutesSsr` acepta todas las opciones de `provideNgxTranslateRoutes` más `availableLanguages`. `enableSsrRouteTranslation` siempre es `true` al usar este provider.
 
-| Opción | Tipo | Por defecto | Descripción |
-|--------|------|-------------|-------------|
-| `availableLanguages` | `string[]` | `['en']` | Idiomas disponibles (usado para detección de URL en el servidor) |
+| Opción               | Tipo       | Por defecto | Descripción                                                      |
+| -------------------- | ---------- | ----------- | ---------------------------------------------------------------- |
+| `availableLanguages` | `string[]` | `['en']`    | Idiomas disponibles (usado para detección de URL en el servidor) |
 
 Todas las demás [opciones de configuración](../configuration) también se aceptan.
 
@@ -106,9 +106,7 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withFetch()),
     provideRouter(routes),
     provideClientHydration(),
-    importProvidersFrom(
-      TranslateModule.forRoot({ /* ... */ }),
-    ),
+    importProvidersFrom(TranslateModule.forRoot({/* ... */})),
     // highlight-start
     provideNgxTranslateRoutes({
       enableLanguageInPath: true,
@@ -123,10 +121,10 @@ export const appConfig: ApplicationConfig = {
 
 ## Opciones Requeridas para SSR
 
-| Opción | Valor | Por qué |
-|--------|-------|---------|
-| `enableSsrRouteTranslation` | `true` | Activa el registro de rutas en el servidor |
-| `availableLanguages` | `['en', 'es', ...]` | Permite detectar el idioma desde la URL traducida en el servidor |
+| Opción                      | Valor               | Por qué                                                          |
+| --------------------------- | ------------------- | ---------------------------------------------------------------- |
+| `enableSsrRouteTranslation` | `true`              | Activa el registro de rutas en el servidor                       |
+| `availableLanguages`        | `['en', 'es', ...]` | Permite detectar el idioma desde la URL traducida en el servidor |
 
 ## Cómo Funciona la Detección de Rutas SSR
 

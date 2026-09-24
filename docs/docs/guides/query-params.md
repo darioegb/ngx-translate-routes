@@ -52,10 +52,10 @@ Use the `routeSuffixesWithQueryParams` convention (defaults: `route: 'root'`, `p
 
 ## Result
 
-| Language | URL |
-|----------|-----|
-| `en` | `/search?query=angular&page=1` |
-| `es` | `/buscar?consulta=angular&pagina=1` |
+| Language | URL                                 |
+| -------- | ----------------------------------- |
+| `en`     | `/search?query=angular&page=1`      |
+| `es`     | `/buscar?consulta=angular&pagina=1` |
 
 ## Custom Suffixes
 
@@ -63,8 +63,8 @@ Use the `routeSuffixesWithQueryParams` convention (defaults: `route: 'root'`, `p
 provideNgxTranslateRoutes({
   enableQueryParamsTranslate: true,
   routeSuffixesWithQueryParams: {
-    route: 'path',    // default: 'root'
-    params: 'query',  // default: 'params'
+    route: 'path', // default: 'root'
+    params: 'query', // default: 'params'
   },
 })
 ```

@@ -4,8 +4,8 @@ import { Component, ChangeDetectionStrategy } from '@angular/core'
   selector: 'app-not-found',
   templateUrl: './not-found.component.html',
   styleUrls: ['./not-found.component.scss'],
-  // eslint-disable-next-line @angular-eslint/prefer-standalone
   changeDetection: ChangeDetectionStrategy.Eager,
+  // eslint-disable-next-line @angular-eslint/prefer-standalone
   standalone: false,
 })
 export class NotFoundComponent {}

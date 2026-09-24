@@ -23,7 +23,7 @@ Los datos persisten entre pestañas y sesiones del navegador.
 ```typescript
 provideNgxTranslateRoutes({
   cacheMethod: 'cookies',
-  cookieExpirationDays: 7,   // por defecto: 30
+  cookieExpirationDays: 7, // por defecto: 30
 })
 ```
 

@@ -52,7 +52,7 @@ Cambia el idioma a través de `TranslateService`. La librería reacciona al even
 import { Component, inject } from '@angular/core'
 import { TranslateService } from '@ngx-translate/core'
 
-@Component({ /* ... */ })
+@Component({/* ... */})
 export class AppComponent {
   private readonly translate = inject(TranslateService)
 
@@ -66,9 +66,9 @@ export class AppComponent {
 
 ```typescript
 provideNgxTranslateRoutes({
-  enableRouteTranslate: true,   // por defecto: true
-  enableTitleTranslate: true,   // por defecto: true
-  enableLanguageInPath: true,   // agrega /es/ a las URLs
+  enableRouteTranslate: true, // por defecto: true
+  enableTitleTranslate: true, // por defecto: true
+  enableLanguageInPath: true, // agrega /es/ a las URLs
   includeDefaultLanguageInPath: true,
 })
 ```

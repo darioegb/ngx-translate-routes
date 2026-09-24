@@ -16,7 +16,6 @@
 
 📖 **[Official Documentation](https://darioegb.github.io/ngx-translate-routes/)**
 
-
 ## Features
 
 - This service translates titles and route paths.
@@ -58,6 +57,7 @@ Latest version available for each version of Angular
 ## Live Example
 
 You can check how these library work in the next links, on live examples:
+
 - Standalone application with SSR: https://stackblitz.com/edit/ngx-translate-routes-example-standalone
 - Angular with modules: https://stackblitz.com/edit/ngx-translate-routes-example
 
@@ -146,7 +146,7 @@ export const appConfig: ApplicationConfig = {
           deps: [HttpClient],
         },
       }),
-      NgxTranslateRoutesModule.forRoot() //NgxTranslateRoutesModule added
+      NgxTranslateRoutesModule.forRoot(), //NgxTranslateRoutesModule added
     ),
   ],
 }
@@ -167,12 +167,13 @@ If you're using Angular SSR, you need to add additional configuration to enable 
 
 ```typescript
 provideNgxTranslateRoutes({
-  enableSsrRouteTranslation: true,  // Enable SSR route translation
+  enableSsrRouteTranslation: true, // Enable SSR route translation
   availableLanguages: ['en', 'es'], // List of available languages
 })
 ```
 
 **Required SSR parameters:**
+
 - `enableSsrRouteTranslation`: Set to `true` to enable route translation in SSR context
 - `availableLanguages`: Array of language codes that your application supports (e.g., `['en', 'es', 'fr']`)
 
@@ -461,6 +462,7 @@ export class AppModule {}
 ```
 
 With this configuration:
+
 - Routes will include the language in the path, e.g., `/en/aboutUs` or `/es/sobreNosotros`.
 - If `includeDefaultLanguageInPath` is set to `true`, the default language (e.g., `en`) will also appear in the path, such as `/en/aboutUs`. If this flag is not set, the default language will not be included in the path (e.g., `/aboutUs`).
 
@@ -475,20 +477,24 @@ To test the library, you can use the following showcase projects:
 
 1. Clone the repository and navigate to the project directory.
 2. Install the dependencies by running:
-  ```bash
-  npm install
-  ```
+
+```bash
+npm install
+```
+
 3. To run the standard showcase project, navigate to the `ngx-translate-routes-showcase` directory and execute:
-  ```bash
-  ng serve
-  ```
+
+```bash
+ng serve
+```
+
 4. To run the SSR showcase project, navigate to the `ngx-translate-routes-ssr-showcase` directory and execute:
-  ```bash
-  npm run dev:ssr
-  ```
+
+```bash
+npm run dev:ssr
+```
 
 These commands will start the respective projects, and you can view them in your browser at `http://localhost:4200`.
-
 
 ## License
 

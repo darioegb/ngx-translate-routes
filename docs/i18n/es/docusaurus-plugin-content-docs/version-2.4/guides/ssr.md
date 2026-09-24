@@ -19,9 +19,7 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withFetch()),
     provideRouter(routes),
     provideClientHydration(),
-    importProvidersFrom(
-      TranslateModule.forRoot({ /* ... */ }),
-    ),
+    importProvidersFrom(TranslateModule.forRoot({/* ... */})),
     // highlight-start
     provideNgxTranslateRoutes({
       enableLanguageInPath: true,
@@ -36,10 +34,10 @@ export const appConfig: ApplicationConfig = {
 
 ## Opciones Requeridas para SSR
 
-| Opción | Valor | Por qué |
-|--------|-------|---------|
-| `enableSsrRouteTranslation` | `true` | Activa el registro de rutas en el servidor |
-| `availableLanguages` | `['en', 'es', ...]` | Permite detectar el idioma desde la URL traducida en el servidor |
+| Opción                      | Valor               | Por qué                                                          |
+| --------------------------- | ------------------- | ---------------------------------------------------------------- |
+| `enableSsrRouteTranslation` | `true`              | Activa el registro de rutas en el servidor                       |
+| `availableLanguages`        | `['en', 'es', ...]` | Permite detectar el idioma desde la URL traducida en el servidor |
 
 ## Cómo Funciona la Detección de Rutas SSR
 

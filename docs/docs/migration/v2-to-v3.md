@@ -21,6 +21,7 @@ v3 drops support for Angular 16 and 17. Update your peer dependency:
 `enableSsrRouteTranslation` has been removed from `provideNgxTranslateRoutes()` — passing it now throws a runtime error. SSR setup has moved to a dedicated entry point to keep the browser bundle clean.
 
 **Before (v2):**
+
 ```typescript
 import { provideNgxTranslateRoutes } from 'ngx-translate-routes'
 
@@ -32,11 +33,12 @@ provideNgxTranslateRoutes({
 ```
 
 **After (v3):**
+
 ```typescript
 // app.config.ts (browser — no SSR options here)
 import { provideNgxTranslateRoutes } from 'ngx-translate-routes'
 
-provideNgxTranslateRoutes({ /* browser options only */ })
+provideNgxTranslateRoutes({/* browser options only */})
 ```
 
 ```typescript

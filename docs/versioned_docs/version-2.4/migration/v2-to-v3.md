@@ -27,6 +27,7 @@ Update your `package.json` peer dependency:
 SSR logic has been moved to a separate entry point to reduce browser bundle size.
 
 **Before (v2):**
+
 ```typescript
 provideNgxTranslateRoutes({
   enableSsrRouteTranslation: true,
@@ -35,11 +36,12 @@ provideNgxTranslateRoutes({
 ```
 
 **After (v3):**
+
 ```typescript
 // app.config.ts (browser)
 import { provideNgxTranslateRoutes } from 'ngx-translate-routes'
 
-provideNgxTranslateRoutes({ /* ... */ })
+provideNgxTranslateRoutes({/* ... */})
 ```
 
 ```typescript

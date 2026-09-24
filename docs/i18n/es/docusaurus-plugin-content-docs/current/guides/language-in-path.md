@@ -27,18 +27,18 @@ provideNgxTranslateRoutes({
 
 ## Resultado
 
-| Locale | URL |
-|--------|-----|
-| `en` (por defecto) | `/about` |
-| `en` (con `includeDefaultLanguageInPath`) | `/en/about` |
-| `es` | `/es/sobreNosotros` |
+| Locale                                    | URL                 |
+| ----------------------------------------- | ------------------- |
+| `en` (por defecto)                        | `/about`            |
+| `en` (con `includeDefaultLanguageInPath`) | `/en/about`         |
+| `es`                                      | `/es/sobreNosotros` |
 
 ## Componente Raíz
 
 Persiste el idioma seleccionado y recupéralo al cargar:
 
 ```typescript
-@Component({ /* ... */ })
+@Component({/* ... */})
 export class AppComponent implements OnInit {
   private readonly translate = inject(TranslateService)
 
