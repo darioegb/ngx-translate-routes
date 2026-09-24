@@ -5,8 +5,8 @@ import { Component, inject, ChangeDetectionStrategy } from '@angular/core'
   selector: 'app-myaccount',
   templateUrl: './myaccount.component.html',
   styleUrls: ['./myaccount.component.scss'],
-  // eslint-disable-next-line @angular-eslint/prefer-standalone
   changeDetection: ChangeDetectionStrategy.Eager,
+  // eslint-disable-next-line @angular-eslint/prefer-standalone
   standalone: false,
 })
 export class MyaccountComponent {
