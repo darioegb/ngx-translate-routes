@@ -106,3 +106,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          # @semantic-release/git's release commit body embeds the full
+          # changelog notes (long markdown links), which fails commitlint's
+          # line-length rules via the local commit-msg husky hook. That hook
+          # exists to police human-authored commits, not this generated one,
+          # so skip it here rather than relaxing commitlint for real commits.
+          HUSKY: 0
