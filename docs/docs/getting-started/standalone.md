@@ -52,7 +52,7 @@ Switch the language through `TranslateService`. The library reacts to `onLangCha
 import { Component, inject } from '@angular/core'
 import { TranslateService } from '@ngx-translate/core'
 
-@Component({ /* ... */ })
+@Component({/* ... */})
 export class AppComponent {
   private readonly translate = inject(TranslateService)
 
@@ -66,9 +66,9 @@ export class AppComponent {
 
 ```typescript
 provideNgxTranslateRoutes({
-  enableRouteTranslate: true,   // default: true
-  enableTitleTranslate: true,   // default: true
-  enableLanguageInPath: true,   // prepend /en/ to URLs
+  enableRouteTranslate: true, // default: true
+  enableTitleTranslate: true, // default: true
+  enableLanguageInPath: true, // prepend /en/ to URLs
   includeDefaultLanguageInPath: true,
 })
 ```

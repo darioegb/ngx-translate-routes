@@ -23,7 +23,7 @@ Data persists across tabs and browser sessions.
 ```typescript
 provideNgxTranslateRoutes({
   cacheMethod: 'cookies',
-  cookieExpirationDays: 7,   // default: 30
+  cookieExpirationDays: 7, // default: 30
 })
 ```
 

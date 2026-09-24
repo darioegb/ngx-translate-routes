@@ -26,10 +26,10 @@ sidebar_position: 1
 
 ## Live Examples
 
-| Example | Link |
-|---|---|
+| Example                 | Link                                                                                      |
+| ----------------------- | ----------------------------------------------------------------------------------------- |
 | Standalone app with SSR | [Open in Stackblitz](https://stackblitz.com/edit/ngx-translate-routes-example-standalone) |
-| NgModule app | [Open in Stackblitz](https://stackblitz.com/edit/ngx-translate-routes-example) |
+| NgModule app            | [Open in Stackblitz](https://stackblitz.com/edit/ngx-translate-routes-example)            |
 
 ## How It Works
 
@@ -45,11 +45,11 @@ User navigates to /about
 
 ## Compatibility
 
-| ngx-translate-routes | Angular |
-|---|---|
-| 2.4.x | 16.x – 21.x |
-| 2.3.x | 16.x – 21.x |
-| 2.0.x – 2.2.x | 16.x – 19.x |
-| 1.4.0 | 13.x – 15.x |
-| 1.3.0 | 8.x – 12.x |
-| 1.0.x – 1.2.x | 7.x – 9.x |
+| ngx-translate-routes | Angular     |
+| -------------------- | ----------- |
+| 2.4.x                | 16.x – 21.x |
+| 2.3.x                | 16.x – 21.x |
+| 2.0.x – 2.2.x        | 16.x – 19.x |
+| 1.4.0                | 13.x – 15.x |
+| 1.3.0                | 8.x – 12.x  |
+| 1.0.x – 1.2.x        | 7.x – 9.x   |
