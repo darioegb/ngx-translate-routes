@@ -1,3 +1,13 @@
+## <small>3.1.1 (2026-09-24)</small>
+
+* Merge branch 'main' into chore/tooling-cleanup-and-repo-hygiene ([c03b329](https://github.com/darioegb/ngx-translate-routes/commit/c03b329))
+* Merge pull request #92 from darioegb/chore/tooling-cleanup-and-repo-hygiene ([868acc7](https://github.com/darioegb/ngx-translate-routes/commit/868acc7)), closes [#92](https://github.com/darioegb/ngx-translate-routes/issues/92)
+* style: apply prettier formatting repo-wide, remove dead legacy .eslintrc.json ([056b38d](https://github.com/darioegb/ngx-translate-routes/commit/056b38d))
+* chore: add repo governance files ([57d23a2](https://github.com/darioegb/ngx-translate-routes/commit/57d23a2))
+* chore(deps): drop orphaned Karma/Jasmine/Puppeteer, migrate to unified angular-eslint ([bff0c7d](https://github.com/darioegb/ngx-translate-routes/commit/bff0c7d))
+* fix(showcases): remove redundant standalone:true and misplaced eslint-disable comments ([b56ff4c](https://github.com/darioegb/ngx-translate-routes/commit/b56ff4c))
+* ci: skip the commit-msg husky hook for the generated release commit ([2f3fb46](https://github.com/darioegb/ngx-translate-routes/commit/2f3fb46))
+
 ## 3.1.0 (2026-09-24)
 
 * Merge pull request #91 from darioegb/feat/error-hook-language-change-cookie-security ([103f2e8](https://github.com/darioegb/ngx-translate-routes/commit/103f2e8)), closes [#91](https://github.com/darioegb/ngx-translate-routes/issues/91)
