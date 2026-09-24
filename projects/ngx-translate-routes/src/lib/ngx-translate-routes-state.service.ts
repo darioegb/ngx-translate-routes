@@ -4,7 +4,7 @@ import {
   inject,
   TransferState,
   makeStateKey,
-  DOCUMENT
+  DOCUMENT,
 } from '@angular/core'
 import { isPlatformBrowser, isPlatformServer } from '@angular/common'
 import { RoutePath } from './ngx-translate-routes.interfaces'
@@ -106,16 +106,16 @@ export class NgxTranslateRoutesStateService {
 
     if (this.config.cacheMethod === 'cookies') {
       const matches = this.document.cookie.match(
-        new RegExp(
-          '(?:^|; )' +
-            key.replaceAll(/([.$?*|{}()[]\/+^])/g, String.raw`\$1`) +
-            '=([^;]*)',
-        ),
+        new RegExp(`(?:^|; )${this.escapeRegExp(key)}=([^;]*)`),
       )
       return matches ? (JSON.parse(decodeURIComponent(matches[1])) as T) : null
     } else {
       const item = localStorage.getItem(key)
       return item ? (JSON.parse(item) as T) : null
     }
+  }
+
+  private escapeRegExp(value: string): string {
+    return value.replaceAll(/[.*+?^${}()|[\]\\]/g, String.raw`\$&`)
   }
 }
