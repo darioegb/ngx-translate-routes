@@ -1,0 +1,9 @@
+dist/
+coverage/
+node_modules/
+docs/build/
+docs/.docusaurus/
+docs/node_modules/
+pnpm-lock.yaml
+docs/pnpm-lock.yaml
+CHANGELOG.md

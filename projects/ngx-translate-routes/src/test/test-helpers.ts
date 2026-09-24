@@ -9,14 +9,25 @@ import { Observable, of } from 'rxjs'
  * (via `envProvider`). This is required in Angular 22 TestBed where
  * `providedIn: 'root'` services can only access the environment injector.
  */
-export function createTranslateSetup(translations: Translations, defaultLang = 'en') {
-  const testModule = TranslateTestingModule.withTranslations(translations).withDefaultLanguage(defaultLang)
+export function createTranslateSetup(
+  translations: Translations,
+  defaultLang = 'en',
+) {
+  const testModule =
+    TranslateTestingModule.withTranslations(translations).withDefaultLanguage(
+      defaultLang,
+    )
   const cachedProviders = testModule.providers
-  const translateService = (cachedProviders[0] as { useValue: TranslateService }).useValue
+  const translateService = (
+    cachedProviders[0] as { useValue: TranslateService }
+  ).useValue
   return {
     /** Use in TestBed `imports` to get full TranslateModule support */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    importConfig: { ngModule: testModule.ngModule, providers: cachedProviders } as any,
+    importConfig: {
+      ngModule: testModule.ngModule,
+      providers: cachedProviders,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } as any,
     /** Use in TestBed `providers` to expose TranslateService to the env injector */
     envProvider: { provide: TranslateService, useValue: translateService },
     /** Direct reference to the shared TranslateService instance */
@@ -43,9 +54,7 @@ export function createRouterMock(
           children: {
             primary: {
               segments:
-                segments.length > 0
-                  ? segments
-                  : [{ path: '', parameters: {} }],
+                segments.length > 0 ? segments : [{ path: '', parameters: {} }],
             },
           },
         },
