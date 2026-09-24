@@ -46,7 +46,11 @@ export class NgxTranslateRoutesStateService {
         expiry.getTime() +
           (this.config.cookieExpirationDays ?? 30) * millisecondsInADay,
       )
-      this.document.cookie = `${key}=${JSON.stringify(value)}; expires=${expiry.toUTCString()}; path=/`
+      const sameSite = this.config.cookieSameSite ?? 'Lax'
+      // Secure requires HTTPS, so only add it when the page is actually served over it.
+      const secure =
+        this.document.location?.protocol === 'https:' ? '; Secure' : ''
+      this.document.cookie = `${key}=${JSON.stringify(value)}; expires=${expiry.toUTCString()}; path=/; SameSite=${sameSite}${secure}`
     } else {
       localStorage.setItem(key, JSON.stringify(value))
     }

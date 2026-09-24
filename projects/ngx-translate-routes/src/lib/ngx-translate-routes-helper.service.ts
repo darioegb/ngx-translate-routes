@@ -342,7 +342,11 @@ export class NgxTranslateRoutesHelperService {
       }
     } catch (error) {
       /* istanbul ignore next */
-      console.error('Error translating route:', error)
+      if (this.config.onError) {
+        this.config.onError(error)
+      } else {
+        console.error('Error translating route:', error)
+      }
     }
   }
 

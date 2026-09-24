@@ -14,6 +14,8 @@ import { Component, DOCUMENT } from '@angular/core'
 
 import { NgxTranslateRoutesHelperService } from './ngx-translate-routes-helper.service'
 import { NgxTranslateRoutesModule } from './ngx-translate-routes.module'
+import { NGX_TRANSLATE_ROUTES_CONFIG } from './ngx-translate-routes.token'
+import { DEFAULT_CONFIG } from './ngx-translate-routes.constants'
 import { TRANSLATIONS } from '../test'
 import {
   createRouterMock,
@@ -303,6 +305,67 @@ describe('NgxTranslateRoutesHelperService', () => {
     it('translateRoute should be callable', () => {
       expect(() => service.translateRoute()).not.toThrow()
     })
+  })
+
+  describe('Route Translation error handling', () => {
+    let service: NgxTranslateRoutesHelperService
+    let router: Router
+    let onErrorSpy: ReturnType<typeof vi.fn<(error: unknown) => void>>
+
+    beforeEach(() => {
+      onErrorSpy = vi.fn<(error: unknown) => void>()
+      const _ts = createTranslateSetup(TRANSLATIONS, 'en')
+      TestBed.configureTestingModule({
+        imports: [_ts.importConfig],
+        providers: [
+          _ts.envProvider,
+          {
+            provide: NGX_TRANSLATE_ROUTES_CONFIG,
+            useValue: {
+              ...DEFAULT_CONFIG,
+              enableRouteTranslate: true,
+              onError: onErrorSpy,
+            },
+          },
+          {
+            provide: Router,
+            useValue: createRouterMock([{ path: 'about', component: {} }]),
+          },
+          {
+            provide: ActivatedRoute,
+            useValue: {
+              firstChild: {
+                snapshot: {
+                  data: {},
+                  params: {},
+                  queryParams: {},
+                },
+              },
+            },
+          },
+          provideHttpClient(withXhr(), withInterceptorsFromDi()),
+          provideHttpClientTesting(),
+        ],
+      })
+
+      service = TestBed.inject(NgxTranslateRoutesHelperService)
+      router = TestBed.inject(Router)
+    })
+
+    it('should call config.onError instead of console.error when route translation fails', fakeAsync(() => {
+      const consoleErrorSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => undefined)
+      vi.spyOn(router, 'createUrlTree').mockImplementation(() => {
+        throw new Error('boom')
+      })
+
+      service.translateRoute()
+      tick(50)
+
+      expect(onErrorSpy).toHaveBeenCalledWith(expect.any(Error))
+      expect(consoleErrorSpy).not.toHaveBeenCalled()
+    }))
   })
 
   describe('Helper Methods', () => {

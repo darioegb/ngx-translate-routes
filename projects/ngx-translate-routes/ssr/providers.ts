@@ -18,6 +18,7 @@ export interface NgxTranslateRoutesSsrConfig extends NgxTranslateRoutesConfig {
   availableLanguages?: string[]
 }
 
+/** Registers ngx-translate-routes with SSR route translation enabled. */
 export function provideNgxTranslateRoutesSsr(
   config?: NgxTranslateRoutesSsrConfig,
 ): EnvironmentProviders {
