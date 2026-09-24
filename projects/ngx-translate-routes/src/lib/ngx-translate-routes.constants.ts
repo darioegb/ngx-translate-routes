@@ -15,10 +15,12 @@ export const DEFAULT_CONFIG: Required<NgxTranslateRoutesConfig> = {
   titlePrefix: 'titles',
   cacheMethod: 'localStorage',
   cookieExpirationDays: 30,
+  cookieSameSite: 'Lax',
   enableSsrRouteTranslation: false,
   availableLanguages: ['en'],
   onLanguageChange: undefined as unknown as () => void,
   routeTranslationStrategy: undefined as unknown as (
     originalRoute: string,
   ) => string,
+  onError: undefined as unknown as (error: unknown) => void,
 }

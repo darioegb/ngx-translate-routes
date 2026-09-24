@@ -54,6 +54,25 @@ export class NgxTranslateRoutesHelperService {
     this._translationCache.clear()
   }
 
+  private getCachedTranslation(
+    cacheKey: string,
+    key: string,
+    params?: Params,
+  ): Promise<string> {
+    if (!this._translationCache.has(cacheKey)) {
+      const translationPromise = firstValueFrom(
+        this.translate.get(key, params),
+      ).catch((error: unknown) => {
+        // Don't cache failures - a transient error shouldn't reject every future lookup for this key.
+        this._translationCache.delete(cacheKey)
+        throw error
+      })
+      this._translationCache.set(cacheKey, translationPromise)
+    }
+
+    return this._translationCache.get(cacheKey)!
+  }
+
   private parseUrlSegments(url: string): string[] {
     return url
       .split('?')[0]
@@ -73,18 +92,11 @@ export class NgxTranslateRoutesHelperService {
       await this.ensureCorrectLanguage()
 
       const cacheKey = `${this.translate.currentLang}:${this._computedConfig.titlePrefixDot}${routeTitle}`
-
-      if (!this._translationCache.has(cacheKey)) {
-        const translationPromise = firstValueFrom(
-          this.translate.get(
-            `${this._computedConfig.titlePrefixDot}${routeTitle}`,
-            params,
-          ),
-        )
-        this._translationCache.set(cacheKey, translationPromise)
-      }
-
-      appTitle = await this._translationCache.get(cacheKey)!
+      appTitle = await this.getCachedTranslation(
+        cacheKey,
+        `${this._computedConfig.titlePrefixDot}${routeTitle}`,
+        params,
+      )
     } else {
       /* istanbul ignore next */
       appTitle = this.title.getTitle()
@@ -330,7 +342,11 @@ export class NgxTranslateRoutesHelperService {
       }
     } catch (error) {
       /* istanbul ignore next */
-      console.error('Error translating route:', error)
+      if (this.config.onError) {
+        this.config.onError(error)
+      } else {
+        console.error('Error translating route:', error)
+      }
     }
   }
 
@@ -520,15 +536,10 @@ export class NgxTranslateRoutesHelperService {
 
   private async getTranslatedPath(subPath: string): Promise<string> {
     const cacheKey = `${this.translate.currentLang}:${this._computedConfig.routePrefixDot}${subPath}`
-
-    if (!this._translationCache.has(cacheKey)) {
-      const translationPromise = firstValueFrom(
-        this.translate.get(`${this._computedConfig.routePrefixDot}${subPath}`),
-      )
-      this._translationCache.set(cacheKey, translationPromise)
-    }
-
-    return this._translationCache.get(cacheKey)!
+    return this.getCachedTranslation(
+      cacheKey,
+      `${this._computedConfig.routePrefixDot}${subPath}`,
+    )
   }
 
   private async translateQueryParams(
