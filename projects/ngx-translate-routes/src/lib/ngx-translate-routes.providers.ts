@@ -11,13 +11,14 @@ import { NgxTranslateRoutesConfig } from './ngx-translate-routes.interfaces'
 import { NgxTranslateRoutesService } from './ngx-translate-routes.service'
 import { DEFAULT_CONFIG } from './ngx-translate-routes.constants'
 
+/** Registers ngx-translate-routes for a standalone (browser-only) Angular app. */
 export function provideNgxTranslateRoutes(
   config?: NgxTranslateRoutesConfig,
 ): EnvironmentProviders {
   if (config?.enableSsrRouteTranslation !== undefined) {
     throw new Error(
       '[ngx-translate-routes] The `enableSsrRouteTranslation` option has been removed in v3. ' +
-      'Use the `ngx-translate-routes/ssr` secondary entry point instead.',
+        'Use the `ngx-translate-routes/ssr` secondary entry point instead.',
     )
   }
 

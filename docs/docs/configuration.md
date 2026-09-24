@@ -10,23 +10,25 @@ All options can be passed to both `provideNgxTranslateRoutes(config)` and `NgxTr
 
 ## Options
 
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `enableRouteTranslate` | `boolean` | `true` | Translate URL path segments |
-| `enableTitleTranslate` | `boolean` | `true` | Translate `document.title` |
-| `enableQueryParamsTranslate` | `boolean` | `false` | Translate query parameter names |
-| `enableLanguageInPath` | `boolean` | `false` | Prepend locale code to URL (e.g. `/es/ruta`) |
-| `includeDefaultLanguageInPath` | `boolean` | `false` | Include default locale in URL (e.g. `/en/route`) |
-| `routePrefix` | `string` | `'routes'` | Top-level key in translation file for route paths |
-| `titlePrefix` | `string` | `'titles'` | Top-level key in translation file for page titles |
-| `routeSuffixesWithQueryParams` | `object` | `{ route: 'root', params: 'params' }` | Sub-keys used when query param translation is enabled |
-| `routeTranslationStrategy` | `Function` | `undefined` | Override translation logic: `(route: string) => string` |
-| `routesUsingStrategy` | `string[]` | `[]` | Route segments where `routeTranslationStrategy` applies |
-| `cacheMethod` | `'localStorage' \| 'cookies'` | `'localStorage'` | Storage backend for translated path history |
-| `cookieExpirationDays` | `number` | `30` | Cookie TTL when `cacheMethod` is `'cookies'` |
-| `enableSsrRouteTranslation` | `boolean` | `false` | ⚠️ **Removed from v3** — use [`provideNgxTranslateRoutesSsr()`](guides/ssr) |
-| `availableLanguages` | `string[]` | `['en']` | Languages for SSR URL detection. Also used as fallback in browser when `TranslateService.langs` is empty |
-| `onLanguageChange` | `() => void` | `undefined` | Callback fired after language change and re-translation |
+| Option                         | Type                          | Default                               | Description                                                                                                                            |
+| ------------------------------ | ----------------------------- | ------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| `enableRouteTranslate`         | `boolean`                     | `true`                                | Translate URL path segments                                                                                                            |
+| `enableTitleTranslate`         | `boolean`                     | `true`                                | Translate `document.title`                                                                                                             |
+| `enableQueryParamsTranslate`   | `boolean`                     | `false`                               | Translate query parameter names                                                                                                        |
+| `enableLanguageInPath`         | `boolean`                     | `false`                               | Prepend locale code to URL (e.g. `/es/ruta`)                                                                                           |
+| `includeDefaultLanguageInPath` | `boolean`                     | `false`                               | Include default locale in URL (e.g. `/en/route`)                                                                                       |
+| `routePrefix`                  | `string`                      | `'routes'`                            | Top-level key in translation file for route paths                                                                                      |
+| `titlePrefix`                  | `string`                      | `'titles'`                            | Top-level key in translation file for page titles                                                                                      |
+| `routeSuffixesWithQueryParams` | `object`                      | `{ route: 'root', params: 'params' }` | Sub-keys used when query param translation is enabled                                                                                  |
+| `routeTranslationStrategy`     | `Function`                    | `undefined`                           | Override translation logic: `(route: string) => string`                                                                                |
+| `routesUsingStrategy`          | `string[]`                    | `[]`                                  | Route segments where `routeTranslationStrategy` applies                                                                                |
+| `cacheMethod`                  | `'localStorage' \| 'cookies'` | `'localStorage'`                      | Storage backend for translated path history                                                                                            |
+| `cookieExpirationDays`         | `number`                      | `30`                                  | Cookie TTL when `cacheMethod` is `'cookies'`                                                                                           |
+| `cookieSameSite`               | `'Lax' \| 'Strict' \| 'None'` | `'Lax'`                               | `SameSite` attribute for cookies when `cacheMethod` is `'cookies'`. `Secure` is added automatically when the page is served over HTTPS |
+| `enableSsrRouteTranslation`    | `boolean`                     | `false`                               | ⚠️ **Removed from v3** — use [`provideNgxTranslateRoutesSsr()`](guides/ssr)                                                            |
+| `availableLanguages`           | `string[]`                    | `['en']`                              | Languages for SSR URL detection. Also used as fallback in browser when `TranslateService.langs` is empty                               |
+| `onLanguageChange`             | `() => void`                  | `undefined`                           | Callback fired after language change and re-translation                                                                                |
+| `onError`                      | `(error: unknown) => void`    | `undefined`                           | Called when route translation fails, instead of logging to `console.error`                                                             |
 
 ## Defaults
 
@@ -64,8 +66,11 @@ provideNgxTranslateRoutes({
 provideNgxTranslateRoutes({
   cacheMethod: 'cookies',
   cookieExpirationDays: 7,
+  cookieSameSite: 'Strict', // default: 'Lax'
 })
 ```
+
+See [Caching Strategy](guides/caching) for details on cookie attributes.
 
 ### Custom translation key prefixes
 
@@ -86,28 +91,52 @@ provideNgxTranslateRoutes({
 })
 ```
 
+For a reactive alternative, inject `NgxTranslateRoutesService` and subscribe to `languageChange$`, which emits once route translations for the new language have been applied:
+
+```typescript
+import { inject } from '@angular/core'
+import { NgxTranslateRoutesService } from 'ngx-translate-routes'
+
+const translateRoutes = inject(NgxTranslateRoutesService)
+translateRoutes.languageChange$.subscribe(() => {
+  console.log('Language changed and routes re-translated')
+})
+```
+
+### Error handling
+
+By default, a failure while translating a route logs to `console.error`. Provide `onError` to handle it yourself instead (e.g. report to your error tracker):
+
+```typescript
+provideNgxTranslateRoutes({
+  onError: (error) => {
+    errorTrackingService.report(error)
+  },
+})
+```
+
 ## Route Data Properties
 
 Configure individual routes via `data`:
 
-| Property | Type | Description |
-|----------|------|-------------|
-| `data.title` | `string` | Translation key for the page title (maps to `titlePrefix.value`) |
-| `data.skipTranslation` | `boolean` | Skip both title and route translation for this route |
-| `title` | `string` | Angular native title — used as-is when `skipTranslation: true` |
+| Property               | Type      | Description                                                      |
+| ---------------------- | --------- | ---------------------------------------------------------------- |
+| `data.title`           | `string`  | Translation key for the page title (maps to `titlePrefix.value`) |
+| `data.skipTranslation` | `boolean` | Skip both title and route translation for this route             |
+| `title`                | `string`  | Angular native title — used as-is when `skipTranslation: true`   |
 
 ```typescript
 const routes: Routes = [
   {
     path: 'about',
     component: AboutComponent,
-    data: { title: 'about' },           // → translated
+    data: { title: 'about' }, // → translated
   },
   {
     path: 'dashboard',
     title: 'Dashboard',
     component: DashboardComponent,
-    data: { skipTranslation: true },    // → not translated
+    data: { skipTranslation: true }, // → not translated
   },
 ]
 ```

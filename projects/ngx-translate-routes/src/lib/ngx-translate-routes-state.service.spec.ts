@@ -1,7 +1,5 @@
-
-
 import { TestBed } from '@angular/core/testing'
-import { PLATFORM_ID } from '@angular/core'
+import { PLATFORM_ID, DOCUMENT } from '@angular/core'
 import { NgxTranslateRoutesStateService } from './ngx-translate-routes-state.service'
 import { NGX_TRANSLATE_ROUTES_CONFIG } from './ngx-translate-routes.token'
 
@@ -11,8 +9,8 @@ describe('NgxTranslateRoutesStateService - SSR Test', () => {
       providers: [
         { provide: PLATFORM_ID, useValue: 'server' },
         { provide: NGX_TRANSLATE_ROUTES_CONFIG, useValue: {} },
-        NgxTranslateRoutesStateService
-      ]
+        NgxTranslateRoutesStateService,
+      ],
     })
 
     const service = TestBed.inject(NgxTranslateRoutesStateService)
@@ -26,8 +24,8 @@ describe('NgxTranslateRoutesStateService - SSR Test', () => {
       providers: [
         { provide: PLATFORM_ID, useValue: 'browser' },
         { provide: NGX_TRANSLATE_ROUTES_CONFIG, useValue: {} },
-        NgxTranslateRoutesStateService
-      ]
+        NgxTranslateRoutesStateService,
+      ],
     })
 
     const service = TestBed.inject(NgxTranslateRoutesStateService)
@@ -40,9 +38,12 @@ describe('NgxTranslateRoutesStateService - SSR Test', () => {
     TestBed.configureTestingModule({
       providers: [
         { provide: PLATFORM_ID, useValue: 'browser' },
-        { provide: NGX_TRANSLATE_ROUTES_CONFIG, useValue: { cacheStrategy: 'localStorage' } },
-        NgxTranslateRoutesStateService
-      ]
+        {
+          provide: NGX_TRANSLATE_ROUTES_CONFIG,
+          useValue: { cacheStrategy: 'localStorage' },
+        },
+        NgxTranslateRoutesStateService,
+      ],
     })
 
     const service = TestBed.inject(NgxTranslateRoutesStateService)
@@ -59,9 +60,12 @@ describe('NgxTranslateRoutesStateService - SSR Test', () => {
     TestBed.configureTestingModule({
       providers: [
         { provide: PLATFORM_ID, useValue: 'browser' },
-        { provide: NGX_TRANSLATE_ROUTES_CONFIG, useValue: { cacheStrategy: 'localStorage' } },
-        NgxTranslateRoutesStateService
-      ]
+        {
+          provide: NGX_TRANSLATE_ROUTES_CONFIG,
+          useValue: { cacheStrategy: 'localStorage' },
+        },
+        NgxTranslateRoutesStateService,
+      ],
     })
 
     const service = TestBed.inject(NgxTranslateRoutesStateService)
@@ -79,9 +83,12 @@ describe('NgxTranslateRoutesStateService - SSR Test', () => {
     TestBed.configureTestingModule({
       providers: [
         { provide: PLATFORM_ID, useValue: 'browser' },
-        { provide: NGX_TRANSLATE_ROUTES_CONFIG, useValue: { cacheStrategy: 'cookie', cookieExpirationDays: 7 } },
-        NgxTranslateRoutesStateService
-      ]
+        {
+          provide: NGX_TRANSLATE_ROUTES_CONFIG,
+          useValue: { cacheStrategy: 'cookie', cookieExpirationDays: 7 },
+        },
+        NgxTranslateRoutesStateService,
+      ],
     })
 
     const service = TestBed.inject(NgxTranslateRoutesStateService)
@@ -102,9 +109,12 @@ describe('NgxTranslateRoutesStateService - SSR Test', () => {
     TestBed.configureTestingModule({
       providers: [
         { provide: PLATFORM_ID, useValue: 'browser' },
-        { provide: NGX_TRANSLATE_ROUTES_CONFIG, useValue: { cacheStrategy: 'cookie' } },
-        NgxTranslateRoutesStateService
-      ]
+        {
+          provide: NGX_TRANSLATE_ROUTES_CONFIG,
+          useValue: { cacheStrategy: 'cookie' },
+        },
+        NgxTranslateRoutesStateService,
+      ],
     })
 
     const service = TestBed.inject(NgxTranslateRoutesStateService)
@@ -123,8 +133,8 @@ describe('NgxTranslateRoutesStateService - SSR Test', () => {
       providers: [
         { provide: PLATFORM_ID, useValue: 'browser' },
         { provide: NGX_TRANSLATE_ROUTES_CONFIG, useValue: {} },
-        NgxTranslateRoutesStateService
-      ]
+        NgxTranslateRoutesStateService,
+      ],
     })
 
     const service = TestBed.inject(NgxTranslateRoutesStateService)
@@ -138,8 +148,8 @@ describe('NgxTranslateRoutesStateService - SSR Test', () => {
       providers: [
         { provide: PLATFORM_ID, useValue: 'server' },
         { provide: NGX_TRANSLATE_ROUTES_CONFIG, useValue: {} },
-        NgxTranslateRoutesStateService
-      ]
+        NgxTranslateRoutesStateService,
+      ],
     })
 
     const service = TestBed.inject(NgxTranslateRoutesStateService)
@@ -152,12 +162,15 @@ describe('NgxTranslateRoutesStateService - SSR Test', () => {
     TestBed.configureTestingModule({
       providers: [
         { provide: PLATFORM_ID, useValue: 'browser' },
-        { provide: NGX_TRANSLATE_ROUTES_CONFIG, useValue: {
-          cacheStrategy: 'localStorage',
-          cookieExpirationDays: 30
-        } },
-        NgxTranslateRoutesStateService
-      ]
+        {
+          provide: NGX_TRANSLATE_ROUTES_CONFIG,
+          useValue: {
+            cacheStrategy: 'localStorage',
+            cookieExpirationDays: 30,
+          },
+        },
+        NgxTranslateRoutesStateService,
+      ],
     })
 
     const service = TestBed.inject(NgxTranslateRoutesStateService)
@@ -178,22 +191,22 @@ describe('NgxTranslateRoutesStateService - SSR Test', () => {
       providers: [
         { provide: PLATFORM_ID, useValue: 'browser' },
         { provide: NGX_TRANSLATE_ROUTES_CONFIG, useValue: {} },
-        NgxTranslateRoutesStateService
-      ]
+        NgxTranslateRoutesStateService,
+      ],
     })
 
     const service = TestBed.inject(NgxTranslateRoutesStateService)
     const largeObject = {
       translations: {
         en: { routes: { about: 'about', contact: 'contact' } },
-        es: { routes: { about: 'acerca', contact: 'contacto' } }
+        es: { routes: { about: 'acerca', contact: 'contacto' } },
       },
       config: {
         enableRouteTranslate: true,
         enableTitleTranslate: true,
         enableLanguageInPath: true,
-        availableLanguages: ['en', 'es']
-      }
+        availableLanguages: ['en', 'es'],
+      },
     }
 
     service.setItem('large-object', largeObject)
@@ -207,8 +220,8 @@ describe('NgxTranslateRoutesStateService - SSR Test', () => {
       providers: [
         { provide: PLATFORM_ID, useValue: 'browser' },
         { provide: NGX_TRANSLATE_ROUTES_CONFIG, useValue: {} },
-        NgxTranslateRoutesStateService
-      ]
+        NgxTranslateRoutesStateService,
+      ],
     })
 
     const service = TestBed.inject(NgxTranslateRoutesStateService)
@@ -246,8 +259,8 @@ describe('NgxTranslateRoutesStateService - SSR Test', () => {
       providers: [
         { provide: PLATFORM_ID, useValue: 'browser' },
         { provide: NGX_TRANSLATE_ROUTES_CONFIG, useValue: {} },
-        NgxTranslateRoutesStateService
-      ]
+        NgxTranslateRoutesStateService,
+      ],
     })
 
     const browserService = TestBed.inject(NgxTranslateRoutesStateService)
@@ -260,8 +273,8 @@ describe('NgxTranslateRoutesStateService - SSR Test', () => {
       providers: [
         { provide: PLATFORM_ID, useValue: 'server' },
         { provide: NGX_TRANSLATE_ROUTES_CONFIG, useValue: {} },
-        NgxTranslateRoutesStateService
-      ]
+        NgxTranslateRoutesStateService,
+      ],
     })
 
     const serverService = TestBed.inject(NgxTranslateRoutesStateService)
@@ -274,9 +287,12 @@ describe('NgxTranslateRoutesStateService - SSR Test', () => {
     TestBed.configureTestingModule({
       providers: [
         { provide: PLATFORM_ID, useValue: 'browser' },
-        { provide: NGX_TRANSLATE_ROUTES_CONFIG, useValue: { cacheStrategy: 'localStorage' } },
-        NgxTranslateRoutesStateService
-      ]
+        {
+          provide: NGX_TRANSLATE_ROUTES_CONFIG,
+          useValue: { cacheStrategy: 'localStorage' },
+        },
+        NgxTranslateRoutesStateService,
+      ],
     })
 
     const localStorageService = TestBed.inject(NgxTranslateRoutesStateService)
@@ -288,9 +304,12 @@ describe('NgxTranslateRoutesStateService - SSR Test', () => {
     TestBed.configureTestingModule({
       providers: [
         { provide: PLATFORM_ID, useValue: 'browser' },
-        { provide: NGX_TRANSLATE_ROUTES_CONFIG, useValue: { cacheStrategy: 'cookie' } },
-        NgxTranslateRoutesStateService
-      ]
+        {
+          provide: NGX_TRANSLATE_ROUTES_CONFIG,
+          useValue: { cacheStrategy: 'cookie' },
+        },
+        NgxTranslateRoutesStateService,
+      ],
     })
 
     const cookieService = TestBed.inject(NgxTranslateRoutesStateService)
@@ -305,8 +324,8 @@ describe('NgxTranslateRoutesStateService - SSR Test', () => {
       providers: [
         { provide: PLATFORM_ID, useValue: 'browser' },
         { provide: NGX_TRANSLATE_ROUTES_CONFIG, useValue: {} },
-        NgxTranslateRoutesStateService
-      ]
+        NgxTranslateRoutesStateService,
+      ],
     })
 
     const service = TestBed.inject(NgxTranslateRoutesStateService)
@@ -338,11 +357,11 @@ describe('NgxTranslateRoutesStateService - SSR Test', () => {
             provide: NGX_TRANSLATE_ROUTES_CONFIG,
             useValue: {
               cacheMethod: 'localStorage',
-              cookieExpirationDays: 30
-            }
+              cookieExpirationDays: 30,
+            },
           },
-          NgxTranslateRoutesStateService
-        ]
+          NgxTranslateRoutesStateService,
+        ],
       })
 
       service = TestBed.inject(NgxTranslateRoutesStateService)
@@ -410,8 +429,8 @@ describe('NgxTranslateRoutesStateService - SSR Test', () => {
         providers: [
           { provide: PLATFORM_ID, useValue: 'server' },
           { provide: NGX_TRANSLATE_ROUTES_CONFIG, useValue: {} },
-          NgxTranslateRoutesStateService
-        ]
+          NgxTranslateRoutesStateService,
+        ],
       })
 
       const service = TestBed.inject(NgxTranslateRoutesStateService)
@@ -428,12 +447,12 @@ describe('NgxTranslateRoutesStateService - SSR Test', () => {
         providers: [
           { provide: PLATFORM_ID, useValue: 'server' },
           { provide: NGX_TRANSLATE_ROUTES_CONFIG, useValue: {} },
-          NgxTranslateRoutesStateService
-        ]
+          NgxTranslateRoutesStateService,
+        ],
       })
 
       const service = TestBed.inject(NgxTranslateRoutesStateService)
-      const preloadedRoutes = { 'about': 'acerca', 'contact': 'contacto' }
+      const preloadedRoutes = { about: 'acerca', contact: 'contacto' }
 
       service.setPreloadedRoutes(preloadedRoutes)
 
@@ -445,8 +464,8 @@ describe('NgxTranslateRoutesStateService - SSR Test', () => {
         providers: [
           { provide: PLATFORM_ID, useValue: 'browser' },
           { provide: NGX_TRANSLATE_ROUTES_CONFIG, useValue: {} },
-          NgxTranslateRoutesStateService
-        ]
+          NgxTranslateRoutesStateService,
+        ],
       })
 
       const service = TestBed.inject(NgxTranslateRoutesStateService)
@@ -461,8 +480,8 @@ describe('NgxTranslateRoutesStateService - SSR Test', () => {
         providers: [
           { provide: PLATFORM_ID, useValue: 'server' },
           { provide: NGX_TRANSLATE_ROUTES_CONFIG, useValue: {} },
-          NgxTranslateRoutesStateService
-        ]
+          NgxTranslateRoutesStateService,
+        ],
       })
 
       const service = TestBed.inject(NgxTranslateRoutesStateService)
@@ -478,8 +497,8 @@ describe('NgxTranslateRoutesStateService - SSR Test', () => {
         providers: [
           { provide: PLATFORM_ID, useValue: 'server' },
           { provide: NGX_TRANSLATE_ROUTES_CONFIG, useValue: {} },
-          NgxTranslateRoutesStateService
-        ]
+          NgxTranslateRoutesStateService,
+        ],
       })
 
       const service = TestBed.inject(NgxTranslateRoutesStateService)
@@ -493,8 +512,8 @@ describe('NgxTranslateRoutesStateService - SSR Test', () => {
         providers: [
           { provide: PLATFORM_ID, useValue: 'server' },
           { provide: NGX_TRANSLATE_ROUTES_CONFIG, useValue: {} },
-          NgxTranslateRoutesStateService
-        ]
+          NgxTranslateRoutesStateService,
+        ],
       })
 
       const service = TestBed.inject(NgxTranslateRoutesStateService)
@@ -510,8 +529,8 @@ describe('NgxTranslateRoutesStateService - SSR Test', () => {
         providers: [
           { provide: PLATFORM_ID, useValue: 'server' },
           { provide: NGX_TRANSLATE_ROUTES_CONFIG, useValue: {} },
-          NgxTranslateRoutesStateService
-        ]
+          NgxTranslateRoutesStateService,
+        ],
       })
 
       const service = TestBed.inject(NgxTranslateRoutesStateService)
@@ -526,9 +545,12 @@ describe('NgxTranslateRoutesStateService - SSR Test', () => {
       TestBed.configureTestingModule({
         providers: [
           { provide: PLATFORM_ID, useValue: 'browser' },
-          { provide: NGX_TRANSLATE_ROUTES_CONFIG, useValue: { cacheMethod: 'cookies' } },
-          NgxTranslateRoutesStateService
-        ]
+          {
+            provide: NGX_TRANSLATE_ROUTES_CONFIG,
+            useValue: { cacheMethod: 'cookies' },
+          },
+          NgxTranslateRoutesStateService,
+        ],
       })
 
       const service = TestBed.inject(NgxTranslateRoutesStateService)
@@ -536,19 +558,90 @@ describe('NgxTranslateRoutesStateService - SSR Test', () => {
       const value = { data: 'test' }
 
       service.setItem(specialKey, value)
-      const result = service.getItem(specialKey)
+      const result = service.getItem<typeof value>(specialKey)
 
-      // The regex escape should handle special characters properly
-      expect(result !== undefined).toBe(true)
+      // The regex escape should find and decode the cookie correctly
+      expect(result).toEqual(value)
+    })
+
+    it('should mark cookies SameSite=Lax and add Secure only over https', () => {
+      const writes: string[] = []
+      // Minimal DOCUMENT stand-in: real jsdom Location.protocol can't be redefined,
+      // and TransferState needs a working getElementById.
+      const fakeDocument = {
+        location: { protocol: 'https:' },
+        getElementById: () => null,
+        get cookie() {
+          return writes.at(-1) ?? ''
+        },
+        set cookie(value: string) {
+          writes.push(value)
+        },
+      }
+
+      TestBed.configureTestingModule({
+        providers: [
+          { provide: PLATFORM_ID, useValue: 'browser' },
+          { provide: DOCUMENT, useValue: fakeDocument },
+          {
+            provide: NGX_TRANSLATE_ROUTES_CONFIG,
+            useValue: { cacheMethod: 'cookies' },
+          },
+          NgxTranslateRoutesStateService,
+        ],
+      })
+
+      TestBed.inject(NgxTranslateRoutesStateService).setItem('secure-key', {
+        data: 'value',
+      })
+
+      expect(writes.at(-1)).toContain('SameSite=Lax')
+      expect(writes.at(-1)).toContain('; Secure')
+    })
+
+    it('should not add Secure over http and should respect a custom cookieSameSite', () => {
+      const writes: string[] = []
+      const fakeDocument = {
+        location: { protocol: 'http:' },
+        getElementById: () => null,
+        get cookie() {
+          return writes.at(-1) ?? ''
+        },
+        set cookie(value: string) {
+          writes.push(value)
+        },
+      }
+
+      TestBed.configureTestingModule({
+        providers: [
+          { provide: PLATFORM_ID, useValue: 'browser' },
+          { provide: DOCUMENT, useValue: fakeDocument },
+          {
+            provide: NGX_TRANSLATE_ROUTES_CONFIG,
+            useValue: { cacheMethod: 'cookies', cookieSameSite: 'Strict' },
+          },
+          NgxTranslateRoutesStateService,
+        ],
+      })
+
+      TestBed.inject(NgxTranslateRoutesStateService).setItem('plain-key', {
+        data: 'value',
+      })
+
+      expect(writes.at(-1)).toContain('SameSite=Strict')
+      expect(writes.at(-1)).not.toContain('Secure')
     })
 
     it('should use default cookieExpirationDays when not provided', () => {
       TestBed.configureTestingModule({
         providers: [
           { provide: PLATFORM_ID, useValue: 'browser' },
-          { provide: NGX_TRANSLATE_ROUTES_CONFIG, useValue: { cacheMethod: 'cookies' } },
-          NgxTranslateRoutesStateService
-        ]
+          {
+            provide: NGX_TRANSLATE_ROUTES_CONFIG,
+            useValue: { cacheMethod: 'cookies' },
+          },
+          NgxTranslateRoutesStateService,
+        ],
       })
 
       const service = TestBed.inject(NgxTranslateRoutesStateService)
@@ -563,9 +656,12 @@ describe('NgxTranslateRoutesStateService - SSR Test', () => {
       TestBed.configureTestingModule({
         providers: [
           { provide: PLATFORM_ID, useValue: 'browser' },
-          { provide: NGX_TRANSLATE_ROUTES_CONFIG, useValue: { cacheMethod: 'cookies' } },
-          NgxTranslateRoutesStateService
-        ]
+          {
+            provide: NGX_TRANSLATE_ROUTES_CONFIG,
+            useValue: { cacheMethod: 'cookies' },
+          },
+          NgxTranslateRoutesStateService,
+        ],
       })
 
       const service = TestBed.inject(NgxTranslateRoutesStateService)
@@ -585,8 +681,8 @@ describe('NgxTranslateRoutesStateService - SSR Test', () => {
         providers: [
           { provide: PLATFORM_ID, useValue: 'browser' },
           { provide: NGX_TRANSLATE_ROUTES_CONFIG, useValue: {} },
-          NgxTranslateRoutesStateService
-        ]
+          NgxTranslateRoutesStateService,
+        ],
       })
 
       const service = TestBed.inject(NgxTranslateRoutesStateService)
@@ -604,8 +700,8 @@ describe('NgxTranslateRoutesStateService - SSR Test', () => {
         providers: [
           { provide: PLATFORM_ID, useValue: 'server' },
           { provide: NGX_TRANSLATE_ROUTES_CONFIG, useValue: {} },
-          NgxTranslateRoutesStateService
-        ]
+          NgxTranslateRoutesStateService,
+        ],
       })
 
       const service = TestBed.inject(NgxTranslateRoutesStateService)
@@ -620,8 +716,8 @@ describe('NgxTranslateRoutesStateService - SSR Test', () => {
         providers: [
           { provide: PLATFORM_ID, useValue: 'server' },
           { provide: NGX_TRANSLATE_ROUTES_CONFIG, useValue: {} },
-          NgxTranslateRoutesStateService
-        ]
+          NgxTranslateRoutesStateService,
+        ],
       })
 
       const service = TestBed.inject(NgxTranslateRoutesStateService)
@@ -635,8 +731,8 @@ describe('NgxTranslateRoutesStateService - SSR Test', () => {
         providers: [
           { provide: PLATFORM_ID, useValue: 'browser' },
           { provide: NGX_TRANSLATE_ROUTES_CONFIG, useValue: {} },
-          NgxTranslateRoutesStateService
-        ]
+          NgxTranslateRoutesStateService,
+        ],
       })
 
       const service = TestBed.inject(NgxTranslateRoutesStateService)

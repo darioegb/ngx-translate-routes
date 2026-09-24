@@ -9,6 +9,7 @@ import {
   LoadChildrenCallback,
 } from '@angular/router'
 import { filter, skip } from 'rxjs/operators'
+import { Observable, Subject } from 'rxjs'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { RoutePath } from './ngx-translate-routes.interfaces'
 import { NGX_TRANSLATE_ROUTES_CONFIG } from './ngx-translate-routes.token'
@@ -28,6 +29,11 @@ export class NgxTranslateRoutesService {
   private readonly config = inject(NGX_TRANSLATE_ROUTES_CONFIG)
   private readonly stateService = inject(NgxTranslateRoutesStateService)
   private readonly _destroyRef = inject(DestroyRef)
+
+  private readonly _languageChange = new Subject<void>()
+  /** Emits once route translations for the new language have been applied. */
+  readonly languageChange$: Observable<void> =
+    this._languageChange.asObservable()
 
   constructor() {
     this.translate.onLangChange
@@ -275,6 +281,7 @@ export class NgxTranslateRoutesService {
     if (this.config.onLanguageChange) {
       this.config.onLanguageChange()
     }
+    this._languageChange.next()
   }
 
   private getTranslatedPaths(): RoutePath[] {

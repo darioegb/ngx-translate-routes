@@ -14,6 +14,8 @@ import { Component, DOCUMENT } from '@angular/core'
 
 import { NgxTranslateRoutesHelperService } from './ngx-translate-routes-helper.service'
 import { NgxTranslateRoutesModule } from './ngx-translate-routes.module'
+import { NGX_TRANSLATE_ROUTES_CONFIG } from './ngx-translate-routes.token'
+import { DEFAULT_CONFIG } from './ngx-translate-routes.constants'
 import { TRANSLATIONS } from '../test'
 import {
   createRouterMock,
@@ -29,10 +31,7 @@ describe('NgxTranslateRoutesHelperService', () => {
     beforeEach(() => {
       const _ts = createTranslateSetup(TRANSLATIONS, 'en')
       TestBed.configureTestingModule({
-        imports: [
-          _ts.importConfig,
-          NgxTranslateRoutesModule.forRoot(),
-        ],
+        imports: [_ts.importConfig, NgxTranslateRoutesModule.forRoot()],
         providers: [
           _ts.envProvider,
           {
@@ -185,10 +184,7 @@ describe('NgxTranslateRoutesHelperService', () => {
     beforeEach(() => {
       const _ts = createTranslateSetup(TRANSLATIONS, 'en')
       TestBed.configureTestingModule({
-        imports: [
-          _ts.importConfig,
-          NgxTranslateRoutesModule.forRoot(),
-        ],
+        imports: [_ts.importConfig, NgxTranslateRoutesModule.forRoot()],
         providers: [
           _ts.envProvider,
           {
@@ -240,6 +236,23 @@ describe('NgxTranslateRoutesHelperService', () => {
       // Cache should be empty now (no way to directly test private cache, but method exists)
       expect(service.clearTranslationCache).toBeDefined()
     })
+
+    it('should retry translation after a rejected lookup instead of caching the failure', fakeAsync(() => {
+      const getSpy = vi
+        .spyOn(translate, 'get')
+        .mockReturnValueOnce(throwError(() => new Error('network error')))
+        .mockReturnValueOnce(of('About Us'))
+
+      // Swallow the expected rejection from the first (failing) lookup.
+      service.translateTitle().catch(() => undefined)
+      tick()
+
+      // Second call should retry instead of reusing the failed cache entry.
+      service.translateTitle()
+      tick()
+
+      expect(getSpy).toHaveBeenCalledTimes(2)
+    }))
   })
 
   describe('Route Translation', () => {
@@ -292,6 +305,67 @@ describe('NgxTranslateRoutesHelperService', () => {
     it('translateRoute should be callable', () => {
       expect(() => service.translateRoute()).not.toThrow()
     })
+  })
+
+  describe('Route Translation error handling', () => {
+    let service: NgxTranslateRoutesHelperService
+    let router: Router
+    let onErrorSpy: ReturnType<typeof vi.fn<(error: unknown) => void>>
+
+    beforeEach(() => {
+      onErrorSpy = vi.fn<(error: unknown) => void>()
+      const _ts = createTranslateSetup(TRANSLATIONS, 'en')
+      TestBed.configureTestingModule({
+        imports: [_ts.importConfig],
+        providers: [
+          _ts.envProvider,
+          {
+            provide: NGX_TRANSLATE_ROUTES_CONFIG,
+            useValue: {
+              ...DEFAULT_CONFIG,
+              enableRouteTranslate: true,
+              onError: onErrorSpy,
+            },
+          },
+          {
+            provide: Router,
+            useValue: createRouterMock([{ path: 'about', component: {} }]),
+          },
+          {
+            provide: ActivatedRoute,
+            useValue: {
+              firstChild: {
+                snapshot: {
+                  data: {},
+                  params: {},
+                  queryParams: {},
+                },
+              },
+            },
+          },
+          provideHttpClient(withXhr(), withInterceptorsFromDi()),
+          provideHttpClientTesting(),
+        ],
+      })
+
+      service = TestBed.inject(NgxTranslateRoutesHelperService)
+      router = TestBed.inject(Router)
+    })
+
+    it('should call config.onError instead of console.error when route translation fails', fakeAsync(() => {
+      const consoleErrorSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => undefined)
+      vi.spyOn(router, 'createUrlTree').mockImplementation(() => {
+        throw new Error('boom')
+      })
+
+      service.translateRoute()
+      tick(50)
+
+      expect(onErrorSpy).toHaveBeenCalledWith(expect.any(Error))
+      expect(consoleErrorSpy).not.toHaveBeenCalled()
+    }))
   })
 
   describe('Helper Methods', () => {
@@ -978,25 +1052,28 @@ describe('NgxTranslateRoutesHelperService', () => {
     let title: Title
 
     beforeEach(() => {
-      const _ts = createTranslateSetup({
-            en: {
-              'routes.about': 'about',
-              'routes.users': 'users',
-              'routes.profile': 'profile',
-              'routes.dashboard': 'dashboard',
-              'titles.about': 'About Us',
-              'titles.users': 'Users',
-              'error.translation': 'Translation Error',
-            },
-            es: {
-              'routes.about': 'acerca-de',
-              'routes.users': 'usuarios',
-              'routes.profile': 'perfil',
-              'routes.dashboard': 'tablero',
-              'titles.about': 'Acerca de Nosotros',
-              'titles.users': 'Usuarios',
-            },
-          }, 'en')
+      const _ts = createTranslateSetup(
+        {
+          en: {
+            'routes.about': 'about',
+            'routes.users': 'users',
+            'routes.profile': 'profile',
+            'routes.dashboard': 'dashboard',
+            'titles.about': 'About Us',
+            'titles.users': 'Users',
+            'error.translation': 'Translation Error',
+          },
+          es: {
+            'routes.about': 'acerca-de',
+            'routes.users': 'usuarios',
+            'routes.profile': 'perfil',
+            'routes.dashboard': 'tablero',
+            'titles.about': 'Acerca de Nosotros',
+            'titles.users': 'Usuarios',
+          },
+        },
+        'en',
+      )
       TestBed.configureTestingModule({
         imports: [
           _ts.importConfig,
@@ -1312,51 +1389,54 @@ describe('NgxTranslateRoutesHelperService', () => {
 
     // High-coverage configuration to exercise all features
     beforeEach(() => {
-      const _ts = createTranslateSetup({
-            en: {
-              'routes.home': 'home',
-              'routes.about': 'about',
-              'routes.products': 'products',
-              'routes.category': 'category',
-              'routes.item': 'item',
-              'routes.search': 'search',
-              'routes.profile': 'profile',
-              'routes.settings': 'settings',
-              'routes.admin': 'admin',
-              'routes.dashboard': 'dashboard',
-              'titles.home': 'Home Page',
-              'titles.about': 'About Us',
-              'titles.products': 'Our Products',
-              'titles.profile': 'User Profile',
-              'params.category': 'electronics',
-              'params.item': 'laptop',
-              'params.search': 'searchTerm',
-            },
-            es: {
-              'routes.home': 'inicio',
-              'routes.about': 'acerca-de',
-              'routes.products': 'productos',
-              'routes.category': 'categoria',
-              'routes.item': 'articulo',
-              'routes.search': 'buscar',
-              'routes.profile': 'perfil',
-              'routes.settings': 'configuracion',
-              'routes.admin': 'administrador',
-              'routes.dashboard': 'tablero',
-              'titles.home': 'Página Inicio',
-              'titles.about': 'Acerca de Nosotros',
-              'titles.products': 'Nuestros Productos',
-              'titles.profile': 'Perfil Usuario',
-              'params.category': 'electronica',
-              'params.item': 'portatil',
-            },
-            fr: {
-              'routes.home': 'accueil',
-              'routes.about': 'a-propos',
-              'routes.products': 'produits',
-              'titles.home': 'Page Accueil',
-            },
-          }, 'en')
+      const _ts = createTranslateSetup(
+        {
+          en: {
+            'routes.home': 'home',
+            'routes.about': 'about',
+            'routes.products': 'products',
+            'routes.category': 'category',
+            'routes.item': 'item',
+            'routes.search': 'search',
+            'routes.profile': 'profile',
+            'routes.settings': 'settings',
+            'routes.admin': 'admin',
+            'routes.dashboard': 'dashboard',
+            'titles.home': 'Home Page',
+            'titles.about': 'About Us',
+            'titles.products': 'Our Products',
+            'titles.profile': 'User Profile',
+            'params.category': 'electronics',
+            'params.item': 'laptop',
+            'params.search': 'searchTerm',
+          },
+          es: {
+            'routes.home': 'inicio',
+            'routes.about': 'acerca-de',
+            'routes.products': 'productos',
+            'routes.category': 'categoria',
+            'routes.item': 'articulo',
+            'routes.search': 'buscar',
+            'routes.profile': 'perfil',
+            'routes.settings': 'configuracion',
+            'routes.admin': 'administrador',
+            'routes.dashboard': 'tablero',
+            'titles.home': 'Página Inicio',
+            'titles.about': 'Acerca de Nosotros',
+            'titles.products': 'Nuestros Productos',
+            'titles.profile': 'Perfil Usuario',
+            'params.category': 'electronica',
+            'params.item': 'portatil',
+          },
+          fr: {
+            'routes.home': 'accueil',
+            'routes.about': 'a-propos',
+            'routes.products': 'produits',
+            'titles.home': 'Page Accueil',
+          },
+        },
+        'en',
+      )
       TestBed.configureTestingModule({
         imports: [
           _ts.importConfig,
@@ -1764,44 +1844,47 @@ describe('NgxTranslateRoutesHelperService', () => {
     let location: Location
 
     beforeEach(() => {
-      const _ts = createTranslateSetup({
-            en: {
-              'routes.home': 'home',
-              'routes.about': 'about',
-              'routes.products': 'products',
-              'routes.category': 'category',
-              'routes.item': 'item-detail',
-              'routes.search': 'search-results',
-              'routes.profile': 'user-profile',
-              'routes.admin': 'administration',
-              'titles.home': 'Welcome Home',
-              'titles.about': 'About Our Company',
-              'titles.products': 'Product Catalog',
-              'titles.profile': 'User Profile - {{userId}}',
-              'titles.admin': 'Admin Dashboard',
-              'params.search': 'searchQuery',
-              'params.filter': 'categoryFilter',
-              'params.sort': 'sortBy',
-            },
-            es: {
-              'routes.home': 'inicio',
-              'routes.about': 'acerca-de',
-              'routes.products': 'productos',
-              'routes.category': 'categoria',
-              'routes.item': 'detalle-articulo',
-              'routes.search': 'resultados-busqueda',
-              'routes.profile': 'perfil-usuario',
-              'routes.admin': 'administracion',
-              'titles.home': 'Bienvenido al Inicio',
-              'titles.about': 'Acerca de Nuestra Empresa',
-              'titles.products': 'Catálogo de Productos',
-              'titles.profile': 'Perfil de Usuario - {{userId}}',
-              'titles.admin': 'Panel de Administración',
-              'params.search': 'consulta',
-              'params.filter': 'filtroCategoria',
-              'params.sort': 'ordenarPor',
-            },
-          }, 'en')
+      const _ts = createTranslateSetup(
+        {
+          en: {
+            'routes.home': 'home',
+            'routes.about': 'about',
+            'routes.products': 'products',
+            'routes.category': 'category',
+            'routes.item': 'item-detail',
+            'routes.search': 'search-results',
+            'routes.profile': 'user-profile',
+            'routes.admin': 'administration',
+            'titles.home': 'Welcome Home',
+            'titles.about': 'About Our Company',
+            'titles.products': 'Product Catalog',
+            'titles.profile': 'User Profile - {{userId}}',
+            'titles.admin': 'Admin Dashboard',
+            'params.search': 'searchQuery',
+            'params.filter': 'categoryFilter',
+            'params.sort': 'sortBy',
+          },
+          es: {
+            'routes.home': 'inicio',
+            'routes.about': 'acerca-de',
+            'routes.products': 'productos',
+            'routes.category': 'categoria',
+            'routes.item': 'detalle-articulo',
+            'routes.search': 'resultados-busqueda',
+            'routes.profile': 'perfil-usuario',
+            'routes.admin': 'administracion',
+            'titles.home': 'Bienvenido al Inicio',
+            'titles.about': 'Acerca de Nuestra Empresa',
+            'titles.products': 'Catálogo de Productos',
+            'titles.profile': 'Perfil de Usuario - {{userId}}',
+            'titles.admin': 'Panel de Administración',
+            'params.search': 'consulta',
+            'params.filter': 'filtroCategoria',
+            'params.sort': 'ordenarPor',
+          },
+        },
+        'en',
+      )
       TestBed.configureTestingModule({
         imports: [
           _ts.importConfig,
@@ -2149,12 +2232,15 @@ describe('NgxTranslateRoutesHelperService', () => {
     let translate: TranslateService
 
     beforeEach(() => {
-      const _ts = createTranslateSetup({
-            en: {
-              'routes.test': 'test',
-              'titles.test': 'Test Title',
-            },
-          }, 'en')
+      const _ts = createTranslateSetup(
+        {
+          en: {
+            'routes.test': 'test',
+            'titles.test': 'Test Title',
+          },
+        },
+        'en',
+      )
       TestBed.configureTestingModule({
         imports: [
           _ts.importConfig,
@@ -2391,22 +2477,25 @@ describe('NgxTranslateRoutesHelperService', () => {
     let router: Router
 
     beforeEach(() => {
-      const _ts = createTranslateSetup({
-            en: {
-              routes: {
-                home: 'home',
-                about: 'about',
-                contact: 'contact',
-              },
+      const _ts = createTranslateSetup(
+        {
+          en: {
+            routes: {
+              home: 'home',
+              about: 'about',
+              contact: 'contact',
             },
-            es: {
-              routes: {
-                home: 'inicio',
-                about: 'acerca',
-                contact: 'contacto',
-              },
+          },
+          es: {
+            routes: {
+              home: 'inicio',
+              about: 'acerca',
+              contact: 'contacto',
             },
-          }, 'en')
+          },
+        },
+        'en',
+      )
       TestBed.configureTestingModule({
         imports: [
           _ts.importConfig,

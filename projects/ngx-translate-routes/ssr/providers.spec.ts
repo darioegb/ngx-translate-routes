@@ -1,6 +1,9 @@
 import { TestBed } from '@angular/core/testing'
 import { ApplicationInitStatus, PLATFORM_ID } from '@angular/core'
-import { NGX_TRANSLATE_ROUTES_CONFIG, NgxTranslateRoutesService } from 'ngx-translate-routes'
+import {
+  NGX_TRANSLATE_ROUTES_CONFIG,
+  NgxTranslateRoutesService,
+} from 'ngx-translate-routes'
 import { provideNgxTranslateRoutesSsr } from './providers'
 
 describe('provideNgxTranslateRoutesSsr', () => {

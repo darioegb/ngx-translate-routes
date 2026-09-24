@@ -4,7 +4,7 @@ import {
   inject,
   TransferState,
   makeStateKey,
-  DOCUMENT
+  DOCUMENT,
 } from '@angular/core'
 import { isPlatformBrowser, isPlatformServer } from '@angular/common'
 import { RoutePath } from './ngx-translate-routes.interfaces'
@@ -46,7 +46,11 @@ export class NgxTranslateRoutesStateService {
         expiry.getTime() +
           (this.config.cookieExpirationDays ?? 30) * millisecondsInADay,
       )
-      this.document.cookie = `${key}=${JSON.stringify(value)}; expires=${expiry.toUTCString()}; path=/`
+      const sameSite = this.config.cookieSameSite ?? 'Lax'
+      // Secure requires HTTPS, so only add it when the page is actually served over it.
+      const secure =
+        this.document.location?.protocol === 'https:' ? '; Secure' : ''
+      this.document.cookie = `${key}=${JSON.stringify(value)}; expires=${expiry.toUTCString()}; path=/; SameSite=${sameSite}${secure}`
     } else {
       localStorage.setItem(key, JSON.stringify(value))
     }
@@ -106,16 +110,16 @@ export class NgxTranslateRoutesStateService {
 
     if (this.config.cacheMethod === 'cookies') {
       const matches = this.document.cookie.match(
-        new RegExp(
-          '(?:^|; )' +
-            key.replaceAll(/([.$?*|{}()[]\/+^])/g, String.raw`\$1`) +
-            '=([^;]*)',
-        ),
+        new RegExp(`(?:^|; )${this.escapeRegExp(key)}=([^;]*)`),
       )
       return matches ? (JSON.parse(decodeURIComponent(matches[1])) as T) : null
     } else {
       const item = localStorage.getItem(key)
       return item ? (JSON.parse(item) as T) : null
     }
+  }
+
+  private escapeRegExp(value: string): string {
+    return value.replaceAll(/[.*+?^${}()|[\]\\]/g, String.raw`\$&`)
   }
 }

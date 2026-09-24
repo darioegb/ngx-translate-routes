@@ -1,3 +1,13 @@
+## 3.1.0 (2026-09-24)
+
+* Merge pull request #91 from darioegb/feat/error-hook-language-change-cookie-security ([103f2e8](https://github.com/darioegb/ngx-translate-routes/commit/103f2e8)), closes [#91](https://github.com/darioegb/ngx-translate-routes/issues/91)
+* fix(ci): generate lcov coverage output for SonarCloud ([c488116](https://github.com/darioegb/ngx-translate-routes/commit/c488116))
+* fix(state): escape cookie names correctly and stop caching rejected translations ([f68dfba](https://github.com/darioegb/ngx-translate-routes/commit/f68dfba))
+* docs: add branding assets and remove missing social card ([e65516e](https://github.com/darioegb/ngx-translate-routes/commit/e65516e))
+* docs: document cookieSameSite, onError and languageChange$ ([6d336dc](https://github.com/darioegb/ngx-translate-routes/commit/6d336dc))
+* feat(config): add cookieSameSite, onError and a languageChange$ observable ([31b3c17](https://github.com/darioegb/ngx-translate-routes/commit/31b3c17))
+* ci: add reusable setup action ([43e6e08](https://github.com/darioegb/ngx-translate-routes/commit/43e6e08))
+
 ## 3.0.0 (2026-09-02)
 
 * fix: consolidate SSR provider pattern — provideNgxTranslateRoutesSsr in shared config ([9b169bb](https://github.com/darioegb/ngx-translate-routes/commit/9b169bb))
