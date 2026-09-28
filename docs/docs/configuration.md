@@ -91,6 +91,10 @@ provideNgxTranslateRoutes({
 })
 ```
 
+:::info
+`languageChange$` is available since **v3.1.0**.
+:::
+
 For a reactive alternative, inject `NgxTranslateRoutesService` and subscribe to `languageChange$`, which emits once route translations for the new language have been applied:
 
 ```typescript
@@ -104,6 +108,10 @@ translateRoutes.languageChange$.subscribe(() => {
 ```
 
 ### Error handling
+
+:::info
+`onError` is available since **v3.1.0**.
+:::
 
 By default, a failure while translating a route logs to `console.error`. Provide `onError` to handle it yourself instead (e.g. report to your error tracker):
 

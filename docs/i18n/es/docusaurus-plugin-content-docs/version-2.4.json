@@ -1,0 +1,18 @@
+{
+  "version.label": {
+    "message": "2.x",
+    "description": "The label for version 2.4"
+  },
+  "sidebar.docs.category.Getting Started": {
+    "message": "Primeros Pasos",
+    "description": "The label for category Getting Started in sidebar docs"
+  },
+  "sidebar.docs.category.Guides": {
+    "message": "Guías",
+    "description": "The label for category Guides in sidebar docs"
+  },
+  "sidebar.docs.category.Migration": {
+    "message": "Migración",
+    "description": "The label for category Migration in sidebar docs"
+  }
+}

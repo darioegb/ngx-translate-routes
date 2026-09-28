@@ -31,6 +31,10 @@ Useful when you need the storage to expire or when `localStorage` is unavailable
 
 ### Cookie attributes
 
+:::info
+`cookieSameSite` is available since **v3.1.0**.
+:::
+
 Cookies are written with `SameSite=Lax` by default. Override it with `cookieSameSite` if your app needs a stricter or looser policy:
 
 ```typescript

@@ -1,29 +1,22 @@
 {
   "title": {
-    "message": "NgxTranslateRoutes"
+    "message": "NgxTranslateRoutes",
+    "description": "The title in the navbar"
   },
-  "tagline": {
-    "message": "Traduce automáticamente las rutas y títulos de tu aplicación Angular"
+  "logo.alt": {
+    "message": "Logo de NgxTranslateRoutes",
+    "description": "The alt text of navbar logo"
   },
-  "navbar.item.label.docs": {
-    "message": "Documentación"
+  "item.label.Docs": {
+    "message": "Documentación",
+    "description": "Navbar item with label Docs"
   },
-  "navbar.item.label.npm": {
-    "message": "npm"
+  "item.label.npm": {
+    "message": "npm",
+    "description": "Navbar item with label npm"
   },
-  "navbar.item.label.github": {
-    "message": "GitHub"
-  },
-  "footer.title.documentation": {
-    "message": "Documentación"
-  },
-  "footer.title.guides": {
-    "message": "Guías"
-  },
-  "footer.title.links": {
-    "message": "Enlaces"
-  },
-  "footer.copyright": {
-    "message": "Copyright © {year} NgxTranslateRoutes. Construido con Docusaurus."
+  "item.label.GitHub": {
+    "message": "GitHub",
+    "description": "Navbar item with label GitHub"
   }
 }

@@ -9,7 +9,7 @@ sidebar_position: 2
 NgxTranslateRoutes supports `@angular/ssr` via the dedicated `ngx-translate-routes/ssr` entry point.
 
 :::info v3 change
-`enableSsrRouteTranslation` and `availableLanguages` have moved out of `provideNgxTranslateRoutes()`. Use `provideNgxTranslateRoutesSsr()` in your **shared** `app.config.ts` instead. See the [migration guide](../migration/v2-to-v3).
+The `ngx-translate-routes/ssr` secondary entry point is available since **v3.0.0**. `enableSsrRouteTranslation` and `availableLanguages` have moved out of `provideNgxTranslateRoutes()` — use `provideNgxTranslateRoutesSsr()` in your **shared** `app.config.ts` instead. See the [migration guide](../migration/v2-to-v3).
 :::
 
 ## app.config.ts (shared)

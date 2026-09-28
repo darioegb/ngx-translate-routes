@@ -1,0 +1,58 @@
+{
+  "link.title.Documentation": {
+    "message": "Documentación",
+    "description": "The title of the footer links column with title=Documentation in the footer"
+  },
+  "link.title.Guides": {
+    "message": "Guías",
+    "description": "The title of the footer links column with title=Guides in the footer"
+  },
+  "link.title.Links": {
+    "message": "Enlaces",
+    "description": "The title of the footer links column with title=Links in the footer"
+  },
+  "link.item.label.Introduction": {
+    "message": "Introducción",
+    "description": "The label of footer link with label=Introduction linking to /"
+  },
+  "link.item.label.Installation": {
+    "message": "Instalación",
+    "description": "The label of footer link with label=Installation linking to /installation"
+  },
+  "link.item.label.Configuration": {
+    "message": "Configuración",
+    "description": "The label of footer link with label=Configuration linking to /configuration"
+  },
+  "link.item.label.Language in Path": {
+    "message": "Idioma en la Ruta",
+    "description": "The label of footer link with label=Language in Path linking to /guides/language-in-path"
+  },
+  "link.item.label.SSR Setup": {
+    "message": "Configuración SSR",
+    "description": "The label of footer link with label=SSR Setup linking to /guides/ssr"
+  },
+  "link.item.label.Query Params": {
+    "message": "Query Params",
+    "description": "The label of footer link with label=Query Params linking to /guides/query-params"
+  },
+  "link.item.label.npm package": {
+    "message": "Paquete npm",
+    "description": "The label of footer link with label=npm package linking to https://www.npmjs.com/package/ngx-translate-routes"
+  },
+  "link.item.label.GitHub": {
+    "message": "GitHub",
+    "description": "The label of footer link with label=GitHub linking to https://github.com/darioegb/ngx-translate-routes"
+  },
+  "link.item.label.Stackblitz SSR": {
+    "message": "Stackblitz SSR",
+    "description": "The label of footer link with label=Stackblitz SSR linking to https://stackblitz.com/edit/ngx-translate-routes-example-standalone"
+  },
+  "link.item.label.Stackblitz Modules": {
+    "message": "Stackblitz Modules",
+    "description": "The label of footer link with label=Stackblitz Modules linking to https://stackblitz.com/edit/ngx-translate-routes-example"
+  },
+  "copyright": {
+    "message": "Copyright © 2026 Dario Gonzalez. Publicado bajo la Licencia MIT.",
+    "description": "The footer copyright"
+  }
+}

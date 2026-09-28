@@ -1,0 +1,22 @@
+{
+  "version.label": {
+    "message": "3.x (más reciente)",
+    "description": "The label for version current"
+  },
+  "sidebar.docs.category.Getting Started": {
+    "message": "Primeros Pasos",
+    "description": "The label for category Getting Started in sidebar docs"
+  },
+  "sidebar.docs.category.Guides": {
+    "message": "Guías",
+    "description": "The label for category Guides in sidebar docs"
+  },
+  "sidebar.docs.category.Migration": {
+    "message": "Migración",
+    "description": "The label for category Migration in sidebar docs"
+  },
+  "sidebar.docs.doc.NgModule App (deprecated)": {
+    "message": "App con NgModule (deprecado)",
+    "description": "The label for the doc item NgModule App (deprecated) in sidebar docs, linking to the doc getting-started/module"
+  }
+}

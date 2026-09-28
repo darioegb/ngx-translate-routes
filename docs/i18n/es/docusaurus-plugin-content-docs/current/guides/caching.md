@@ -31,6 +31,10 @@ provideNgxTranslateRoutes({
 
 ### Atributos de la cookie
 
+:::info
+`cookieSameSite` está disponible desde **v3.1.0**.
+:::
+
 Las cookies se escriben con `SameSite=Lax` por defecto. Cambialo con `cookieSameSite` si tu app necesita una política más estricta o más laxa:
 
 ```typescript

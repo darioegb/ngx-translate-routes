@@ -10,24 +10,29 @@ Todas las opciones pueden pasarse a `provideNgxTranslateRoutes(config)` y `NgxTr
 
 ## Opciones
 
-| Opción                         | Tipo                          | Por defecto      | Descripción                                                                                                              |
-| ------------------------------ | ----------------------------- | ---------------- | ------------------------------------------------------------------------------------------------------------------------ |
-| `enableRouteTranslate`         | `boolean`                     | `true`           | Traduce los segmentos del path de la URL                                                                                 |
-| `enableTitleTranslate`         | `boolean`                     | `true`           | Traduce `document.title`                                                                                                 |
-| `enableQueryParamsTranslate`   | `boolean`                     | `false`          | Traduce los nombres de los query params                                                                                  |
-| `enableLanguageInPath`         | `boolean`                     | `false`          | Agrega el código de locale a la URL (`/es/ruta`)                                                                         |
-| `includeDefaultLanguageInPath` | `boolean`                     | `false`          | Incluye el locale por defecto en la URL (`/en/route`)                                                                    |
-| `routePrefix`                  | `string`                      | `'routes'`       | Clave raíz en el archivo de traducción para rutas                                                                        |
-| `titlePrefix`                  | `string`                      | `'titles'`       | Clave raíz en el archivo de traducción para títulos                                                                      |
-| `cacheMethod`                  | `'localStorage' \| 'cookies'` | `'localStorage'` | Backend de almacenamiento                                                                                                |
-| `cookieExpirationDays`         | `number`                      | `30`             | TTL de la cookie cuando `cacheMethod` es `'cookies'`                                                                     |
-| `cookieSameSite`               | `'Lax' \| 'Strict' \| 'None'` | `'Lax'`          | Atributo `SameSite` de la cookie cuando `cacheMethod` es `'cookies'`. `Secure` se agrega automáticamente sobre HTTPS     |
-| `enableSsrRouteTranslation`    | `boolean`                     | `false`          | ⚠️ **Eliminado en v3** — usa [`provideNgxTranslateRoutesSsr()`](guides/ssr)                                              |
-| `availableLanguages`           | `string[]`                    | `['en']`         | Idiomas para detección de URL en SSR. También se usa como fallback en browser cuando `TranslateService.langs` está vacío |
-| `onLanguageChange`             | `() => void`                  | `undefined`      | Callback al cambiar idioma y re-traducir                                                                                 |
-| `onError`                      | `(error: unknown) => void`    | `undefined`      | Se llama cuando falla la traducción de la ruta, en vez de loguear con `console.error`                                    |
-| `routeTranslationStrategy`     | `Function`                    | `undefined`      | Función personalizada: `(route: string) => string`                                                                       |
-| `routesUsingStrategy`          | `string[]`                    | `[]`             | Segmentos donde aplica la función personalizada                                                                          |
+| Opción                         | Tipo                          | Por defecto                           | Descripción                                                                                                              |
+| ------------------------------ | ----------------------------- | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| `enableRouteTranslate`         | `boolean`                     | `true`                                | Traduce los segmentos del path de la URL                                                                                 |
+| `enableTitleTranslate`         | `boolean`                     | `true`                                | Traduce `document.title`                                                                                                 |
+| `enableQueryParamsTranslate`   | `boolean`                     | `false`                               | Traduce los nombres de los query params                                                                                  |
+| `enableLanguageInPath`         | `boolean`                     | `false`                               | Agrega el código de locale a la URL (`/es/ruta`)                                                                         |
+| `includeDefaultLanguageInPath` | `boolean`                     | `false`                               | Incluye el locale por defecto en la URL (`/en/route`)                                                                    |
+| `routePrefix`                  | `string`                      | `'routes'`                            | Clave raíz en el archivo de traducción para rutas                                                                        |
+| `titlePrefix`                  | `string`                      | `'titles'`                            | Clave raíz en el archivo de traducción para títulos                                                                      |
+| `routeSuffixesWithQueryParams` | `object`                      | `{ route: 'root', params: 'params' }` | Sub-claves usadas cuando la traducción de query params está habilitada                                                   |
+| `cacheMethod`                  | `'localStorage' \| 'cookies'` | `'localStorage'`                      | Backend de almacenamiento                                                                                                |
+| `cookieExpirationDays`         | `number`                      | `30`                                  | TTL de la cookie cuando `cacheMethod` es `'cookies'`                                                                     |
+| `cookieSameSite`               | `'Lax' \| 'Strict' \| 'None'` | `'Lax'`                               | Atributo `SameSite` de la cookie cuando `cacheMethod` es `'cookies'`. `Secure` se agrega automáticamente sobre HTTPS     |
+| `enableSsrRouteTranslation`    | `boolean`                     | `false`                               | ⚠️ **Eliminado en v3** — usa [`provideNgxTranslateRoutesSsr()`](guides/ssr)                                              |
+| `availableLanguages`           | `string[]`                    | `['en']`                              | Idiomas para detección de URL en SSR. También se usa como fallback en browser cuando `TranslateService.langs` está vacío |
+| `onLanguageChange`             | `() => void`                  | `undefined`                           | Callback al cambiar idioma y re-traducir                                                                                 |
+| `onError`                      | `(error: unknown) => void`    | `undefined`                           | Se llama cuando falla la traducción de la ruta, en vez de loguear con `console.error`                                    |
+| `routeTranslationStrategy`     | `Function`                    | `undefined`                           | Función personalizada: `(route: string) => string`                                                                       |
+| `routesUsingStrategy`          | `string[]`                    | `[]`                                  | Segmentos donde aplica la función personalizada                                                                          |
+
+:::info
+`languageChange$` está disponible desde **v3.1.0**.
+:::
 
 Como alternativa reactiva a `onLanguageChange`, podés inyectar `NgxTranslateRoutesService` y suscribirte a `languageChange$`, que emite una vez que las traducciones de ruta para el nuevo idioma ya se aplicaron:
 
