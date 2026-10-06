@@ -5,6 +5,8 @@ title: Introducción
 sidebar_position: 1
 ---
 
+import LiveDemo from '@site/src/components/LiveDemo'
+
 # NgxTranslateRoutes
 
 [![CI](https://github.com/darioegb/ngx-translate-routes/actions/workflows/ci.yml/badge.svg)](https://github.com/darioegb/ngx-translate-routes/actions/workflows/ci.yml)
@@ -24,6 +26,12 @@ sidebar_position: 1
 - ✅ **Standalone** — soporte de primera clase; la API NgModule está deprecada en v3
 
 ## Ejemplos en Vivo
+
+Probá la librería acá mismo - es la misma app de showcase que vive en el repo:
+
+<LiveDemo />
+
+También podés abrir estos ejemplos listos para usar:
 
 | Ejemplo                       | Enlace                                                                                     |
 | ----------------------------- | ------------------------------------------------------------------------------------------ |

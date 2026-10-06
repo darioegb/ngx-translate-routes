@@ -1,6 +1,3 @@
-.links li {
-  display: inline-block;
-  font-weight: 900;
-  margin-right: 25px;
-  cursor: pointer;
+:host {
+  display: block;
 }

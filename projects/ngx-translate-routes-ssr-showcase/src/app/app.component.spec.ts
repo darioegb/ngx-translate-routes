@@ -7,9 +7,8 @@ import {
   withXhr,
 } from '@angular/common/http'
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core'
+import { provideRouter } from '@angular/router'
 import { httpLoaderFactory } from './app.config'
-import { ActivatedRoute } from '@angular/router'
-import { of } from 'rxjs'
 
 describe('AppComponent', () => {
   beforeEach(async () => {
@@ -27,17 +26,7 @@ describe('AppComponent', () => {
         }),
       ],
       providers: [
-        {
-          provide: ActivatedRoute,
-          useValue: {
-            params: of({}),
-            snapshot: {
-              paramMap: {
-                get: () => 'en',
-              },
-            },
-          },
-        },
+        provideRouter([]),
         provideHttpClient(withXhr(), withInterceptorsFromDi()),
       ],
     }).compileComponents()
@@ -45,22 +34,24 @@ describe('AppComponent', () => {
 
   it('should create the app', () => {
     const fixture = TestBed.createComponent(AppComponent)
-    const app = fixture.componentInstance
-    expect(app).toBeTruthy()
+    expect(fixture.componentInstance).toBeTruthy()
   })
 
-  it(`should have the 'ngx-translate-routes-ssr-showcase' title`, () => {
-    const fixture = TestBed.createComponent(AppComponent)
-    const app = fixture.componentInstance
-    expect(app.title).toEqual('ngx-translate-routes-ssr-showcase')
-  })
-
-  it('should render title', () => {
+  it('should render the brand and the navigation links', () => {
     const fixture = TestBed.createComponent(AppComponent)
     fixture.detectChanges()
     const compiled = fixture.nativeElement as HTMLElement
-    expect(compiled.querySelector('h1')?.textContent).toContain(
-      'Welcome to ngx-translate-routes-ssr-showcase!',
+    expect(compiled.querySelector('.navbar-brand')?.textContent).toContain(
+      'ngx-translate-routes',
     )
+    expect(compiled.querySelectorAll('.list-group-item')).toHaveLength(5)
+  })
+
+  it('should persist the selected language', () => {
+    const fixture = TestBed.createComponent(AppComponent)
+    const app = fixture.componentInstance
+    app.language = 'es'
+    app.changeLanguage()
+    expect(localStorage.getItem('lang')).toBe('es')
   })
 })
