@@ -12,8 +12,9 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader'
 
 import { routes } from './app.routes'
 
+// Relative prefix so i18n loads under the docs sub-path (/ngx-translate-routes/demo/).
 export const httpLoaderFactory = (http: HttpClient) =>
-  new TranslateHttpLoader(http)
+  new TranslateHttpLoader(http, './assets/i18n/', '.json')
 
 export const appConfig: ApplicationConfig = {
   providers: [

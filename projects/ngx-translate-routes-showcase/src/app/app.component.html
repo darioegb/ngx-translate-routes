@@ -16,10 +16,10 @@
       <li><a [routerLink]="['/users/profile', idUser]">Users</a></li>
     </ul>
   </div>
-  <div class="form-group col-md-6 offset-3">
+  <div class="mb-3 col-md-6 offset-3">
     <label for="changeLanguage"> Select a language</label>
     <select
-      class="custom-select"
+      class="form-select"
       id="changeLanguage"
       [(ngModel)]="language"
       (change)="changeLanguage()"

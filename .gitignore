@@ -7,6 +7,9 @@
 # Only exists if Bazel was run
 /bazel-out
 
+# docs: showcase demo is built in CI / via `pnpm docs:demo`
+/docs/static/demo
+
 # dependencies
 /node_modules
 
