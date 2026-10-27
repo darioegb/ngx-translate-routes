@@ -57,6 +57,7 @@ Latest version available for each version of Angular
 
 | ngx-translate-routes | Angular      |
 | -------------------- | ------------ |
+| 3.1.2                | 18.x to 22.x |
 | 3.1.1                | 18.x to 22.x |
 | 3.1.0                | 18.x to 22.x |
 | 3.0.0                | 18.x to 22.x |

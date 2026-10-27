@@ -56,6 +56,7 @@ El usuario navega a /about
 
 | ngx-translate-routes | Angular     |
 | -------------------- | ----------- |
+| 3.1.2                | 18.x a 22.x |
 | 3.1.1                | 18.x a 22.x |
 | 3.1.0                | 18.x a 22.x |
 | 3.0.0                | 18.x a 22.x |

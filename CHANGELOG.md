@@ -1,3 +1,12 @@
+## <small>3.1.2 (2026-10-27)</small>
+
+* fix(ci): drop stale Karma container and Chrome install from test job ([1172049](https://github.com/darioegb/ngx-translate-routes/commit/1172049))
+* fix(ci): replace broken manual release pipeline with semantic-release + npm trusted publishing ([eeec862](https://github.com/darioegb/ngx-translate-routes/commit/eeec862))
+* fix(ci): use shared setup action in test_lint/test_karma to match pnpm >=10 engine requirement ([f2e975a](https://github.com/darioegb/ngx-translate-routes/commit/f2e975a))
+* Merge pull request #93 from darioegb/feat/docs-live-demo ([fc7e63d](https://github.com/darioegb/ngx-translate-routes/commit/fc7e63d)), closes [#93](https://github.com/darioegb/ngx-translate-routes/issues/93)
+* docs: add an embeddable live demo in the docs with a restyled showcase ([60606cd](https://github.com/darioegb/ngx-translate-routes/commit/60606cd))
+* docs: fix ES i18n gaps, add version-availability notes, sync compat tables ([202622f](https://github.com/darioegb/ngx-translate-routes/commit/202622f))
+
 ## <small>3.1.1 (2026-09-24)</small>
 
 * Merge branch 'main' into chore/tooling-cleanup-and-repo-hygiene ([c03b329](https://github.com/darioegb/ngx-translate-routes/commit/c03b329))
