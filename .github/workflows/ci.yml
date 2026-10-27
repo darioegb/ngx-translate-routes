@@ -29,16 +29,13 @@ jobs:
 
   test_karma:
     runs-on: ubuntu-latest
-    container: trion/ng-cli-karma
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - uses: ./.github/actions/setup
-      - name: Install Chrome for Karma
-        run: pnpm exec puppeteer browsers install chrome
-      - name: Run Karma tests
+      - name: Run unit tests
         run: pnpm test:prod
       - name: Upload coverage
         uses: actions/upload-artifact@v4
